@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Projects - Excellent_develops</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <meta name="description" content="List of projects by Excellent_develops - showcasing creativity and innovation.">
+  <meta name="keywords" content="Excellent_develops, projects, portfolio, software development">
+  <meta name="author" content="Excellent_develops">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,8 +16,10 @@
       background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
       background-size: 800% 800%;
       animation: gradientBG 5s ease infinite;
-      color: white;
-      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -22,76 +27,87 @@
       100% { background-position: 0% 50%; }
     }
     header {
+      text-align: center;
       padding: 20px;
-      background: rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(5px);
+      color: white;
     }
     h1 {
       margin: 0;
     }
-    .container {
+    .projects {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
-      max-width: 1200px;
-      margin: auto;
+      max-width: 1000px;
+      width: 100%;
     }
-    .card {
-      background: rgba(255,255,255,0.1);
+    .project-card {
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
-      padding: 20px;
+      padding: 15px;
+      text-align: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease, background 0.3s ease;
-      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease;
     }
-    .card:hover {
+    .project-card:hover {
       transform: translateY(-5px);
-      background: rgba(255,255,255,0.2);
     }
-    .card h2 {
-      color: #fff;
-      margin-top: 0;
+    .project-card h2 {
+      margin: 10px 0;
+      color: #333;
     }
-    .card p {
-      color: #f1f1f1;
+    .project-card p {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.4;
     }
-    .card a {
+    .project-card a {
       display: inline-block;
       margin-top: 10px;
       padding: 8px 12px;
       background: #0078ff;
       color: white;
-      text-decoration: none;
       border-radius: 8px;
+      text-decoration: none;
       transition: background 0.3s ease;
     }
-    .card a:hover {
+    .project-card a:hover {
       background: #005bb5;
     }
     footer {
-      padding: 20px;
-      font-size: 14px;
-      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      text-align: center;
+      color: white;
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>My Projects</h1>
+    <p>Here are some of my works and demos.</p>
   </header>
 
-  <div class="container">
-    <!-- Example project card -->
-    <div class="card">
-      <h2>Coming Soon 🚀</h2>
-      <p>Exciting projects will appear here soon. Stay tuned!</p>
-      <a href="index.html">Back to Home</a>
+  <section class="projects">
+    <div class="project-card">
+      <h2>Excellent App</h2>
+      <p>A platform that connects highly intelligent and innovative minds to collaborate on impactful projects.</p>
+      <a href="#">Coming Soon</a>
     </div>
-    <!-- More project cards will go here later -->
-  </div>
+
+    <div class="project-card">
+      <h2>Portfolio Website</h2>
+      <p>This personal portfolio website you are viewing right now, built with HTML, CSS, and love.</p>
+      <a href="index.html">View</a>
+    </div>
+
+    <div class="project-card">
+      <h2>Future Project</h2>
+      <p>Another exciting project in the works. Stay tuned for updates!</p>
+      <a href="#">Coming Soon</a>
+    </div>
+  </section>
 
   <footer>
     &copy; 2025 Excellent_develops. All rights reserved.
