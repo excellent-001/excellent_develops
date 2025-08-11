@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Jagun Quareeb Alabi | Emini_Excellent - Muslim, Blog Writer, Youth Advocate, Change Maker, SDGs Champion, Tech Enthusiast, and Student of History & International Studies.">
-    <meta name="keywords" content="Jagun Quareeb Alabi, Emini_Excellent, Blog Writer, Youth Advocate, Change Maker, SDGs Champion, Tech Enthusiast, History and International Studies">
-    <meta name="author" content="Jagun Quareeb Alabi">
-    <title>Jagun Quareeb Alabi - Emini_Excellent</title>
+    <meta name="description" content="Welcome to Emini_Excellent's Portfolio">
+    <title>Home - Emini_Excellent</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             text-align: center;
-            background: linear-gradient(135deg, #f0f0f0, #d4af37);
-            color: #333;
+            color: white;
+            background: linear-gradient(270deg, #ff7eb3, #ff758c, #ff7eb3);
+            background-size: 600% 600%;
+            animation: gradientBG 8s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         header {
             padding: 30px 0;
-            background-color: #222;
-            color: white;
-        }
-        nav {
-            margin: 15px 0;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         nav a {
             text-decoration: none;
@@ -33,55 +34,64 @@
         nav a:hover {
             color: gold;
         }
-        .profile-pic {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 4px solid gold;
-            margin-top: 20px;
-        }
         h1 {
-            color: gold;
             font-size: 2.5rem;
+            margin-top: 50px;
+            text-shadow: 0 0 10px gold, 0 0 20px gold;
         }
         p {
-            max-width: 700px;
-            margin: auto;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 20px auto;
             line-height: 1.6;
-            padding: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: gold;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: orange;
+            color: white;
+            box-shadow: 0 0 10px orange;
         }
         footer {
-            background-color: #222;
+            background-color: rgba(0,0,0,0.5);
             color: white;
             padding: 10px 0;
-            margin-top: 30px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Jagun Quareeb Alabi</h1>
-        <p>Popularly known as <strong>Emini_Excellent</strong></p>
         <nav>
             <a href="index.html">Home</a>
-            <a href="about.html">About Me</a>
-            <a href="project.html">Projects</a>
+            <a href="aboutme.html">About Me</a>
+            <a href="projects.html">Projects</a>
         </nav>
     </header>
 
     <main>
-        <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Jagun Quareeb Alabi" class="profile-pic">
-        <h2>Welcome to My Official Website</h2>
+        <h1>Welcome to My World 🌟</h1>
         <p>
-            I am a Muslim, Blog Writer, Emerging Youth Advocate, Change Maker, SDGs Champion, Tech Enthusiast, 
-            and Student of History and International Studies at the University of Ilorin, Nigeria.  
-            My mission is to inspire change, empower youth, and create a lasting impact in my community and beyond.
+            I'm an aspiring software developer, dedicated to continuous learning and improvement.  
+            I share my progress, projects, and thoughts on the tech industry.  
+            Feel free to explore my journey!
         </p>
+        <a href="aboutme.html" class="btn">Learn More About Me</a>
+        <a href="projects.html" class="btn">See My Projects</a>
     </main>
 
     <footer>
-        <p>© 2025 Jagun Quareeb Alabi | Emini_Excellent. All Rights Reserved.</p>
+        <p>© 2025 Emini_Excellent. All Rights Reserved.</p>
     </footer>
 
 </body>
