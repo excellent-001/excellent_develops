@@ -1,163 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excellent_develops Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <style>
-        /* Smooth animated background */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            animation: gradientBG 10s ease infinite;
-            background: linear-gradient(270deg, #4e54c8, #8f94fb, #00c6ff);
-            background-size: 600% 600%;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* Profile Card */
-        .profile-card {
-            background-color: white;
-            max-width: 450px; /* Medium size */
-            width: 100%;
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-
-        .profile-card img {
-            width: 120px; /* Medium profile picture */
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid #007bff;
-            object-fit: cover;
-        }
-
-        .profile-card h1 {
-            margin: 15px 0 5px;
-            font-size: 1.6em;
-        }
-
-        .profile-card h2 {
-            margin: 0;
-            font-size: 1em;
-            color: gray;
-        }
-
-        .profile-card p {
-            font-size: 0.95em;
-            color: #555;
-            margin-top: 10px;
-        }
-
-        .social-buttons a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            padding: 8px 14px;
-            margin: 5px;
-            border-radius: 6px;
-            font-size: 0.9em;
-            display: inline-block;
-        }
-
-        /* Projects Grid */
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .project-card {
-            background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .project-card h3 {
-            margin: 10px 0;
-        }
-
-        .project-card a {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 0.85em;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excellent_develops Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
+      background-size: 800% 800%;
+      animation: gradientBG 4s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 900px;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-in-out;
+      margin-bottom: 30px;
+    }
+    .profile-pic {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0078ff;
+      transition: transform 0.3s ease;
+    }
+    .profile-pic:hover {
+      transform: scale(1.05);
+    }
+    h1 {
+      color: #333;
+      margin: 10px 0 5px;
+    }
+    h2 {
+      color: #555;
+      margin: 5px 0 15px;
+    }
+    p {
+      color: #444;
+      line-height: 1.4;
+    }
+    a {
+      display: inline-block;
+      margin: 8px 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      background: #0078ff;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    a:hover {
+      background: #005bb5;
+      transform: translateY(-3px);
+    }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .project-card:hover {
+      transform: scale(1.02);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Profile Card -->
-        <div class="profile-card">
-            <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture">
-            <h1>Excellent_develops</h1>
-            <h2>Aspiring Software Developer</h2>
-            <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
-            <div class="social-buttons">
-                <a href="#">Facebook</a>
-                <a href="#">WhatsApp</a>
-            </div>
-        </div>
-
-        <!-- Projects Section -->
-        <div class="projects">
-            <div class="project-card">
-                <h3>Project One</h3>
-                <p>Brief description of Project One.</p>
-                <a href="#">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Project Two</h3>
-                <p>Brief description of Project Two.</p>
-                <a href="#">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Project Three</h3>
-                <p>Brief description of Project Three.</p>
-                <a href="#">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Project Four</h3>
-                <p>Brief description of Project Four.</p>
-                <a href="#">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Project Five</h3>
-                <p>Brief description of Project Five.</p>
-                <a href="#">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Project Six</h3>
-                <p>Brief description of Project Six.</p>
-                <a href="#">View Project</a>
-            </div>
-        </div>
+  <div class="container">
+    <!-- Profile Card -->
+    <div class="card">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
+      <h1>Excellent_develops</h1>
+      <h2>Aspiring Software Developer</h2>
+      <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
+      <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
+      <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
     </div>
 
+    <!-- Projects Section -->
+    <h2 style="color:white; text-align:center;">My Projects</h2>
+    <div class="projects">
+      <div class="project-card">
+        <h3>Project 1</h3>
+        <p>A cool project I worked on. Coming soon!</p>
+      </div>
+      <div class="project-card">
+        <h3>Project 2</h3>
+        <p>Another project. Coming soon!</p>
+      </div>
+      <div class="project-card">
+        <h3>Project 3</h3>
+        <p>More details coming soon.</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
