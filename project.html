@@ -3,107 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Excellent_develops - Aspiring software developer, sharing progress, projects, and thoughts on the tech industry.">
-    <title>Excellent_develops</title>
+    <title>Projects - Excellent_develops</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
             text-align: center;
-            background-color: #111;
-            color: white;
+            padding: 0;
+            animation: bgChange 3s infinite alternate;
         }
-        /* Animated gradient header */
+
+        @keyframes bgChange {
+            0% { background: linear-gradient(45deg, #ff0057, #ff7b00); }
+            50% { background: linear-gradient(45deg, #00c6ff, #0072ff); }
+            100% { background: linear-gradient(45deg, #7b00ff, #ff00d4); }
+        }
+
         header {
-            padding: 30px 0;
-            background: linear-gradient(270deg, #ffcc00, #00ffff, #9933ff, #00ff66, #0066ff);
-            background-size: 1000% 1000%;
-            animation: gradientShift 3s ease infinite;
-            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        nav {
-            margin-top: 15px;
-        }
-        nav a {
+
+        header a {
+            color: yellow;
             text-decoration: none;
-            color: white;
-            margin: 0 15px;
             font-weight: bold;
+            font-size: 18px;
         }
-        nav a:hover {
-            color: gold;
+
+        header a:hover {
+            text-decoration: underline;
         }
-        img {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid gold;
-            margin: 20px 0;
-        }
-        .glow {
-            font-size: 1.2em;
-            color: #00ff88;
-            text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 20px #00ff88;
-            animation: glowEffect 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes glowEffect {
-            from {
-                text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 20px #00ff88;
-            }
-            to {
-                text-shadow: 0 0 10px #00ffaa, 0 0 20px #00ffaa, 0 0 30px #00ffaa;
-            }
-        }
-        footer {
-            background-color: #222;
-            padding: 15px 0;
+
+        h1 {
             margin-top: 30px;
-            color: white;
-            font-size: 0.9em;
+            color: yellow;
+            text-shadow: 0 0 10px yellow, 0 0 20px yellow;
         }
-        .social-links a {
-            color: white;
-            margin: 0 10px;
-            font-size: 1.2em;
+
+        .project {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px yellow;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .project h2 {
+            color: yellow;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            color: black;
+            background-color: yellow;
             text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+            font-weight: bold;
+            cursor: pointer;
         }
-        .social-links a:hover {
-            color: gold;
+
+        .btn:hover {
+            background-color: white;
+            color: black;
+            box-shadow: 0 0 10px white;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: black;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px yellow;
+            text-align: center;
+            z-index: 1000;
+            animation: popFade 0.5s ease;
+        }
+
+        .popup h2 {
+            margin: 0;
+            color: yellow;
+        }
+
+        .popup button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: yellow;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .popup button:hover {
+            background: white;
+            color: black;
+        }
+
+        @keyframes popFade {
+            from {opacity: 0; transform: translate(-50%, -45%);}
+            to {opacity: 1; transform: translate(-50%, -50%);}
+        }
+
+        /* Dark overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
 <body>
-
     <header>
-        <h1>Excellent_develops</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About Me</a>
-            <a href="project.html">Projects</a>
-        </nav>
+        <a href="index.html">Home</a>
+        <a href="aboutme.html">About Me</a>
+        <a href="projects.html">Projects</a>
     </header>
 
-    <main>
-        <img src="your-photo.jpg" alt="Excellent_develops">
-        <p class="glow">I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
-    </main>
+    <h1>🚀 Projects</h1>
+
+    <div class="project">
+        <h2>1. Education Website</h2>
+        <p>Creating an engaging platform for learning and academic growth.</p>
+        <button class="btn" onclick="showPopup()">View Project</button>
+    </div>
+
+    <div class="project">
+        <h2>2. Social Intelligence Hub</h2>
+        <p>A social website that connects problem-solvers, innovators, and highly intellectual people globally.</p>
+        <button class="btn" onclick="showPopup()">View Project</button>
+    </div>
+
+    <div class="project">
+        <h2>3. Business Website: Pematech Company</h2>
+        <p>Breaking limits and fostering excellence in technology solutions.</p>
+        <button class="btn" onclick="showPopup()">View Project</button>
+    </div>
+
+    <div class="project">
+        <h2>4. Excellent Global Updates</h2>
+        <p>A global online hub for news, updates, and opportunities.</p>
+        <button class="btn" onclick="showPopup()">View Project</button>
+    </div>
+
+    <!-- Overlay & Popup -->
+    <div class="overlay" id="overlay" onclick="hidePopup()"></div>
+    <div class="popup" id="popup">
+        <h2>🚧 Coming Soon!</h2>
+        <button onclick="hidePopup()">OK</button>
+    </div>
 
     <footer>
-        <div class="social-links">
-            <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a> |
-            <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a> |
-            <a href="https://www.instagram.com/iam_dexcellent" target="_blank">Instagram</a> |
-            <a href="https://x.com/TheOlodo_Nation" target="_blank">X (Twitter)</a>
-        </div>
-        <p>© 2025 Excellent_develops.comm. All rights reserved.</p>
+        © 2025 Excellent_develops.com. All rights reserved.
     </footer>
 
+    <script>
+        function showPopup() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hidePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
 </body>
     </html>
