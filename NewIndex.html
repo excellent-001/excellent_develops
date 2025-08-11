@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Excellent_develops</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -46,37 +48,42 @@
     .profile-card a {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      margin-top: 15px;
+      margin-top: 10px;
       padding: 10px 20px;
       background-color: #4CAF50;
       color: white;
       text-decoration: none;
       border-radius: 25px;
       transition: background 0.3s;
-      font-weight: bold;
+      font-size: 0.95em;
+    }
+    .profile-card a i {
+      font-size: 1.2em;
     }
     .profile-card a:hover {
       background-color: #45a049;
     }
-    .whatsapp-btn {
+    .facebook {
+      background-color: #1877F2;
+    }
+    .facebook:hover {
+      background-color: #145dbf;
+    }
+    .whatsapp {
       background-color: #25D366;
     }
-    .whatsapp-btn:hover {
-      background-color: #1ebe5b;
-    }
-    .icon {
-      width: 20px;
-      height: 20px;
+    .whatsapp:hover {
+      background-color: #1ebe5d;
     }
   </style>
 </head>
 <body>
 
   <div class="profile-card">
-    <!-- Replace this link with your GitHub raw image link -->
-    <img src="https://github.com/your-username/your-repo/raw/main/mypicture.png" alt="Profile Picture" />
+    <!-- Profile Picture from GitHub raw URL -->
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/45a90a881116e76d956e88b25a5e425535f660ed/Screenshot_20250811-105613.jpg" alt="Profile Picture" />
+
     <h1>Excellent_develops</h1>
     <h2>Aspiring Software Developer</h2>
     <p>
@@ -84,12 +91,14 @@
       I'll share my progress, projects, and thoughts on the tech industry. 
       Feel free to reach out and connect.
     </p>
-    <a href="https://www.facebook.com/EminiExcellent">Facebook Profile</a>
-    <a class="whatsapp-btn" href="https://wa.me/2349046463436" target="_blank">
-      <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" />
-      WhatsApp Me
+
+    <a class="facebook" href="https://www.facebook.com/EminiExcellent" target="_blank">
+      <i class="fab fa-facebook-f"></i> Facebook Profile
+    </a>
+    <a class="whatsapp" href="https://wa.me/2349046463436" target="_blank">
+      <i class="fab fa-whatsapp"></i> WhatsApp Me
     </a>
   </div>
 
 </body>
-</html>
+  </html>
