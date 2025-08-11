@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Projects - Excellent_develops</title>
-  <meta name="description" content="A collection of projects by Excellent_develops.">
-  <meta name="keywords" content="web development, projects, portfolio, HTML, CSS, Excellent_develops">
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,8 +12,9 @@
       padding: 0;
       background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
       background-size: 800% 800%;
-      animation: gradientBG 8s ease infinite;
+      animation: gradientBG 5s ease infinite;
       color: white;
+      text-align: center;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -22,66 +22,79 @@
       100% { background-position: 0% 50%; }
     }
     header {
-      text-align: center;
       padding: 20px;
+      background: rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(5px);
     }
     h1 {
-      margin-bottom: 10px;
+      margin: 0;
     }
-    .projects {
+    .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
+      max-width: 1200px;
+      margin: auto;
     }
     .card {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255,255,255,0.1);
       border-radius: 15px;
-      padding: 15px;
-      text-align: center;
+      padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
+      backdrop-filter: blur(5px);
     }
     .card:hover {
       transform: translateY(-5px);
+      background: rgba(255,255,255,0.2);
     }
     .card h2 {
-      margin-top: 10px;
+      color: #fff;
+      margin-top: 0;
     }
-    a {
+    .card p {
+      color: #f1f1f1;
+    }
+    .card a {
       display: inline-block;
       margin-top: 10px;
       padding: 8px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: white;
       background: #0078ff;
-      transition: background 0.3s ease, transform 0.3s ease;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s ease;
     }
-    a:hover {
+    .card a:hover {
       background: #005bb5;
-      transform: translateY(-3px);
+    }
+    footer {
+      padding: 20px;
+      font-size: 14px;
+      background: rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
   <header>
     <h1>My Projects</h1>
-    <p>A showcase of my work and experiments in web development.</p>
   </header>
 
-  <section class="projects">
+  <div class="container">
+    <!-- Example project card -->
     <div class="card">
-      <h2>Portfolio Website</h2>
-      <p>A personal portfolio site showcasing my skills and work.</p>
-      <a href="index.html">View Project</a>
+      <h2>Coming Soon 🚀</h2>
+      <p>Exciting projects will appear here soon. Stay tuned!</p>
+      <a href="index.html">Back to Home</a>
     </div>
+    <!-- More project cards will go here later -->
+  </div>
 
-    <div class="card">
-      <h2>Coming Soon</h2>
-      <p>More projects will be added as I build and explore new ideas.</p>
-      <a href="#">In Progress</a>
-    </div>
-  </section>
+  <footer>
+    &copy; 2025 Excellent_develops. All rights reserved.
+  </footer>
 </body>
 </html>
