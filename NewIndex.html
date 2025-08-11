@@ -3,102 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_develops</title>
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Excellent_develops Portfolio</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
+      background-size: 800% 800%;
+      animation: gradientBG 15s ease infinite;
     }
-    .profile-card {
-      background: #fff;
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 400px;
       text-align: center;
-      padding: 30px;
-      max-width: 350px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-in-out;
     }
-    .profile-card img {
-      border-radius: 50%;
-      border: 3px solid #4CAF50;
+    .profile-pic {
       width: 150px;
       height: 150px;
+      border-radius: 50%;
       object-fit: cover;
+      border: 3px solid #0078ff;
+      transition: transform 0.3s ease;
     }
-    .profile-card h1 {
-      margin: 15px 0 5px;
-      font-size: 1.8em;
+    .profile-pic:hover {
+      transform: scale(1.05);
+    }
+    h1 {
       color: #333;
+      margin: 10px 0 5px;
     }
-    .profile-card h2 {
-      margin: 5px 0 15px;
-      font-size: 1.2em;
+    h2 {
       color: #555;
+      margin: 5px 0 15px;
     }
-    .profile-card p {
-      color: #666;
-      line-height: 1.5;
+    p {
+      color: #444;
+      line-height: 1.4;
     }
-    .profile-card a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
+    a {
+      display: inline-block;
+      margin: 8px 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
       text-decoration: none;
-      border-radius: 25px;
-      transition: background 0.3s;
-      font-size: 0.95em;
+      color: white;
+      background: #0078ff;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
-    .profile-card a i {
-      font-size: 1.2em;
+    a:hover {
+      background: #005bb5;
+      transform: translateY(-3px);
     }
-    .profile-card a:hover {
-      background-color: #45a049;
-    }
-    .facebook {
-      background-color: #1877F2;
-    }
-    .facebook:hover {
-      background-color: #145dbf;
-    }
-    .whatsapp {
-      background-color: #25D366;
-    }
-    .whatsapp:hover {
-      background-color: #1ebe5d;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-
-  <div class="profile-card">
-    <!-- Profile Picture from GitHub raw URL -->
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/45a90a881116e76d956e88b25a5e425535f660ed/Screenshot_20250811-105613.jpg" alt="Profile Picture" />
-
+  <div class="card">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/45a90a881116e76d956e88b25a5e425535f660ed/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
     <h1>Excellent_develops</h1>
     <h2>Aspiring Software Developer</h2>
-    <p>
-      I'm an aspiring software developer, dedicated to continuous learning and improvement.
-      I'll share my progress, projects, and thoughts on the tech industry. 
-      Feel free to reach out and connect.
-    </p>
-
-    <a class="facebook" href="https://www.facebook.com/EminiExcellent" target="_blank">
-      <i class="fab fa-facebook-f"></i> Facebook Profile
-    </a>
-    <a class="whatsapp" href="https://wa.me/2349046463436" target="_blank">
-      <i class="fab fa-whatsapp"></i> WhatsApp Me
-    </a>
+    <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
+    <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
+    <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
   </div>
-
 </body>
-  </html>
+</html>
