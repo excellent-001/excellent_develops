@@ -6,198 +6,88 @@
     <title>Projects - Excellent_develops</title>
     <style>
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+            background-color: #111;
             color: white;
+            font-family: Arial, sans-serif;
             text-align: center;
-            padding: 0;
-            animation: bgChange 3s infinite alternate;
+            padding: 50px;
         }
-
-        @keyframes bgChange {
-            0% { background: linear-gradient(45deg, #ff0057, #ff7b00); }
-            50% { background: linear-gradient(45deg, #00c6ff, #0072ff); }
-            100% { background: linear-gradient(45deg, #7b00ff, #ff00d4); }
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        header a {
-            color: yellow;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        header a:hover {
-            text-decoration: underline;
-        }
-
         h1 {
-            margin-top: 30px;
-            color: yellow;
-            text-shadow: 0 0 10px yellow, 0 0 20px yellow;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
         }
-
         .project {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px;
             margin: 20px auto;
             max-width: 600px;
             border-radius: 10px;
-            box-shadow: 0 0 10px yellow;
+            box-shadow: 0 0 10px #00ff88;
             animation: fadeIn 1s ease-in-out;
         }
-
         .project h2 {
-            color: yellow;
+            color: #00ff88;
         }
-
         .btn {
             display: inline-block;
             margin-top: 10px;
             padding: 10px 20px;
-            color: black;
-            background-color: yellow;
+            color: white;
+            background-color: #00ff88;
             text-decoration: none;
             border-radius: 5px;
             transition: 0.3s;
-            font-weight: bold;
-            cursor: pointer;
         }
-
         .btn:hover {
-            background-color: white;
-            color: black;
-            box-shadow: 0 0 10px white;
+            background-color: #00ffaa;
+            box-shadow: 0 0 10px #00ffaa;
         }
-
+        a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
         }
-
-        /* Popup Styles */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: black;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px yellow;
-            text-align: center;
-            z-index: 1000;
-            animation: popFade 0.5s ease;
-        }
-
-        .popup h2 {
-            margin: 0;
-            color: yellow;
-        }
-
-        .popup button {
-            margin-top: 10px;
-            padding: 8px 15px;
-            background: yellow;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .popup button:hover {
-            background: white;
-            color: black;
-        }
-
-        @keyframes popFade {
-            from {opacity: 0; transform: translate(-50%, -45%);}
-            to {opacity: 1; transform: translate(-50%, -50%);}
-        }
-
-        /* Dark overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 999;
-        }
-
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.4);
-        }
     </style>
+    <script>
+        function comingSoon() {
+            alert("🚧 Coming Soon! 🚀");
+        }
+    </script>
 </head>
 <body>
-    <header>
-        <a href="index.html">Home</a>
-        <a href="aboutme.html">About Me</a>
-        <a href="projects.html">Projects</a>
-    </header>
-
     <h1>🚀 Projects</h1>
 
     <div class="project">
         <h2>1. Education Website</h2>
         <p>Creating an engaging platform for learning and academic growth.</p>
-        <button class="btn" onclick="showPopup()">View Project</button>
+        <a href="#" class="btn" onclick="comingSoon()">View Project</a>
     </div>
 
     <div class="project">
         <h2>2. Social Intelligence Hub</h2>
         <p>A social website that connects problem-solvers, innovators, and highly intellectual people globally.</p>
-        <button class="btn" onclick="showPopup()">View Project</button>
+        <a href="#" class="btn" onclick="comingSoon()">View Project</a>
     </div>
 
     <div class="project">
         <h2>3. Business Website: Pematech Company</h2>
         <p>Breaking limits and fostering excellence in technology solutions.</p>
-        <button class="btn" onclick="showPopup()">View Project</button>
+        <a href="#" class="btn" onclick="comingSoon()">View Project</a>
     </div>
 
     <div class="project">
         <h2>4. Excellent Global Updates</h2>
         <p>A global online hub for news, updates, and opportunities.</p>
-        <button class="btn" onclick="showPopup()">View Project</button>
+        <a href="#" class="btn" onclick="comingSoon()">View Project</a>
     </div>
 
-    <!-- Overlay & Popup -->
-    <div class="overlay" id="overlay" onclick="hidePopup()"></div>
-    <div class="popup" id="popup">
-        <h2>🚧 Coming Soon!</h2>
-        <button onclick="hidePopup()">OK</button>
-    </div>
-
-    <footer>
-        © 2025 Excellent_develops.com. All rights reserved.
-    </footer>
-
-    <script>
-        function showPopup() {
-            document.getElementById("popup").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
-
-        function hidePopup() {
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-        }
-    </script>
+    <p><a href="index.html">⬅ Back to Home</a></p>
 </body>
-    </html>
+</html>
