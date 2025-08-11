@@ -1,35 +1,78 @@
-<div style="text-align: center; margin-top: 30px; position: relative;">
-  <a href="about.html" 
-     style="display: inline-block; padding: 12px 25px; font-size: 18px; font-weight: bold; 
-            background: linear-gradient(135deg, #ff6b6b, #feca57); 
-            color: white; text-decoration: none; border-radius: 30px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            position: relative; overflow: hidden;">
-    About Me
-    <span class="sparkle"></span>
-  </a>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excellent Connect</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4a148c, #880e4f);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
 
-<style>
-a:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
+    header {
+      padding: 40px 20px;
+    }
 
-.sparkle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-  transform: translate(-50%, -50%) scale(0);
-  border-radius: 50%;
-  animation: sparkle 2s infinite ease-in-out;
-}
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
 
-@keyframes sparkle {
-  0%, 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-  50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-</style>
+    p {
+      font-size: 1.2rem;
+    }
+
+    /* Sparkle Button */
+    .sparkle-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 25px;
+      background: #ffcc00;
+      color: black;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      text-decoration: none;
+      position: relative;
+      animation: pulse 2s infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .sparkle-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00; }
+      50% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
+      100% { box-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00; }
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to Excellent Connect 🌟</h1>
+    <p>Connecting great minds, ideas, and innovations.</p>
+    
+    <!-- Centered Sparkle Button -->
+    <a href="about.html" class="sparkle-btn">✨ About Me ✨</a>
+  </header>
+
+  <footer>
+    <p>&copy; 2025 Excellent Connect. All rights reserved.</p>
+  </footer>
+
+</body>
+  </html>
