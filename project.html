@@ -1,81 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Projects - Excellent_develops</title>
-  <meta name="description" content="A showcase of projects by Excellent_develops.">
-  <meta name="keywords" content="projects, Excellent_develops, portfolio">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
-      background-size: 800% 800%;
-      animation: gradientBG 5s ease infinite;
-      color: white;
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    header {
-      text-align: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.3);
-    }
-    header h1 {
-      margin: 0;
-    }
-    main {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px;
-    }
-    .project-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px;
-      width: 300px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    .project-card h2 {
-      margin: 10px 0;
-      color: #fff;
-    }
-    .project-card p {
-      color: #f0f0f0;
-    }
-    .project-card a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 12px;
-      background: #0078ff;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .project-card a:hover {
-      background: #005bb5;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio projects by Excellent_develops — showcasing creative, practical, and impactful software development work.">
+    <meta name="keywords" content="Excellent_develops, portfolio, software developer, web development, projects, HTML, CSS, JavaScript">
+    <meta name="author" content="Excellent_develops">
+    <title>Projects | Excellent_develops</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-  <header>
-    <h1>My Projects</h1>
-    <p>Here are some projects I’ve worked on</p>
-  </header>
-  <main>
-    <div class="project-card">
-      <h2>Coming Soon</h2>
-      <p>Exciting projects are on the way. Stay tuned!</p>
-      <a href="index.html">Back to Home</a>
-    </div>
-  </main>
+    <header>
+        <nav>
+            <h1>Excellent_develops</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="project.html" class="active">Projects</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>My Projects</h2>
+            <p>Here’s a selection of my best work — designed, built, and refined to solve problems and deliver value.</p>
+        </section>
+
+        <section class="projects">
+            <article class="project-card">
+                <h3>Personal Portfolio Website</h3>
+                <p>A fully responsive portfolio website to showcase my skills, experience, and projects. Built with HTML, CSS, and JavaScript.</p>
+                <a href="https://excellent-001.github.io/excellent_develops/" target="_blank">View Project</a>
+            </article>
+
+            <article class="project-card">
+                <h3>JavaScript Weather App</h3>
+                <p>A simple, fast weather application using OpenWeather API to fetch real-time weather data. Includes location search and temperature conversion.</p>
+                <a href="#" target="_blank">View Project</a>
+            </article>
+
+            <article class="project-card">
+                <h3>Task Tracker App</h3>
+                <p>A productivity tool to create, update, and track daily tasks. Built with HTML, CSS, and localStorage for persistence.</p>
+                <a href="#" target="_blank">View Project</a>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Excellent_develops. All rights reserved.</p>
+    </footer>
 </body>
 </html>
