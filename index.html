@@ -1,73 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emini Excellent</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4e54c8, #8f94fb);
-            color: white;
-            text-align: center;
-        }
+<div style="text-align: center; margin-top: 30px; position: relative;">
+  <a href="about.html" 
+     style="display: inline-block; padding: 12px 25px; font-size: 18px; font-weight: bold; 
+            background: linear-gradient(135deg, #ff6b6b, #feca57); 
+            color: white; text-decoration: none; border-radius: 30px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            position: relative; overflow: hidden;">
+    About Me
+    <span class="sparkle"></span>
+  </a>
+</div>
 
-        header {
-            padding: 30px;
-        }
+<style>
+a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
+.sparkle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  animation: sparkle 2s infinite ease-in-out;
+}
 
-        p {
-            font-size: 1.2em;
-        }
-
-        .about-btn {
-            background-color: #ff9800;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-            display: inline-block;
-            margin-top: 40px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .about-btn:hover {
-            background-color: #e68900;
-            transform: scale(1.05);
-        }
-
-        footer {
-            margin-top: 50px;
-            padding: 10px;
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>Welcome to Emini Excellent's Space</h1>
-        <p>Connecting great minds, sharing ideas, inspiring change.</p>
-    </header>
-
-    <!-- About Me Button Centered -->
-    <div>
-        <a href="about.html" class="about-btn">About Me</a>
-    </div>
-
-    <footer>
-        &copy; 2025 Emini Excellent. All Rights Reserved.
-    </footer>
-
-</body>
-</html>
+@keyframes sparkle {
+  0%, 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+</style>
