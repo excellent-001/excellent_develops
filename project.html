@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_develops - Projects</title>
-
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Explore the portfolio projects of Excellent_develops. Innovative tech, creative solutions, and work that inspires.">
-  <meta name="keywords" content="Excellent_develops projects, software developer, innovation, tech, portfolio">
-  <meta name="author" content="Excellent_develops">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Projects - Excellent_develops</title>
+  <meta name="description" content="A showcase of projects by Excellent_develops.">
+  <meta name="keywords" content="projects, Excellent_develops, portfolio">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,7 +15,6 @@
       background-size: 800% 800%;
       animation: gradientBG 5s ease infinite;
       color: white;
-      text-align: center;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -27,55 +22,60 @@
       100% { background-position: 0% 50%; }
     }
     header {
-      padding: 50px 20px;
+      text-align: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
     }
-    h1 {
-      margin-bottom: 10px;
+    header h1 {
+      margin: 0;
     }
-    p {
-      max-width: 600px;
-      margin: 0 auto 30px;
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
     }
     .project-card {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      padding: 20px;
-      margin: 15px auto;
-      max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      padding: 15px;
+      margin: 10px;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: center;
     }
-    a.btn {
+    .project-card h2 {
+      margin: 10px 0;
+      color: #fff;
+    }
+    .project-card p {
+      color: #f0f0f0;
+    }
+    .project-card a {
       display: inline-block;
-      padding: 12px 20px;
-      background: #ff9800;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #0078ff;
       color: white;
       text-decoration: none;
-      font-size: 18px;
-      border-radius: 8px;
-      transition: background 0.3s ease;
+      border-radius: 5px;
     }
-    a.btn:hover {
-      background: #e68900;
+    .project-card a:hover {
+      background: #005bb5;
     }
   </style>
 </head>
 <body>
-
   <header>
     <h1>My Projects</h1>
-    <p>Here are some of my works, showcasing innovation, creativity, and technical skills.</p>
+    <p>Here are some projects I’ve worked on</p>
   </header>
-
-  <section>
+  <main>
     <div class="project-card">
       <h2>Coming Soon</h2>
-      <p>Exciting projects are on the way! Stay tuned for updates.</p>
+      <p>Exciting projects are on the way. Stay tuned!</p>
+      <a href="index.html">Back to Home</a>
     </div>
-  </section>
-
-  <footer style="margin-top: 30px;">
-    <a href="index.html" class="btn">Back to Home</a>
-  </footer>
-
+  </main>
 </body>
 </html>
