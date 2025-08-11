@@ -3,57 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emini Excellent</title>
+    <title>Jagun Quareeb Alabi - Emini_Excellent</title>
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #000000, #1a1a1a);
-            color: white;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #fff8e1, #ffecb3);
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+        header {
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100vh;
+            padding: 20px;
+            background: #b8860b;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.5em;
-        }
-        .about-link {
-            font-size: 1.2em;
+        nav a {
+            color: white;
             text-decoration: none;
-            color: gold;
-            background: rgba(255, 215, 0, 0.1);
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px gold;
-            transition: all 0.3s ease;
+            margin: 0 12px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #b8860b;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+        .hero a {
             display: inline-block;
-            animation: sparkle 1.5s infinite alternate;
+            padding: 12px 20px;
+            margin: 10px;
+            background: #b8860b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
         }
-        .about-link:hover {
+        .hero a:hover {
+            background: #a77d0a;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #b8860b;
+            color: white;
+            margin-top: 40px;
+        }
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
             background: gold;
-            color: black;
-            box-shadow: 0 0 25px gold;
-        }
-        @keyframes sparkle {
-            0% { text-shadow: 0 0 5px gold; }
-            100% { text-shadow: 0 0 20px gold; }
-        }
-        img {
-            width: 150px;
-            height: 150px;
             border-radius: 50%;
-            border: 3px solid gold;
-            box-shadow: 0 0 20px gold;
-            margin-bottom: 20px;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: sparkleAnim 2s infinite ease-in-out;
+        }
+        @keyframes sparkleAnim {
+            0%, 100% {transform: scale(0);}
+            50% {transform: scale(1);}
         }
     </style>
 </head>
 <body>
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Emini Excellent">
-    <h1>Welcome to My Space</h1>
-    <a href="about.html" class="about-link">✨ About Me ✨</a>
+
+<header>
+    <h1>Jagun Quareeb Alabi</h1>
+    <p>Popularly known as <strong>Emini_Excellent</strong></p>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="about.html">About Me</a>
+    </nav>
+</header>
+
+<section class="hero fade-in">
+    <h1>Welcome to My Website</h1>
+    <p>
+        I am a student of History and International Studies at the University of Ilorin, a youth advocate, storyteller, and changemaker passionate about 
+        leveraging technology and creative storytelling to drive sustainable development, health equity, and youth empowerment.
+    </p>
+    <a href="about.html">Learn More About Me</a>
+    <a href="projects.html">View My Projects</a>
+</section>
+
+<footer>
+    &copy; 2025 Jagun Quareeb Alabi — Emini_Excellent
+</footer>
+
+<script>
+    // Scroll fade-in
+    const faders = document.querySelectorAll('.fade-in');
+    window.addEventListener('scroll', () => {
+        faders.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 50) {
+                el.classList.add('visible');
+            }
+        });
+    });
+
+    // Sparkles generator
+    for (let i = 0; i < 30; i++) {
+        let sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.width = sparkle.style.height = Math.random() * 6 + 'px';
+        sparkle.style.top = Math.random() * window.innerHeight + 'px';
+        sparkle.style.left = Math.random() * window.innerWidth + 'px';
+        sparkle.style.animationDuration = Math.random() * 3 + 2 + 's';
+        document.body.appendChild(sparkle);
+    }
+</script>
+
 </body>
 </html>
