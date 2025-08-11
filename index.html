@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_develops Portfolio</title>
+  <title>Excellent_develops | Aspiring Software Developer</title>
+  <meta name="description" content="Excellent_develops is an aspiring software developer passionate about creating modern, responsive websites and web apps. Connect on Facebook or WhatsApp." />
+  <meta name="keywords" content="Excellent_develops, software developer, web developer, portfolio, HTML, CSS, JavaScript, responsive design" />
+  <meta name="author" content="Excellent_develops" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,33 +16,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       min-height: 100vh;
       background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
       background-size: 800% 800%;
-      animation: gradientBG 4s ease infinite;
+      animation: gradientBG 5s ease infinite; /* Faster background change */
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    .container {
-      max-width: 900px;
-      padding: 20px;
-    }
     .card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
       padding: 20px;
+      max-width: 350px; /* Fitable size */
       text-align: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       animation: fadeIn 1s ease-in-out;
-      margin-bottom: 30px;
     }
     .profile-pic {
-      width: 130px;
-      height: 130px;
+      width: 120px; /* Not too big */
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #0078ff;
@@ -73,22 +72,6 @@
       background: #005bb5;
       transform: translateY(-3px);
     }
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .project-card {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-    .project-card:hover {
-      transform: scale(1.02);
-    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -96,33 +79,13 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Profile Card -->
-    <div class="card">
-      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
-      <h1>Excellent_develops</h1>
-      <h2>Aspiring Software Developer</h2>
-      <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
-      <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
-      <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
-    </div>
-
-    <!-- Projects Section -->
-    <h2 style="color:white; text-align:center;">My Projects</h2>
-    <div class="projects">
-      <div class="project-card">
-        <h3>Project 1</h3>
-        <p>A cool project I worked on. Coming soon!</p>
-      </div>
-      <div class="project-card">
-        <h3>Project 2</h3>
-        <p>Another project. Coming soon!</p>
-      </div>
-      <div class="project-card">
-        <h3>Project 3</h3>
-        <p>More details coming soon.</p>
-      </div>
-    </div>
+  <div class="card">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/main/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
+    <h1>Excellent_develops</h1>
+    <h2>Aspiring Software Developer</h2>
+    <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
+    <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
+    <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
   </div>
 </body>
 </html>
