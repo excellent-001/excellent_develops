@@ -1,91 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_develops Portfolio</title>
-  <meta name="description" content="Excellent_develops - Aspiring Software Developer. View my projects, connect with me on Facebook or WhatsApp.">
-  <meta name="keywords" content="Excellent_develops, software developer, portfolio, projects, tech">
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
-      background-size: 800% 800%;
-      animation: gradientBG 5s ease infinite;
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 15px;
-      padding: 20px;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      animation: fadeIn 1s ease-in-out;
-    }
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #0078ff;
-      transition: transform 0.3s ease;
-    }
-    .profile-pic:hover {
-      transform: scale(1.05);
-    }
-    h1 {
-      color: #333;
-      margin: 10px 0 5px;
-    }
-    h2 {
-      color: #555;
-      margin: 5px 0 15px;
-    }
-    p {
-      color: #444;
-      line-height: 1.4;
-    }
-    a {
-      display: inline-block;
-      margin: 8px 10px;
-      padding: 10px 15px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: white;
-      background: #0078ff;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    a:hover {
-      background: #005bb5;
-      transform: translateY(-3px);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Excellent_develops - Aspiring software developer creating innovative projects, sharing coding knowledge, and learning new technologies.">
+    <meta name="keywords" content="Excellent_develops, software developer, web development, coding projects, portfolio, GitHub, HTML, CSS, JavaScript">
+    <meta name="author" content="Excellent_develops">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Excellent_develops | Software Developer Portfolio">
+    <meta property="og:description" content="Explore my portfolio of creative software projects, web development experiments, and tech insights.">
+    <meta property="og:image" content="https://excellent-001.github.io/excellent_develops/favicon.ico">
+    <meta property="og:url" content="https://excellent-001.github.io/excellent_develops/">
+    <meta property="og:type" content="website">
+
+    <title>Excellent_develops | Software Developer Portfolio</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+        }
+        h1 {
+            color: #00ff99;
+        }
+        p {
+            max-width: 600px;
+            margin: auto;
+            line-height: 1.6;
+        }
+        nav a {
+            color: #00ff99;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #1f1f1f;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
-    <h1>Excellent_develops</h1>
-    <h2>Aspiring Software Developer</h2>
-    <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
-    <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
-    <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
-    <a href="projects.html" target="_blank">View My Projects</a>
-  </div>
+
+<header>
+    <h1>Welcome to Excellent_develops</h1>
+    <p>Turning ideas into reality through code — Web Development, Software Engineering, and Creative Tech Solutions.</p>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="project.html">Projects</a>
+        <a href="https://github.com/excellent-001" target="_blank">GitHub</a>
+    </nav>
+</header>
+
+<main>
+    <h2>About Me</h2>
+    <p>Hello! I'm <strong>Excellent_develops</strong>, an aspiring software developer passionate about building useful and innovative projects. I’m always learning new technologies, improving my skills, and sharing my coding journey with others.</p>
+    
+    <h2>What I Do</h2>
+    <p>💻 Develop responsive websites and applications<br>
+       🚀 Experiment with creative tech ideas<br>
+       🌍 Share knowledge with the coding community
+    </p>
+</main>
+
+<footer>
+    <p>© 2025 Excellent_develops. All rights reserved.</p>
+</footer>
+
 </body>
-    </html>
+</html>
