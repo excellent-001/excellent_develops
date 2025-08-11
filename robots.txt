@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://excellent-001.github.io/excellent_develops/sitemap.xml
