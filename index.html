@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent App - Coming Soon</title>
+  <title>Excellent_develops Portfolio</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f3f4f6;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      background: linear-gradient(270deg, #0078ff, #00c6ff, #6a11cb, #2575fc);
+      background-size: 800% 800%;
+      animation: gradientBG 5s ease infinite; /* faster change */
     }
-    .container {
-      text-align: center;
-      background: white;
-      padding: 30px;
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 20px;
       max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-in-out;
     }
     .profile-pic {
       width: 120px;
@@ -30,59 +38,52 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #0078ff;
-      margin-bottom: 15px;
+      transition: transform 0.3s ease;
+    }
+    .profile-pic:hover {
+      transform: scale(1.05);
     }
     h1 {
       color: #333;
+      margin: 10px 0 5px;
+    }
+    h2 {
+      color: #555;
+      margin: 5px 0 15px;
     }
     p {
-      color: #666;
-      font-size: 16px;
-      margin-bottom: 20px;
+      color: #444;
+      line-height: 1.4;
     }
-    .note {
-      font-size: 14px;
-      color: #888;
-      margin-top: 20px;
-    }
-    .btn {
+    a {
       display: inline-block;
-      margin: 8px 5px;
+      margin: 8px 10px;
       padding: 10px 15px;
       border-radius: 8px;
       text-decoration: none;
       color: white;
-      font-weight: bold;
+      background: #0078ff;
       transition: background 0.3s ease, transform 0.3s ease;
     }
-    .facebook {
-      background: #1877f2;
-    }
-    .facebook:hover {
-      background: #145db2;
+    a:hover {
+      background: #005bb5;
       transform: translateY(-3px);
     }
-    .whatsapp {
-      background: #25d366;
-    }
-    .whatsapp:hover {
-      background: #1aa64f;
-      transform: translateY(-3px);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="card">
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture" class="profile-pic" />
-    <h1>Excellent App</h1>
-    <p>Connecting intelligent minds and great thinkers from around the world.</p>
-    <h2>🚀 Coming Soon...</h2>
-
-    <!-- Social buttons -->
-    <a href="https://www.facebook.com/EminiExcellent" target="_blank" class="btn facebook">Facebook</a>
-    <a href="https://wa.me/2349046463436" target="_blank" class="btn whatsapp">WhatsApp</a>
-
-    <div class="note">Stay tuned for something amazing.</div>
+    <h1>Excellent_develops</h1>
+    <h2>Aspiring Software Developer</h2>
+    <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
+    <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
+    <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
+    <a href="projects.html">View My Projects</a>
   </div>
 </body>
 </html>
