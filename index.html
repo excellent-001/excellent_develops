@@ -1,146 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jagun Quareeb Alabi - Emini_Excellent</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #fff8e1, #ffecb3);
-            color: #333;
-            overflow-x: hidden;
-            position: relative;
-        }
-        header {
-            text-align: center;
-            padding: 20px;
-            background: #b8860b;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 12px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            color: #b8860b;
-            margin-bottom: 10px;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: auto;
-            margin-bottom: 30px;
-        }
-        .hero a {
-            display: inline-block;
-            padding: 12px 20px;
-            margin: 10px;
-            background: #b8860b;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .hero a:hover {
-            background: #a77d0a;
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #b8860b;
-            color: white;
-            margin-top: 40px;
-        }
-        /* Fade-in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Sparkles */
-        .sparkle {
-            position: absolute;
-            background: gold;
-            border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
-            animation: sparkleAnim 2s infinite ease-in-out;
-        }
-        @keyframes sparkleAnim {
-            0%, 100% {transform: scale(0);}
-            50% {transform: scale(1);}
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jagun Quareeb Alabi | Emini_Excellent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      background: #f5f5f5;
+      scroll-behavior: smooth;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(255,236,179,0.8), rgba(255,216,51,0.8));
+      position: relative;
+      text-align: center;
+      padding: 20px;
+    }
+    header img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 5px solid #b8860b;
+      box-shadow: 0 0 20px rgba(184, 134, 11, 0.6);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeSlideIn 1s ease forwards 0.5s;
+    }
+    header h1, header p {
+      font-weight: 300;
+      margin: 10px 0;
+      opacity: 0;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      color: #b8860b;
+      animation: typeWriter 3s steps(30) forwards 1.5s;
+    }
+    header p {
+      font-size: 1.1rem;
+      animation: fadeSlideIn 1s ease forwards 4s;
+    }
+    nav {
+      margin-top: 40px;
+    }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 8px 12px;
+      transition: background 0.3s, color 0.3s;
+    }
+    nav a:hover {
+      background: #b8860b;
+      color: white;
+      border-radius: 4px;
+    }
+    section {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      color: #b8860b;
+      margin-bottom: 15px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      background: #b8860b;
+      color: white;
+      margin-top: 60px;
+    }
+
+    @keyframes fadeSlideIn {
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes typeWriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Jagun Quareeb Alabi</h1>
-    <p>Popularly known as <strong>Emini_Excellent</strong></p>
+  <header>
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Jagun Quareeb Alabi" />
+    <h1>Jagun Quareeb Alabi — Emini_Excellent</h1>
+    <p>Youth Advocate · Writer · Change Maker</p>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="about.html">About Me</a>
+      <a href="#about">About Me</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
     </nav>
-</header>
+  </header>
 
-<section class="hero fade-in">
-    <h1>Welcome to My Website</h1>
+  <section id="about">
+    <h2>About Me</h2>
     <p>
-        I am a student of History and International Studies at the University of Ilorin, a youth advocate, storyteller, and changemaker passionate about 
-        leveraging technology and creative storytelling to drive sustainable development, health equity, and youth empowerment.
+      A student of History and International Studies at the University of Ilorin,
+      I’m passionate about driving change through storytelling, advocacy, tech, and community engagement.
     </p>
-    <a href="about.html">Learn More About Me</a>
-    <a href="projects.html">View My Projects</a>
-</section>
+  </section>
 
-<footer>
+  <section id="achievements">
+    <h2>Achievements</h2>
+    <div class="cards">
+      <div class="card">Pursuing a degree in History &amp; International Studies</div>
+      <div class="card">Content Creator for Foundation for Neuromuscular Support Nigeria</div>
+      <div class="card">Human Rights Advocate — Amnesty International UK</div>
+      <div class="card">Accelerate Impact Scholarship (Nguvu Collective, 2025)</div>
+    </div>
+  </section>
+
+  <section id="certifications">
+    <h2>Certifications & Skills</h2>
+    <p>African Masterclass Series, Jobberman, Growth Clan & more<br />
+    Blog Writing · Advocacy · Digital Storytelling · Youth Empowerment · SDG Projects</p>
+  </section>
+
+  <footer id="contact">
     &copy; 2025 Jagun Quareeb Alabi — Emini_Excellent
-</footer>
+  </footer>
 
-<script>
-    // Scroll fade-in
-    const faders = document.querySelectorAll('.fade-in');
-    window.addEventListener('scroll', () => {
-        faders.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 50) {
-                el.classList.add('visible');
-            }
-        });
-    });
-
-    // Sparkles generator
-    for (let i = 0; i < 30; i++) {
-        let sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.width = sparkle.style.height = Math.random() * 6 + 'px';
-        sparkle.style.top = Math.random() * window.innerHeight + 'px';
-        sparkle.style.left = Math.random() * window.innerWidth + 'px';
-        sparkle.style.animationDuration = Math.random() * 3 + 2 + 's';
-        document.body.appendChild(sparkle);
-    }
-</script>
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const revealCards = () => {
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          card.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', revealCards);
+    window.addEventListener('load', revealCards);
+  </script>
 
 </body>
 </html>
