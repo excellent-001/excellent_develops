@@ -3,75 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excellent Develops</title>
+    <title>Excellent_Developers</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #111, #222);
             color: white;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            animation: gradientBG 4s ease infinite;
         }
-        header {
-            padding: 40px 0;
+
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
         }
-        h1 {
-            font-size: 2.5rem;
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88;
-        }
-        p {
-            font-size: 1.1rem;
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
             max-width: 700px;
-            margin: auto;
-            line-height: 1.6;
         }
-        .social {
+
+        img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        .buttons {
             margin-top: 20px;
         }
-        .social a {
+
+        .btn {
             display: inline-block;
-            margin: 0 10px;
-            font-size: 1rem;
-            padding: 10px 15px;
+            background-color: #ff9800;
             color: white;
-            background: #00ff88;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .social a:hover {
-            background: #00ffaa;
-        }
-        nav a {
-            display: inline-block;
-            margin: 20px 15px;
-            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
+            transition: 0.3s;
         }
-        nav a:hover {
-            color: #00ff88;
+
+        .btn:hover {
+            background-color: #e68900;
+        }
+
+        .social-icons {
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5em;
+            margin: 0 10px;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Welcome to Excellent Develops</h1>
-        <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry. Feel free to reach out and connect.</p>
-    </header>
+    <div class="container">
+        <img src="https://bootcamprankings.com/wp-content/uploads/2021/01/How-to-Learn-Web-Development.png" alt="Web Development">
+        <h1>Welcome to Excellent_Developers</h1>
+        <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry.</p>
 
-    <div class="social">
-        <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
-        <a href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
-        <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
-        <a href="https://x.com/TheOlodo_Nation" target="_blank">Twitter</a>
+        <div class="buttons">
+            <a href="about.html" class="btn">About Me</a>
+            <a href="projects.html" class="btn">Projects</a>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.facebook.com/EminiExcellent" target="_blank">📘</a>
+            <a href="https://wa.me/2349046463436" target="_blank">💬</a>
+            <a href="https://x.com/TheOlodo_Nation" target="_blank">🐦</a>
+            <a href="https://www.linkedin.com/inquareeb-jagun" target="_blank">🔗</a>
+        </div>
     </div>
-
-    <nav>
-        <a href="about.html">About Me</a>
-        <a href="projects.html">Projects</a>
-    </nav>
 
 </body>
 </html>
