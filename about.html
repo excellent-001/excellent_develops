@@ -3,85 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Emini_Excellent</title>
+    <title>Excellent_Develops - Home</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
             text-align: center;
-            background: linear-gradient(135deg, #f0f0f0, #d4af37);
-            color: #333;
+            height: 100vh;
+            background: linear-gradient(-45deg, #1e3c72, #2a5298, #00c6ff, #0072ff);
+            background-size: 400% 400%;
+            animation: gradientBG 5s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        header {
-            padding: 30px 0;
-            background-color: #222;
-            color: white;
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        nav a {
-            text-decoration: none;
-            color: white;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: gold;
-        }
+
         h1 {
-            color: gold;
             font-size: 2.5rem;
+            text-shadow: 0 0 10px black;
         }
-        img {
-            margin-top: 20px;
+
+        .profile-pic {
             width: 200px;
             height: 200px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid gold;
+            border: 4px solid white;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
         }
+
         p {
-            max-width: 900px;
-            margin: auto;
+            max-width: 500px;
             line-height: 1.6;
-            padding: 15px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px black;
         }
-        footer {
-            background-color: #222;
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 1.8rem;
             color: white;
-            padding: 10px 0;
-            margin-top: 30px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: gold;
+        }
+
+        nav {
+            margin-top: 25px;
+        }
+
+        nav a {
+            display: inline-block;
+            background: gold;
+            color: black;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background: orange;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>About Me</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="projects.html">Projects</a>
-        </nav>
-    </header>
+    <h1>Excellent_Develops</h1>
+    <img src="https://bootcamprankings.com/wp-content/uploads/2021/01/How-to-Learn-Web-Development.png" alt="Web Development" class="profile-pic">
 
-    <main>
-        <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile Picture">
+    <p>
+        Welcome to Excellent_Develops — where creativity meets technology.  
+        I build impactful digital solutions and share ideas to inspire change.
+    </p>
 
-        <p>
-            Jagun Quareeb Alabi, popularly known as Emini_Excellent, was born in Ogun State, Nigeria.
-            He is a Muslim, Blog Writer, Youth Advocate, Change Maker, SDGs Champion, Tech Enthusiast,
-            and Student of History and International Studies at the University of Ilorin, Kwara State.
-        </p>
-        <p>
-            Quareeb is dedicated to creating positive change within his community, Nigeria, Africa, and beyond.
-            His work blends academic insight, grassroots engagement, creative storytelling, and advocacy for the
-            United Nations Sustainable Development Goals (SDGs) with a focus on health equity, youth empowerment,
-            human rights, and sustainable development.
-        </p>
-    </main>
+    <div class="social-icons">
+        <a href="https://facebook.com" target="_blank">📘</a>
+        <a href="https://wa.me/1234567890" target="_blank">💬</a>
+        <a href="https://linkedin.com" target="_blank">🔗</a>
+    </div>
 
-    <footer>
-        <p>© 2025 Jagun Quareeb Alabi | Emini_Excellent</p>
-    </footer>
+    <nav>
+        <a href="about.html">About Me</a>
+        <a href="projects.html">View Projects</a>
+    </nav>
 
 </body>
 </html>
