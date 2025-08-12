@@ -1,106 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excellent_Developers</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43, #2c5364);
-            background-size: 400% 400%;
-            animation: gradientBG 4s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
-        }
-
-        .container {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 700px;
-        }
-
-        img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.1em;
-        }
-
-        .buttons {
-            margin-top: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #ff9800;
-            color: white;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #e68900;
-        }
-
-        .social-icons {
-            margin-top: 15px;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: 1.5em;
-            margin: 0 10px;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excellent_develops Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: white;
+    }
+    header {
+      text-align: center;
+      padding: 30px 10px;
+      background: #1e293b;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      height: 25px;
+      overflow: hidden;
+    }
+    .slideshow span {
+      position: absolute;
+      opacity: 0;
+      animation: fade 6s infinite;
+    }
+    .slideshow span:nth-child(1) { animation-delay: 0s; }
+    .slideshow span:nth-child(2) { animation-delay: 2s; }
+    .slideshow span:nth-child(3) { animation-delay: 4s; }
+    @keyframes fade {
+      0%, 20% { opacity: 0; }
+      25%, 45% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    nav {
+      text-align: center;
+      background: #334155;
+      padding: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #38bdf8;
+    }
+    section {
+      padding: 40px 20px;
+      text-align: center;
+      transition: background 0.5s;
+    }
+    section:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    footer {
+      background: #1e293b;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://bootcamprankings.com/wp-content/uploads/2021/01/How-to-Learn-Web-Development.png" alt="Web Development">
-        <h1>Welcome to Excellent_Developers</h1>
-        <p>I'm an aspiring software developer, dedicated to continuous learning and improvement. I share my progress, projects, and thoughts on the tech industry.</p>
+  <header>
+    <h1>Excellent_develops</h1>
+    <p class="slideshow">
+      <span>Turning ideas into reality 🚀</span>
+      <span>Building the future, one line of code at a time 💻</span>
+      <span>Creating solutions that inspire ✨</span>
+    </p>
+  </header>
 
-        <div class="buttons">
-            <a href="about.html" class="btn">About Me</a>
-            <a href="projects.html" class="btn">Projects</a>
-        </div>
+  <nav>
+    <a href="about.html">About Me</a>
+    <a href="projects.html">Projects</a>
+    <a href="coming-soon.html">Contact</a>
+    <a href="coming-soon.html">FAQ</a>
+  </nav>
 
-        <div class="social-icons">
-            <a href="https://www.facebook.com/EminiExcellent" target="_blank">📘</a>
-            <a href="https://wa.me/2349046463436" target="_blank">💬</a>
-            <a href="https://x.com/TheOlodo_Nation" target="_blank">🐦</a>
-            <a href="https://www.linkedin.com/inquareeb-jagun" target="_blank">🔗</a>
-        </div>
-    </div>
+  <section>
+    <h2>About Me</h2>
+    <p>I’m Excellent_develops — an aspiring software developer with a passion for continuous learning and creating impactful, useful, and innovative projects.</p>
+  </section>
+
+  <section>
+    <h2>My Mission</h2>
+    <p>To craft software solutions that solve real problems, inspire others, and push the limits of what’s possible through technology.</p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <p>Explore my creative and technical work — from simple experiments to full-featured applications.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Excellent_develops | Built with ❤️ and passion for code
+  </footer>
 
 </body>
 </html>
