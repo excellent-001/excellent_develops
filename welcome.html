@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Welcome • Excellent_Develops</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <!-- Sign out button -->
   <button onclick="logout()" class="btn" style="position:fixed;right:18px;top:18px">Sign out</button>
 
   <div class="container header-gap center">
@@ -23,6 +25,53 @@
     </div>
   </div>
 
-  <script type="module" src="auth-guard.js"></script>
+  <!-- Firebase Authentication Guard -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    await setPersistence(auth, browserLocalPersistence);
+
+    // Auto logout after 60 minutes
+    const LIMIT_MINUTES = 60;
+    const LS_KEY = "ed_last_active_at";
+    const setActive = () => localStorage.setItem(LS_KEY, String(Date.now()));
+    ["click","keydown","mousemove","touchstart","scroll"].forEach(evt => window.addEventListener(evt, setActive, {passive:true}));
+    setInterval(async ()=>{
+      const last = Number(localStorage.getItem(LS_KEY) || "0");
+      if (last && Date.now() - last > LIMIT_MINUTES*60*1000) {
+        try { await signOut(auth); } catch(e){}
+        window.location.replace("index.html");
+      }
+    }, 15*1000);
+    setActive();
+
+    // Redirect if not logged in
+    onAuthStateChanged(auth, (user)=>{
+      if(!user){
+        window.location.replace("index.html");
+      }
+    });
+
+    // Global logout
+    window.logout = async ()=>{
+      try { await signOut(auth); } catch(e){}
+      window.location.href = "index.html";
+    };
+  </script>
 </body>
 </html>
