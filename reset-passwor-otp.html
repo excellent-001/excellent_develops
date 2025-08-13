@@ -1,99 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reset Password</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6a0dad, #9b4dca);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+    .container {
+      background: #fff;
+      color: #333;
+      padding: 25px;
+      border-radius: 15px;
+      width: 320px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 15px;
+      color: #6a0dad;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background: #6a0dad;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover {
+      background: #580a9e;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Reset Your Password</h2>
+
+<div class="container">
+  <h2>Reset Password</h2>
   
-  <div>
-    <input type="email" id="email" placeholder="Enter your email">
-    <button id="sendCode">Send Verification Code</button>
+  <!-- Step 1: Ask for email -->
+  <div id="step1">
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button onclick="sendVerificationCode()">Send Code</button>
   </div>
 
-  <div style="margin-top:15px;">
-    <input type="text" id="verificationCode" placeholder="Enter code">
-    <button id="verifyCode">Verify Code</button>
+  <!-- Step 2: Enter verification code -->
+  <div id="step2" class="hidden">
+    <input type="text" id="code" placeholder="Enter verification code" required>
+    <input type="password" id="newPassword" placeholder="Enter new password" required>
+    <button onclick="verifyCodeAndReset()">Reset Password</button>
   </div>
+</div>
 
-  <div style="margin-top:15px;">
-    <input type="password" id="newPassword" placeholder="Enter new password">
-    <button id="resetPassword">Reset Password</button>
-  </div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
 
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
+<script>
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  // EmailJS init
+  emailjs.init("h5LWzY8YUESb4sZbS");
+
+  let generatedCode = "";
+
+  function sendVerificationCode() {
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+    generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const templateParams = {
+      to_email: email,
+      code: generatedCode
     };
-    firebase.initializeApp(firebaseConfig);
 
-    // EmailJS init
-    (function(){
-      emailjs.init("h5LWzY8YUESb4sZbS");
-    })();
-
-    let generatedCode = "";
-    let emailForReset = "";
-
-    document.getElementById('sendCode').addEventListener('click', function() {
-      emailForReset = document.getElementById('email').value.trim();
-      if(!emailForReset) {
-        alert("Please enter your email");
-        return;
-      }
-      generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-      emailjs.send("service_cvvr3vn", "template_6xgms6a", {
-        to_email: emailForReset,
-        verification_code: generatedCode
-      }).then(function() {
+    emailjs.send("service_cvvr3vn", "template_6xgms6a", templateParams)
+      .then(function() {
         alert("Verification code sent to your email.");
-      }, function(err) {
-        alert("Error sending code: " + JSON.stringify(err));
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
+      }, function(error) {
+        alert("Error sending code: " + JSON.stringify(error));
       });
-    });
+  }
 
-    document.getElementById('verifyCode').addEventListener('click', function() {
-      const enteredCode = document.getElementById('verificationCode').value.trim();
-      if(enteredCode === generatedCode) {
-        alert("Code verified. You can now reset your password.");
-      } else {
-        alert("Incorrect code. Please try again.");
-      }
-    });
+  function verifyCodeAndReset() {
+    const enteredCode = document.getElementById("code").value.trim();
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-    document.getElementById('resetPassword').addEventListener('click', function() {
-      const enteredCode = document.getElementById('verificationCode').value.trim();
-      const newPassword = document.getElementById('newPassword').value.trim();
+    if (enteredCode !== generatedCode) {
+      alert("Invalid verification code.");
+      return;
+    }
 
-      if(enteredCode !== generatedCode) {
-        alert("You must enter the correct verification code first.");
-        return;
-      }
-      if(newPassword.length < 6) {
-        alert("Password must be at least 6 characters.");
-        return;
-      }
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        alert("Password reset email sent. Please check your inbox.");
+        window.location.href = "login.html";
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  }
+</script>
 
-      firebase.auth().sendPasswordResetEmail(emailForReset)
-        .then(() => {
-          alert("Password reset email sent. Redirecting to login...");
-          window.location.href = "login.html";
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    });
-  </script>
 </body>
 </html>
