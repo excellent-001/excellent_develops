@@ -1,102 +1,57 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>My Projects • Excellent_Develops</title>
-<style>
-  :root{
-    --bg1:#0d0b16; --bg2:#161028; --card:#1f1636; --text:#f3ecff; --muted:#cbbcff;
-    --accent:#a36cff; --ring:rgba(163,108,255,.35);
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; color:var(--text);
-    background: radial-gradient(1200px 700px at -10% -10%, #3a1a73 0%, transparent 60%),
-                radial-gradient(1000px 600px at 110% 110%, #5c1d91 0%, transparent 60%),
-                linear-gradient(180deg,var(--bg1),var(--bg2));
-    min-height:100%;
-  }
-  header{display:flex; justify-content:space-between; align-items:center; padding:18px 18px}
-  h1{margin:0; font-size:24px}
-  .btn-small{padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:700;
-             background:#2a2046; color:#e8ddff}
-  .wrap{max-width:1100px; margin:0 auto; padding:10px 18px 40px}
-  .grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px}
-  @media (max-width:820px){ .grid{grid-template-columns:1fr} }
-  .card{
-    background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
-    border:1px solid rgba(255,255,255,.10); border-radius:16px; padding:18px;
-    box-shadow:0 12px 40px rgba(0,0,0,.4);
-  }
-  .card h2{margin:4px 0 8px; font-size:18px; color:#f1eaff}
-  .card p{margin:0 0 12px; color:var(--muted); line-height:1.6}
-  .btn{
-    display:inline-block; padding:10px 14px; border-radius:12px; border:none; cursor:pointer; font-weight:800;
-    color:#140a1f; background:linear-gradient(90deg,#a36cff,#e29bff); text-decoration:none;
-    box-shadow:0 12px 26px rgba(163,108,255,.35);
-  }
-  footer{margin:24px 0 18px; text-align:center; color:#b9a8ff; font-size:12px}
-</style>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>My Projects • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <h1>My Projects</h1>
-    <button class="btn-small" onclick="logout()">Sign out</button>
-  </header>
+  <button onclick="logout()" class="btn" style="position:fixed;right:18px;top:18px">Sign out</button>
 
-  <main class="wrap">
-    <div class="grid">
-      <div class="card">
-        <h2>1) Education Website</h2>
-        <p>Creating an engaging platform for learning and academic growth.</p>
+  <div class="container header-gap">
+    <div class="projects-header">
+      <h1>My Projects</h1>
+      <span class="badge">Secure Area</span>
+    </div>
+
+    <div class="grid grid-2 big-gap">
+      <div class="card stack">
+        <div class="card-title">1. Education Website</div>
+        <div class="card-desc">An engaging platform for learning and academic growth.</div>
         <a class="btn" href="coming-soon.html">View Project</a>
       </div>
-      <div class="card">
-        <h2>2) Social Intelligence Hub</h2>
-        <p>Connecting problem-solvers, innovators, and highly intellectual people globally.</p>
+
+      <div class="card stack">
+        <div class="card-title">2. Social Intelligence Hub</div>
+        <div class="card-desc">Connecting problem-solvers, innovators, and highly intellectual people.</div>
         <a class="btn" href="coming-soon.html">View Project</a>
       </div>
-      <div class="card">
-        <h2>3) Pematech Company</h2>
-        <p>Business website: Breaking limits and fostering excellence.</p>
+
+      <div class="card stack">
+        <div class="card-title">3. Pematech Company</div>
+        <div class="card-desc">Business website: breaking limits and fostering excellence.</div>
         <a class="btn" href="coming-soon.html">View Project</a>
       </div>
-      <div class="card">
-        <h2>4) Excellent Global Concepts</h2>
-        <p>A global hub for news, updates, and opportunities.</p>
+
+      <div class="card stack">
+        <div class="card-title">4. Excellent Global Concepts</div>
+        <div class="card-desc">Global updates, opportunities, and insights.</div>
         <a class="btn" href="coming-soon.html">View Project</a>
       </div>
     </div>
-  </main>
 
-  <footer>
-    © 2025 Excellent_Develops. All rights reserved.
-  </footer>
+    <div class="footer">
+      <div>Contact: quareebalabi22@gmail.com • +2349046463436 • +2348142370183</div>
+      <div class="socials">
+        <a class="icon-btn" href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
+        <a class="icon-btn" href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
+        <a class="icon-btn" href="https://x.com/TheOlodo_Nation" target="_blank">X (Twitter)</a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">LinkedIn</a>
+      </div>
+      <div class="section-gap">Created by Excellent Global Conceptional 2025. Copyright “All rights reserved”.</div>
+    </div>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user)=>{ if(!user) window.location.replace('login.html'); });
-    window.logout = async ()=>{ try{ await signOut(auth);}catch(e){} finally{ window.location.href='login.html'; }};
-
-    // 60 min inactivity logout
-    let timer; const reset=()=>{ clearTimeout(timer); timer=setTimeout(()=>window.logout(), 60*60*1000); };
-    ['click','mousemove','keydown','scroll','touchstart'].forEach(evt=>window.addEventListener(evt, reset));
-    reset();
-  </script>
+  <script type="module" src="auth-guard.js"></script>
 </body>
-  </html>
+</html>
