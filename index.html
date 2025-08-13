@@ -1,198 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Excellent_Develops Login</title>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Excellent Developers - Sign In</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
     body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #0d0d1a, #0a0a14);
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
+      background-color: #0d1117;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-
-    .container {
-        max-width: 400px;
-        width: 100%;
-        background-color: rgba(20, 20, 35, 0.95);
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    .card {
+      background: #161b22;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: min(350px, 90vw);
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.3);
     }
-
     .logo {
-        display: block;
-        margin: 0 auto 10px;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
     }
-
-    h1 {
-        text-align: center;
-        font-size: 1.6em;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #00d4ff;
-    }
-
-    label {
-        display: block;
-        margin: 8px 0 5px;
-    }
-
     input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        margin-bottom: 15px;
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+      outline: none;
     }
-
-    .btn {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-        color: white;
-        font-size: 1em;
-        cursor: pointer;
-        transition: 0.3s;
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #238636;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
     }
-
-    .btn:hover {
-        opacity: 0.9;
+    button:hover {
+      background: #2ea043;
     }
-
-    .forgot {
-        text-align: right;
-        font-size: 0.85em;
-        margin-top: -10px;
-        margin-bottom: 15px;
+    a {
+      display: block;
+      margin-top: 12px;
+      color: #58a6ff;
+      text-decoration: none;
+      font-size: 14px;
     }
-
-    .forgot a {
-        color: #9f7aea;
-        text-decoration: none;
+    a:hover {
+      text-decoration: underline;
     }
-
-    .footer {
-        text-align: center;
-        font-size: 0.8em;
-        margin-top: 15px;
-        color: #888;
-    }
-
-    .footer a {
-        color: #9f7aea;
-        text-decoration: none;
-    }
-
-    #forgot-form {
-        display: none;
-        margin-top: 15px;
-        background: rgba(255,255,255,0.05);
-        padding: 10px;
-        border-radius: 8px;
-    }
-</style>
+  </style>
 </head>
 <body>
+  <div class="card">
+    <img src="web-dev-logo.jpg" alt="Logo" class="logo"/>
+    <h2>Excellent Developers</h2>
+    
+    <input type="email" id="email" placeholder="Email" required/>
+    <input type="password" id="password" placeholder="Password" required/>
+    <button id="signinBtn">Sign In</button>
+    <a href="#" id="forgotPassword">Forgot Password?</a>
+    
+    <p id="message" style="color:red; font-size:14px; margin-top:10px;"></p>
+  </div>
 
-<div class="container">
-    <img src="your-logo.png" alt="Logo" class="logo">
-    <h1>Excellent_Develops</h1>
-
-    <!-- Login Form -->
-    <div id="login-form">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="Enter your email">
-
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="Enter your password">
-
-        <div class="forgot">
-            <a href="#" onclick="showForgotForm()">Forgot Password?</a>
-        </div>
-
-        <button class="btn" onclick="login()">Sign In</button>
-    </div>
-
-    <!-- Forgot Password Form -->
-    <div id="forgot-form">
-        <label>Enter your registered email</label>
-        <input type="email" id="forgot-email" placeholder="Enter your email">
-        <button class="btn" onclick="resetPassword()">Send Reset Link</button>
-    </div>
-
-    <div class="footer">
-        © 2025 Excellent Developers. All rights reserved.
-    </div>
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
-
-<script>
-    // Your Firebase Config
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Show forgot form
-    function showForgotForm() {
-        document.getElementById("login-form").style.display = "none";
-        document.getElementById("forgot-form").style.display = "block";
-    }
-
-    // Login function
-    function login() {
-        const email = document.getElementById("login-email").value;
-        const password = document.getElementById("login-password").value;
-
-        auth.signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            alert("Login Successful!");
-            window.location.href = "dashboard.html"; // Redirect after login
-        })
-        .catch(error => {
-            alert(error.message);
-        });
-    }
-
-    // Reset password
-    function resetPassword() {
-        const email = document.getElementById("forgot-email").value;
-
-        auth.sendPasswordResetEmail(email)
-        .then(() => {
-            alert("Password reset link sent to your email.");
-            document.getElementById("forgot-form").style.display = "none";
-            document.getElementById("login-form").style.display = "block";
-        })
-        .catch(error => {
-            alert(error.message);
-        });
-    }
-</script>
-
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
