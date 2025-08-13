@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reset Password • OTP Verification</title>
+  <style>
+    :root{
+      --bg1:#4b0082; /* indigo */
+      --bg2:#800080; /* purple */
+      --card:#ffffff;
+      --muted:#7f8ea3;
+      --accent:#8a2be2;
+      --ok:#16a34a;
+      --danger:#dc2626;
+      --shadow: 0 10px 35px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background: radial-gradient(1200px 1200px at 20% 10%, #5d30a5 0%, transparent 60%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:#fff;
+    }
+    .wrap{
+      width:min(460px, 96vw);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(6px);
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;margin:6px 4px 14px;
+    }
+    .brand img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+    .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.2px}
+    .card{
+      background:var(--card);
+      color:#111827;
+      border-radius:16px;
+      padding:20px 18px;
+      box-shadow:var(--shadow);
+      animation:pop .45s ease-out both;
+    }
+    @keyframes pop{
+      0%{transform:scale(.96);opacity:0}
+      100%{transform:scale(1);opacity:1}
+    }
+    h2{margin:6px 0 2px;font-size:20px}
+    p.sub{margin:0 0 14px;color:#475569;font-size:14px}
+    label{display:block;font-size:13px;margin:10px 0 6px;color:#374151}
+    input{
+      width:100%;padding:12px 12px;border-radius:10px;border:1px solid #e5e7eb;
+      font-size:14px;outline:none;background:#fff;
+    }
+    input:focus{border-color:#c7a6ff; box-shadow:0 0 0 3px #e9ddff}
+    .row{display:flex;gap:10px;align-items:flex-end}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:8px;width:100%;padding:12px 14px;border:0;border-radius:10px;
+      background:var(--accent);color:#fff;font-weight:600;cursor:pointer;
+    }
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .muted{color:var(--muted);font-size:12px;margin-top:10px}
+    .error{color:var(--danger);font-size:12px;margin-top:8px;min-height:16px}
+    .ok{color:var(--ok)}
+    .hidden{display:none}
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,.55);
+      display:flex;align-items:center;justify-content:center;z-index:50;
+    }
+    .modal{
+      width:min(420px,92vw);background:#fff;color:#111827;border-radius:18px;
+      padding:22px;box-shadow:var(--shadow);text-align:center;
+      animation:drop .35s ease-out both;
+    }
+    @keyframes drop{0%{transform:translateY(-10px) scale(.98);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+    .check{
+      width:58px;height:58px;margin:4px auto 10px;border-radius:50%;
+      border:3px solid #22c55e;display:grid;place-items:center;position:relative;
+      animation:pulse 1.2s ease-in-out 2;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1)}50%{transform:scale(1.06)}
+    }
+    .check::after{
+      content:"✔";font-size:28px;color:#22c55e;line-height:1;position:relative;top:-1px;
+    }
+    .modal p{margin:8px 0 14px;color:#334155}
+    .modal .actions{display:flex;gap:10px}
+    .btn-ghost{
+      background:#eee;color:#111;border:1px solid #e5e7eb;
+    }
+    .timer{font-size:12px;color:#64748b;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops"/>
+      <h1>Reset Password (OTP)</h1>
+    </div>
+
+    <div class="card" id="step-email">
+      <h2>Step 1 — Send OTP</h2>
+      <p class="sub">Enter the email you used to register. We’ll email you a 6-digit code.</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <div class="error" id="emailError"></div>
+      <button class="btn" id="sendCodeBtn">Send Code</button>
+      <p class="muted">You’ll receive the code within a few seconds. Check your inbox and spam folder.</p>
+    </div>
+
+    <div class="card hidden" id="step-otp">
+      <h2>Step 2 — Verify Code</h2>
+      <p class="sub">Enter the 6-digit OTP we sent to <span id="sentTo" class="ok"></span>.</p>
+      <label for="otp">OTP Code</label>
+      <input id="otp" inputmode="numeric" maxlength="6" placeholder="e.g. 483920"/>
+      <div class="error" id="otpError"></div>
+      <div class="row">
+        <button class="btn" id="verifyBtn">Verify Code</button>
+        <button class="btn btn-ghost" id="resendBtn" type="button">Resend</button>
+      </div>
+      <p class="muted">Code expires in 10 minutes.</p>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-backdrop hidden" id="successBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="check" aria-hidden="true"></div>
+      <h3 style="margin:6px 0 0">Thank you ✅</h3>
+      <p>Your OTP is verified. We’ve sent a secure password-reset link to your email.  
+         Open it to set a new password. You’ll be returned to login after completion.</p>
+      <div class="actions">
+        <button class="btn btn-ghost" id="toLoginBtn">Back to Login</button>
+        <button class="btn" id="openEmailBtn">Open Email App</button>
+      </div>
+      <div class="timer" id="countdownText">Auto-return to login in 15s…</div>
+    </div>
+  </div>
+
+  <!-- Firebase + EmailJS -->
+  <script type="module">
+    // ---------- Firebase ----------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // ---------- EmailJS ----------
+    // 1) Add this script in <head> if you prefer: <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    //    The module-friendly way:
+    import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // <-- replace
+
+    // ---------- Helpers ----------
+    const $ = (id)=>document.getElementById(id);
+    const emailInput = $("email");
+    const emailError = $("emailError");
+    const sendBtn    = $("sendCodeBtn");
+    const stepEmail  = $("step-email");
+    const stepOtp    = $("step-otp");
+    const sentTo     = $("sentTo");
+    const otpInput   = $("otp");
+    const otpError   = $("otpError");
+    const verifyBtn  = $("verifyBtn");
+    const resendBtn  = $("resendBtn");
+
+    const successBackdrop = $("successBackdrop");
+    const toLoginBtn      = $("toLoginBtn");
+    const openEmailBtn    = $("openEmailBtn");
+    const countdownText   = $("countdownText");
+
+    // Create a 6-digit OTP
+    function makeOTP(){
+      return String(Math.floor(100000 + Math.random()*900000));
+    }
+    // Hash the OTP so we don't store in plain text
+    async function hashText(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+    function emailKey(email){
+      // use email as doc id (lowercased)
+      return email.trim().toLowerCase();
+    }
+
+    // Send OTP
+    sendBtn.addEventListener("click", async ()=>{
+      emailError.textContent = "";
+      const email = emailInput.value.trim().toLowerCase();
+      if(!email || !email.includes("@")){
+        emailError.textContent = "Enter a valid email address.";
+        return;
+      }
+      sendBtn.disabled = true; sendBtn.textContent = "Sending…";
+
+      try{
+        const otp = makeOTP();
+        const codeHash = await hashText(otp);
+        const expiresAt = Date.now() + (10 * 60 * 1000); // 10 minutes
+
+        // Save hashed OTP in Firestore
+        await setDoc(doc(db, "password_otp", emailKey(email)), {
+          codeHash,
+          expiresAt,
+          createdAt: serverTimestamp(),
+          used: false
+        });
+
+        // Email the OTP via EmailJS
+        await emailjs.send(
+          "YOUR_EMAILJS_SERVICE_ID",     // <-- replace
+          "YOUR_EMAILJS_TEMPLATE_ID",    // <-- replace
+          {
+            to_email: email,
+            otp_code: otp
+          }
+        );
+
+        // Move to OTP step
+        sentTo.textContent = email;
+        stepEmail.classList.add("hidden");
+        stepOtp.classList.remove("hidden");
+        otpInput.focus();
+      }catch(err){
+        console.error(err);
+        emailError.textContent = "Could not send code. Please try again.";
+      }finally{
+        sendBtn.disabled = false; sendBtn.textContent = "Send Code";
+      }
+    });
+
+    // Resend OTP
+    resendBtn.addEventListener("click", ()=> sendBtn.click());
+
+    // Verify OTP
+    verifyBtn.addEventListener("click", async ()=>{
+      otpError.textContent = "";
+      const email = sentTo.textContent;
+      const otp = otpInput.value.trim();
+      if(otp.length !== 6){
+        otpError.textContent = "Enter the 6-digit code.";
+        return;
+      }
+      verifyBtn.disabled = true; verifyBtn.textContent = "Verifying…";
+
+      try{
+        const snap = await getDoc(doc(db, "password_otp", emailKey(email)));
+        if(!snap.exists()){
+          otpError.textContent = "No code found. Please resend.";
+          return;
+        }
+        const data = snap.data();
+        if(data.used){
+          otpError.textContent = "Code already used. Resend a new one.";
+          return;
+        }
+        if(Date.now() > data.expiresAt){
+          otpError.textContent = "Code expired. Resend a new one.";
+          return;
+        }
+        const inputHash = await hashText(otp);
+        if(inputHash !== data.codeHash){
+          otpError.textContent = "Incorrect code. Try again.";
+          return;
+        }
+
+        // Code is correct — now trigger Firebase's secure reset email
+        await sendPasswordResetEmail(auth, email);
+
+        // Show success popup + auto return
+        openSuccessModal();
+      }catch(err){
+        console.error(err);
+        otpError.textContent = "Verification failed. Try again.";
+      }finally{
+        verifyBtn.disabled = false; verifyBtn.textContent = "Verify Code";
+      }
+    });
+
+    function openSuccessModal(){
+      successBackdrop.classList.remove("hidden");
+      let left = 15;
+      countdownText.textContent = `Auto-return to login in ${left}s…`;
+      const t = setInterval(()=>{
+        left--;
+        countdownText.textContent = `Auto-return to login in ${left}s…`;
+        if(left<=0){ clearInterval(t); window.location.href = "login.html"; }
+      }, 1000);
+    }
+    toLoginBtn.addEventListener("click", ()=> window.location.href = "login.html");
+    openEmailBtn.addEventListener("click", ()=>{
+      // best-effort: opens mail app
+      window.location.href = "mailto:";
+    });
+  </script>
+</body>
+  </html>
