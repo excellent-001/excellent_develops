@@ -1,112 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Excellent_develops Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excellent Develops</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #0f172a;
-      color: white;
+      text-align: center;
+      background-color: #f8f9fa;
+      color: #333;
     }
     header {
-      text-align: center;
-      padding: 30px 10px;
-      background: #1e293b;
+      padding: 30px 0;
     }
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
+    .logo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #555;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
     }
-    header p {
-      font-size: 1.2em;
-      margin-top: 10px;
-      height: 25px;
-      overflow: hidden;
-    }
-    .slideshow span {
-      position: absolute;
-      opacity: 0;
-      animation: fade 6s infinite;
-    }
-    .slideshow span:nth-child(1) { animation-delay: 0s; }
-    .slideshow span:nth-child(2) { animation-delay: 2s; }
-    .slideshow span:nth-child(3) { animation-delay: 4s; }
-    @keyframes fade {
-      0%, 20% { opacity: 0; }
-      25%, 45% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-    nav {
-      text-align: center;
-      background: #334155;
-      padding: 15px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
+    h1 {
+      font-size: 2rem;
+      margin-top: 15px;
       font-weight: bold;
-      transition: color 0.3s;
     }
-    nav a:hover {
-      color: #38bdf8;
+    main {
+      padding: 20px;
     }
-    section {
-      padding: 40px 20px;
-      text-align: center;
-      transition: background 0.5s;
+    .logout-btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    section:hover {
-      background: rgba(255, 255, 255, 0.05);
+    .logout-btn:hover {
+      background-color: #cc0000;
     }
     footer {
-      background: #1e293b;
-      text-align: center;
-      padding: 15px;
-      font-size: 0.9em;
-      margin-top: 20px;
+      background-color: #222;
+      color: white;
+      padding: 15px 0;
+      margin-top: 30px;
+      font-size: 0.9rem;
     }
   </style>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Protect page (redirect to login if not signed in)
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Logout function
+    function logout() {
+      firebase.auth().signOut()
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch(err => alert(err.message));
+    }
+  </script>
 </head>
 <body>
 
   <header>
-    <h1>Excellent_develops</h1>
-    <p class="slideshow">
-      <span>Turning ideas into reality 🚀</span>
-      <span>Building the future, one line of code at a time 💻</span>
-      <span>Creating solutions that inspire ✨</span>
-    </p>
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>Welcome to Excellent Develops</h1>
   </header>
 
-  <nav>
-    <a href="about.html">About Me</a>
-    <a href="projects.html">Projects</a>
-    <a href="coming-soon.html">Contact</a>
-    <a href="coming-soon.html">FAQ</a>
-  </nav>
-
-  <section>
-    <h2>About Me</h2>
-    <p>I’m Excellent_develops — an aspiring software developer with a passion for continuous learning and creating impactful, useful, and innovative projects.</p>
-  </section>
-
-  <section>
-    <h2>My Mission</h2>
-    <p>To craft software solutions that solve real problems, inspire others, and push the limits of what’s possible through technology.</p>
-  </section>
-
-  <section>
-    <h2>Projects</h2>
-    <p>Explore my creative and technical work — from simple experiments to full-featured applications.</p>
-  </section>
+  <main>
+    <p>This is the official hub for all my web development projects, ideas, and collaborations.  
+       Explore my work, learn about my mission, and connect for opportunities.</p>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </main>
 
   <footer>
-    &copy; 2025 Excellent_develops | Built with ❤️ and passion for code
+    <p>All Rights Reserved © Excellent Developers 2025</p>
   </footer>
 
 </body>
