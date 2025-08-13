@@ -1,161 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Forgot Password</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgot Password</title>
+<style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6a0dad, #9b4dca);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
     .container {
-      background: #fff;
-      color: #333;
-      padding: 25px;
-      border-radius: 15px;
-      width: 320px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      text-align: center;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        text-align: center;
+        width: 350px;
     }
     h2 {
-      margin-bottom: 15px;
-      color: #6a0dad;
+        color: #6a1b9a;
+        margin-bottom: 20px;
     }
     input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
     }
     button {
-      background: #6a0dad;
-      color: white;
-      padding: 10px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
+        background: #6a1b9a;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
     }
     button:hover {
-      background: #580a9e;
+        background: #8e24aa;
     }
-    .hidden {
-      display: none;
+    .message {
+        margin-top: 15px;
+        font-size: 14px;
     }
-    footer {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #555;
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+        authDomain: "excellent-d056e.firebaseapp.com",
+        projectId: "excellent-d056e",
+        storageBucket: "excellent-d056e.firebasestorage.app",
+        messagingSenderId: "629984941607",
+        appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+        measurementId: "G-G3RCTDSY27"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // EmailJS Init
+    (function(){
+        emailjs.init("h5LWzY8YUESb4sZbS"); // Your EmailJS public key
+    })();
+
+    function sendResetEmail() {
+        const email = document.getElementById("email").value;
+        if (!email) {
+            document.getElementById("message").innerText = "Please enter your email.";
+            return;
+        }
+
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                // Send notification via EmailJS
+                emailjs.send("service_cvvr3vn", "template_6xgms6a", { user_email: email })
+                    .then(() => {
+                        alert("Password reset email sent! Check your inbox.");
+                        window.location.href = "login.html"; // Redirect to login
+                    });
+            })
+            .catch((error) => {
+                document.getElementById("message").innerText = error.message;
+            });
     }
-    footer hr {
-      margin: 10px 0;
-      border: 0;
-      border-top: 1px solid #ccc;
-    }
-  </style>
+</script>
 </head>
 <body>
-
 <div class="container">
-  <h2>Forgot Password</h2>
-  
-  <!-- Step 1: Ask for email -->
-  <div id="step1">
+    <h2>Forgot Password</h2>
     <input type="email" id="email" placeholder="Enter your email" required>
-    <button onclick="sendVerificationCode()">Send Code</button>
-  </div>
-
-  <!-- Step 2: Enter verification code -->
-  <div id="step2" class="hidden">
-    <input type="text" id="code" placeholder="Enter verification code" required>
-    <input type="password" id="newPassword" placeholder="Enter new password" required>
-    <button onclick="verifyCodeAndReset()">Reset Password</button>
-  </div>
-
-  <footer>
-    <hr>
-    📧 quareebalabi22@gmail.com<br>
-    📞 +234 904 646 3436<br>
-    © Powered by Excellent Global Concepts — All Rights Reserved, 2025
-  </footer>
+    <button onclick="sendResetEmail()">Send Reset Link</button>
+    <div id="message" class="message"></div>
 </div>
-
-<!-- Firebase & EmailJS Scripts -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-
-<script>
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
-  firebase.initializeApp(firebaseConfig);
-
-  // EmailJS init
-  emailjs.init("h5LWzY8YUESb4sZbS");
-
-  let generatedCode = "";
-
-  function sendVerificationCode() {
-    const email = document.getElementById("email").value.trim();
-    if (!email) {
-      alert("Please enter your email.");
-      return;
-    }
-    generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-    const templateParams = {
-      to_email: email,
-      code: generatedCode
-    };
-
-    emailjs.send("service_cvvr3vn", "template_6xgms6a", templateParams)
-      .then(function() {
-        alert("Verification code sent to your email.");
-        document.getElementById("step1").classList.add("hidden");
-        document.getElementById("step2").classList.remove("hidden");
-      }, function(error) {
-        alert("Error sending code: " + JSON.stringify(error));
-      });
-  }
-
-  function verifyCodeAndReset() {
-    const enteredCode = document.getElementById("code").value.trim();
-    const newPassword = document.getElementById("newPassword").value.trim();
-    const email = document.getElementById("email").value.trim();
-
-    if (enteredCode !== generatedCode) {
-      alert("Invalid verification code.");
-      return;
-    }
-
-    firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        alert("Password reset email sent. Please check your inbox.");
-        window.location.href = "login.html";
-      })
-      .catch((error) => {
-        alert("Error: " + error.message);
-      });
-  }
-</script>
-
 </body>
 </html>
