@@ -1,105 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forgot Password</title>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Reset Password • OTP</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #6a1b9a, #8e24aa);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    .container {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        text-align: center;
-        width: 350px;
-    }
-    h2 {
-        color: #6a1b9a;
-        margin-bottom: 20px;
-    }
-    input {
-        width: 90%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 16px;
-    }
-    button {
-        background: #6a1b9a;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    button:hover {
-        background: #8e24aa;
-    }
-    .message {
-        margin-top: 15px;
-        font-size: 14px;
-    }
+  :root{--bg1:#4b0082;--bg2:#800080;--card:#fff;--accent:#8a2be2;--ok:#16a34a;--danger:#dc2626;--shadow:0 10px 35px rgba(0,0,0,.25);}
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Segoe UI,Arial;color:#fff;min-height:100vh;
+    background: radial-gradient(1100px 900px at 20% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .wrap{width:min(460px,96vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .brand img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+  .card{background:var(--card);color:#0f172a;border-radius:16px;padding:18px;box-shadow:var(--shadow);animation:pop .45s ease-out both}
+  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+  h2{margin:6px 0 6px;font-size:20px}
+  p.sub{margin:0 0 12px;color:#475569;font-size:14px}
+  label{display:block;font-size:12px;margin:8px 0 4px;color:#374151}
+  input{width:100%;padding:12px;border-radius:10px;border:1px solid #e5e7eb;font-size:14px}
+  input:focus{border-color:#c7a6ff; box-shadow:0 0 0 3px #e9ddff; outline: none}
+  .row{display:flex;gap:10px;align-items:flex-end}
+  .btn{width:100%;padding:12px 14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+  .btn-ghost{background:#eee;color:#111;border:1px solid #e5e7eb}
+  .muted{color:#64748b;font-size:12px;margin-top:6px}
+  .error{color:var(--danger);font-size:12px;min-height:16px;margin-top:6px}
+  .hidden{display:none}
+  /* modal */
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50}
+  .modal{width:min(420px,92vw);background:#fff;color:#111;border-radius:18px;padding:22px;box-shadow:var(--shadow);text-align:center;animation:drop .35s ease-out both}
+  @keyframes drop{0%{transform:translateY(-8px) scale(.98);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+  .check{width:58px;height:58px;margin:4px auto 10px;border-radius:50%;border:3px solid #22c55e;display:grid;place-items:center;animation:pulse 1.2s ease-in-out 2}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  .check::after{content:"✔";font-size:28px;color:#22c55e;line-height:1;position:relative;top:-1px}
+  .timer{font-size:12px;color:#64748b;margin-top:8px}
+  a.back{display:inline-block;margin-top:10px;color:#fff}
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-    // Firebase Config
-    const firebaseConfig = {
-        apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-        authDomain: "excellent-d056e.firebaseapp.com",
-        projectId: "excellent-d056e",
-        storageBucket: "excellent-d056e.firebasestorage.app",
-        messagingSenderId: "629984941607",
-        appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-        measurementId: "G-G3RCTDSY27"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    // EmailJS Init
-    (function(){
-        emailjs.init("h5LWzY8YUESb4sZbS"); // Your EmailJS public key
-    })();
-
-    function sendResetEmail() {
-        const email = document.getElementById("email").value;
-        if (!email) {
-            document.getElementById("message").innerText = "Please enter your email.";
-            return;
-        }
-
-        firebase.auth().sendPasswordResetEmail(email)
-            .then(() => {
-                // Send notification via EmailJS
-                emailjs.send("service_cvvr3vn", "template_6xgms6a", { user_email: email })
-                    .then(() => {
-                        alert("Password reset email sent! Check your inbox.");
-                        window.location.href = "login.html"; // Redirect to login
-                    });
-            })
-            .catch((error) => {
-                document.getElementById("message").innerText = error.message;
-            });
-    }
-</script>
 </head>
 <body>
-<div class="container">
-    <h2>Forgot Password</h2>
-    <input type="email" id="email" placeholder="Enter your email" required>
-    <button onclick="sendResetEmail()">Send Reset Link</button>
-    <div id="message" class="message"></div>
-</div>
+  <div class="wrap">
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="logo"/>
+      <div>
+        <div style="font-weight:700">Reset Password (OTP)</div>
+        <a class="back" href="login.html">← Back to Login</a>
+      </div>
+    </div>
+
+    <div class="card" id="step1">
+      <h2>Step 1 — Send OTP</h2>
+      <p class="sub">Enter the email you used to register. We’ll email a 6-digit code.</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <div class="error" id="emailError"></div>
+      <button class="btn" id="sendCodeBtn">Send Code</button>
+      <p class="muted">You’ll receive the code shortly. Check inbox/spam.</p>
+    </div>
+
+    <div class="card hidden" id="step2">
+      <h2>Step 2 — Verify Code</h2>
+      <p class="sub">Enter the 6-digit OTP sent to <span id="sentTo" style="color:#16a34a"></span>.</p>
+      <label for="otp">OTP Code</label>
+      <input id="otp" inputmode="numeric" maxlength="6" placeholder="e.g. 483920"/>
+      <div class="error" id="otpError"></div>
+      <div class="row">
+        <button class="btn" id="verifyBtn">Verify Code</button>
+        <button class="btn btn-ghost" id="resendBtn" type="button">Resend</button>
+      </div>
+      <p class="muted">Code expires in 10 minutes.</p>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="backdrop hidden" id="okBackdrop">
+    <div class="modal">
+      <div class="check"></div>
+      <h3 style="margin:6px 0 0">Thank you ✅</h3>
+      <p>OTP verified. We’ve emailed you a secure password-reset link.  
+      Open it to set a new password. You’ll return to login after completion.</p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" id="toLogin">Back to Login</button>
+        <button class="btn" id="openMail">Open Email App</button>
+      </div>
+      <div class="timer" id="countdown">Auto-return to login in 15s…</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+
+    emailjs.init("h5LWzY8YUESb4sZbS"); // your public key
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const $ = id => document.getElementById(id);
+    const emailInput = $("email");
+    const emailError = $("emailError");
+    const otpInput   = $("otp");
+    const otpError   = $("otpError");
+    const sentTo     = $("sentTo");
+    const step1 = $("step1"), step2 = $("step2");
+    const okBackdrop = $("okBackdrop");
+    const countdown  = $("countdown");
+
+    function makeOTP(){ return String(Math.floor(100000 + Math.random()*900000)); }
+    async function hashText(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+
+    $("sendCodeBtn").onclick = async ()=>{
+      emailError.textContent = "";
+      const email = emailInput.value.trim().toLowerCase();
+      if(!email || !email.includes("@")){ emailError.textContent="Enter a valid email."; return; }
+      $("sendCodeBtn").disabled = true; $("sendCodeBtn").textContent = "Sending…";
+
+      try{
+        const otp = makeOTP();
+        const codeHash = await hashText(otp);
+        const expiresAt = Date.now() + 10*60*1000;
+
+        await setDoc(doc(db,"password_otp",email),{
+          codeHash, expiresAt, createdAt: serverTimestamp(), used:false
+        });
+
+        await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+          to_email: email,
+          otp_code: otp
+        });
+
+        sentTo.textContent = email;
+        step1.classList.add("hidden");
+        step2.classList.remove("hidden");
+        otpInput.focus();
+      }catch(e){
+        console.error(e);
+        emailError.textContent = "Could not send code. Try again.";
+      }finally{
+        $("sendCodeBtn").disabled = false; $("sendCodeBtn").textContent = "Send Code";
+      }
+    };
+
+    $("resendBtn").onclick = ()=> $("sendCodeBtn").click();
+
+    $("verifyBtn").onclick = async ()=>{
+      otpError.textContent = "";
+      const email = sentTo.textContent;
+      const otp   = otpInput.value.trim();
+      if(otp.length!==6){ otpError.textContent="Enter the 6-digit code."; return; }
+      $("verifyBtn").disabled = true; $("verifyBtn").textContent="Verifying…";
+
+      try{
+        const ref = doc(db,"password_otp",email);
+        const snap = await getDoc(ref);
+        if(!snap.exists()){ otpError.textContent="No code found. Resend."; return; }
+        const d = snap.data();
+        if(d.used){ otpError.textContent="Code already used. Resend."; return; }
+        if(Date.now()>d.expiresAt){ otpError.textContent="Code expired. Resend."; return; }
+        const h = await hashText(otp);
+        if(h!==d.codeHash){ otpError.textContent="Incorrect code."; return; }
+
+        // Send official Firebase reset email now
+        await sendPasswordResetEmail(auth,email);
+
+        // Success modal + 15s auto return to login
+        okBackdrop.classList.remove("hidden");
+        let left = 15;
+        countdown.textContent = `Auto-return to login in ${left}s…`;
+        const t = setInterval(()=>{
+          left--; countdown.textContent = `Auto-return to login in ${left}s…`;
+          if(left<=0){ clearInterval(t); window.location.href="login.html"; }
+        },1000);
+      }catch(e){
+        console.error(e);
+        otpError.textContent = "Verification failed. Try again.";
+      }finally{
+        $("verifyBtn").disabled = false; $("verifyBtn").textContent="Verify Code";
+      }
+    };
+
+    $("toLogin").onclick = ()=> window.location.href="login.html";
+    $("openMail").onclick = ()=> window.location.href="mailto:";
+  </script>
 </body>
 </html>
