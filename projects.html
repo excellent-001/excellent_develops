@@ -1,62 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>My Projects • Excellent_Develops</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px 20px;
+    }
+
+    .signout-btn {
+        background-color: #00ff88;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin: 20px 0;
+        text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+    }
+
+    .project-card {
+        background-color: #111;
+        border: 2px solid #00ff88;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px auto;
+        max-width: 400px;
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+    .project-card h2 {
+        color: #00ff88;
+    }
+
+    .project-card button {
+        background-color: #00ff88;
+        border: none;
+        padding: 10px 15px;
+        color: #000;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #00ff88;
+    }
+
+    footer {
+        margin: 20px 0;
+    }
+</style>
 </head>
-<body class="page page--projects">
-  <script type="module" src="auth-guard.js"></script>
+<body>
 
-  <main class="projects-wrap">
-    <header class="topbar">
-      <h1>My Projects</h1>
-      <button class="btn btn-sm" onclick="logout()">Sign out</button>
-    </header>
+<header>
+    <button class="signout-btn" onclick="signOut()">Sign Out</button>
+</header>
 
-    <p class="muted">Secure Area</p>
+<h1>🚀 Projects</h1>
 
-    <section class="project-grid">
+<div class="project-card">
+    <h2>1. Education Website</h2>
+    <p>Creating an engaging platform for learning and academic growth.</p>
+    <button onclick="goToComingSoon()">View Project</button>
+</div>
 
-      <article class="project-card">
-        <h3>1. Education Website</h3>
-        <p>Creating an engaging platform for learning and academic growth.</p>
-        <a class="btn" href="coming-soon.html">View Project</a>
-      </article>
+<div class="project-card">
+    <h2>2. Social Intelligence Hub</h2>
+    <p>A social website that connects problem-solvers, innovators, and highly intellectual people globally.</p>
+    <button onclick="goToComingSoon()">View Project</button>
+</div>
 
-      <article class="project-card">
-        <h3>2. Social Intelligence Hub</h3>
-        <p>Connecting problem-solvers, innovators, and highly intellectual people.</p>
-        <a class="btn" href="coming-soon.html">View Project</a>
-      </article>
+<div class="project-card">
+    <h2>3. Business Website: Pematech Company</h2>
+    <p>Breaking limits and fostering excellence in technology solutions.</p>
+    <button onclick="goToComingSoon()">View Project</button>
+</div>
 
-      <article class="project-card">
-        <h3>3. Business Website: Pematech Company</h3>
-        <p>Breaking limits and fostering excellence in technology solutions.</p>
-        <a class="btn" href="coming-soon.html">View Project</a>
-      </article>
+<div class="project-card">
+    <h2>4. Excellent Global Concepts</h2>
+    <p>A global online hub for news, updates, and opportunities.</p>
+    <button onclick="goToComingSoon()">View Project</button>
+</div>
 
-      <article class="project-card">
-        <h3>4. Excellent Global Concepts</h3>
-        <p>Global updates, opportunities, and insights.</p>
-        <a class="btn" href="coming-soon.html">View Project</a>
-      </article>
+<footer>
+    <a href="index.html">← Back to Home</a>
+</footer>
 
-    </section>
-  </main>
+<script type="module">
+    // Firebase Import
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <p>Contact: quareebalabi22@gmail.com · +2349046463436 · +2348142370183</p>
-      <p>
-        <a href="https://wa.me/2349046463436" target="_blank" rel="noopener">WhatsApp</a> ·
-        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a> ·
-        <a href="https://twitter.com" target="_blank" rel="noopener">X (Twitter)</a> ·
-        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
-      </p>
-      <p>Created by Excellent Global Conceptional 2025. Copyright “All rights reserved”.</p>
-    </div>
-  </footer>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+        authDomain: "excellent-d056e.firebaseapp.com",
+        projectId: "excellent-d056e",
+        storageBucket: "excellent-d056e.firebasestorage.app",
+        messagingSenderId: "629984941607",
+        appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+        measurementId: "G-G3RCTDSY27"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Sign Out Function
+    window.signOut = function () {
+        signOut(auth).then(() => {
+            alert("Signed out successfully!");
+            window.location.href = "index.html";
+        }).catch((error) => {
+            console.error(error);
+        });
+    };
+
+    // Go to Coming Soon
+    window.goToComingSoon = function () {
+        window.location.href = "coming-soon.html";
+    };
+</script>
+
 </body>
-</html>
+  </html>
