@@ -1,121 +1,326 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Coming Soon • Excellent_Develops</title>
-  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root{
+      --bg1:#4b0082;   /* deep indigo */
+      --bg2:#800080;   /* purple */
+      --card:#ffffff;
+      --text:#0f0f16;
+      --muted:#6b6b7a;
+      --accent:#7c3aed; /* violet */
+      --accent-2:#4a90e2;
+      --line:#ffffff;  /* footer top line (white) */
+      --footer-bg:#ffffff;
+      --footer-text:#000000;
+      --ok:#16a34a;
+      --danger:#ef4444;
+    }
+
+    /* Page layout */
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:#fff;
+      background: radial-gradient(1200px 800px at 20% -10%, #6a11cb22, transparent 60%),
+                  radial-gradient(900px 700px at 110% 20%, #2575fc22, transparent 60%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px;
+      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15), rgba(0,0,0,0));
+      backdrop-filter: blur(4px);
+    }
+    .top-actions{display:flex; gap:10px; align-items:center;}
+    .link, .btn{
+      appearance:none; border:0; cursor:pointer; text-decoration:none;
+      padding:10px 14px; border-radius:999px; font-weight:600; font-size:14px;
+    }
+    .link{ background:#ffffff22; color:#fff; }
+    .link:hover{ background:#ffffff33; }
+    .btn{ background:var(--accent); color:#fff; }
+    .btn:hover{ filter:brightness(1.05); }
+
+    /* Main content area (keeps footer visible) */
+    .page{
+      flex:1 0 auto;
+      display:flex; align-items:flex-start; justify-content:center;
+      padding:28px 14px 120px; /* bottom space so footer doesn't cover content */
+    }
+    .stack{ display:grid; gap:18px; width:min(880px, 100%); }
+
+    /* Card */
+    .card{
+      background:var(--card);
+      color:var(--text);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      animation:bounceIn .65s cubic-bezier(.2,.95,.25,1.15);
+    }
+    @keyframes bounceIn{
+      0%{ transform:scale(.9); opacity:0;}
+      60%{ transform:scale(1.03); opacity:1;}
+      100%{ transform:scale(1);}
+    }
+    .title{ font-size:clamp(24px, 3.4vw, 34px); margin:0 0 6px; }
+    .sub{ color:var(--muted); margin:0; }
+
+    /* Feedback form */
+    .grid{ display:grid; gap:12px; }
+    .grid-2{ grid-template-columns:1fr 1fr; }
+    @media (max-width:640px){ .grid-2{ grid-template-columns:1fr; } }
+    label{ font-size:13px; color:#3b3b46; font-weight:600; }
+    input, textarea{
+      width:100%; padding:12px 12px; border-radius:12px; border:1px solid #e6e6ef;
+      outline:none; font-size:15px; background:#fafafa;
+    }
+    textarea{ min-height:120px; resize:vertical; }
+    .submit-row{ display:flex; gap:10px; align-items:center; }
+    .btn-primary{
+      background:var(--accent-2); color:#fff; border:0; padding:12px 16px; border-radius:12px;
+      font-weight:700; cursor:pointer;
+    }
+    .btn-primary:hover{ filter:brightness(1.05); }
+    .hint{ color:var(--muted); font-size:13px; }
+
+    /* Footer (always visible) */
+    footer{
+      flex-shrink:0;
+      background:var(--footer-bg);
+      color:var(--footer-text);
+      border-top:4px solid var(--line);
+      box-shadow:0 -8px 30px rgba(0,0,0,.15);
+    }
+    .footer-inner{
+      max-width:1100px; margin:0 auto; padding:16px 14px;
+      display:grid; gap:10px;
+    }
+    .footer-title{ font-weight:800; letter-spacing:.2px; }
+    .footer-row{ display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+    .pill{ background:#f3f4f6; color:#111827; border-radius:999px; padding:8px 12px; font-size:14px; }
+    .socials{ display:flex; gap:8px; flex-wrap:wrap; }
+    .icon{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:36px; height:36px; border-radius:50%; font-weight:900; text-decoration:none;
+      background:#111827; color:#fff;
+    }
+    .icon.whatsapp{ background:#25D366; }
+    .icon.facebook{ background:#1877F2; }
+    .icon.instagram{ background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .icon.linkedin{ background:#0A66C2; }
+    .icon.x{ background:#000; }
+
+    .foot-note{ font-size:13px; color:#111; }
+
+    /* Modal (thank you) */
+    .modal-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center; z-index:50;
+    }
+    .modal{
+      width:min(520px, 92vw);
+      background:#fff; color:#111827; border-radius:22px; padding:22px;
+      box-shadow:0 25px 60px rgba(0,0,0,.35);
+      transform:scale(.9); opacity:0;
+      animation: pop .45s cubic-bezier(.2,.95,.25,1.2) forwards;
+      text-align:center;
+    }
+    @keyframes pop{
+      to{ transform:scale(1); opacity:1; }
+    }
+    .badge-ok{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:64px; height:64px; border-radius:50%; background:#e8f7ed; color:var(--ok);
+      font-size:30px; margin-bottom:12px;
+    }
+    .modal-actions{ display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+    .btn-ghost{ background:#eff0f3; color:#111; }
+    .btn-danger{ background:var(--danger); color:#fff; }
+    .small{ font-size:13px; color:#444; }
+
+  </style>
 </head>
 <body>
-  <button onclick="logout()" class="btn" style="position:fixed;right:18px;top:18px">Sign out</button>
 
-  <div class="container header-gap">
-    <div class="card stack center-text">
-      <h1 style="font-size:34px">🚧 Coming Soon</h1>
-      <p class="lead">This project page is under construction. Meanwhile, drop your feedback below — I’d love to hear from you.</p>
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="top-actions">
+      <a class="link" href="welcome.html">← Return Home</a>
     </div>
-
-    <!-- Feedback -->
-    <div class="card stack big-gap" style="max-width:720px; margin:28px auto 0">
-      <h2>Send Feedback</h2>
-      <form id="feedback-form" class="stack section-gap">
-        <div class="grid grid-2">
-          <div class="stack">
-            <label class="label" for="fb-name">Full Name</label>
-            <input class="input" id="fb-name" type="text" required/>
-          </div>
-          <div class="stack">
-            <label class="label" for="fb-phone">Phone Number</label>
-            <input class="input" id="fb-phone" type="tel" placeholder="+234..." required/>
-          </div>
-        </div>
-        <div class="grid grid-2">
-          <div class="stack">
-            <label class="label" for="fb-email">Email</label>
-            <input class="input" id="fb-email" type="email" required/>
-          </div>
-          <div class="stack">
-            <label class="label" for="fb-topic">Topic (optional)</label>
-            <input class="input" id="fb-topic" type="text" placeholder="e.g., Site design"/>
-          </div>
-        </div>
-        <div class="stack">
-          <label class="label" for="fb-msg">Message</label>
-          <textarea class="input" id="fb-msg" rows="5" required placeholder="Share your thoughts..."></textarea>
-        </div>
-        <div id="fb-error" class="error"></div>
-        <button class="btn" type="submit">Submit Feedback</button>
-      </form>
-    </div>
-
-    <!-- Socials under the feedback (as you asked) -->
-    <div class="card stack big-gap center-text" style="max-width:720px; margin:28px auto 0">
-      <p class="lead">Connect with me:</p>
-      <div class="socials" style="justify-content:center">
-        <a class="icon-btn" href="https://wa.me/2349046463436" target="_blank">WhatsApp</a>
-        <a class="icon-btn" href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a>
-        <a class="icon-btn" href="https://x.com/TheOlodo_Nation" target="_blank">X (Twitter)</a>
-        <a class="icon-btn" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">LinkedIn</a>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div>Contact: quareebalabi22@gmail.com • +2349046463436 • +2348142370183</div>
-      <div class="section-gap">Created by Excellent Global Conceptional 2025. Copyright “All rights reserved”.</div>
+    <div class="top-actions">
+      <button class="btn" id="btnSignOut">Sign Out</button>
     </div>
   </div>
 
-  <!-- Success Modal -->
-  <div id="ok-modal" class="modal" aria-hidden="true">
-    <div class="modal-card stack center-text">
-      <div style="font-size:42px">👍</div>
-      <h2>Thank you for your feedback!</h2>
-      <p class="muted">We appreciate you.</p>
-      <div class="grid grid-2 section-gap">
-        <button class="btn" onclick="document.getElementById('ok-modal').classList.remove('open')">Close</button>
-        <a class="btn ghost" href="portfolio.html">Return to Homepage</a>
+  <!-- Main -->
+  <main class="page">
+    <div class="stack">
+      <!-- Coming Soon -->
+      <section class="card">
+        <h1 class="title">🚀 Coming Soon</h1>
+        <p class="sub">I’m building something exciting. Please check back soon.</p>
+      </section>
+
+      <!-- Feedback -->
+      <section class="card">
+        <h2 class="title" style="font-size:22px; margin-bottom:2px;">Send Feedback</h2>
+        <p class="sub">Tell me what you think about my portfolio or what you’d love to see.</p>
+
+        <form id="feedbackForm" class="grid" autocomplete="on">
+          <div class="grid grid-2">
+            <div>
+              <label for="fbName">Name</label>
+              <input id="fbName" name="name" placeholder="Your name"/>
+            </div>
+            <div>
+              <label for="fbEmail">Email</label>
+              <input id="fbEmail" name="email" type="email" placeholder="you@email.com"/>
+            </div>
+          </div>
+          <div>
+            <label for="fbMessage">Message</label>
+            <textarea id="fbMessage" name="message" placeholder="Write your feedback..."></textarea>
+          </div>
+
+          <div class="submit-row">
+            <button class="btn-primary" type="submit">Submit Feedback</button>
+            <span class="hint" id="saveHint"></span>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer (always visible, white) -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-title">Contact Us</div>
+
+      <div class="footer-row">
+        <a class="pill" href="mailto:quareebalabi22@gmail.com">📧 quareebalabi22@gmail.com</a>
+        <a class="pill" href="tel:+2349046463436">📞 +234 904 646 3436</a>
       </div>
+
+      <div class="footer-row">
+        <div class="socials">
+          <a class="icon whatsapp" href="https://wa.me/2349046463436" target="_blank" aria-label="WhatsApp">W</a>
+          <a class="icon facebook" href="https://www.facebook.com/EminiExcellent" target="_blank" aria-label="Facebook">F</a>
+          <a class="icon instagram" href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank" aria-label="Instagram">📷</a>
+          <a class="icon x" href="https://x.com/TheOlodo_Nation" target="_blank" aria-label="X">X</a>
+          <a class="icon linkedin" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+
+      <div class="foot-note">© Powered by Excellent Global Concepts — All Rights Reserved, 2025</div>
+    </div>
+  </footer>
+
+  <!-- Thank-you Modal -->
+  <div class="modal-backdrop" id="thanksBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="badge-ok">✅</div>
+      <h3 style="margin:6px 0 6px;">Thank you for your feedback!</h3>
+      <p class="small">We appreciate you. Choose where to go next:</p>
+      <div class="modal-actions">
+        <a class="btn-ghost link" href="welcome.html">Back to Home</a>
+        <button class="btn-danger" id="modalSignOut">Sign Out</button>
+      </div>
+      <p class="small" id="autoMsg" style="margin-top:10px;"></p>
     </div>
   </div>
 
-  <!-- Firebase + Feedback logic + Guard -->
+  <!-- Firebase + Page Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-    import { firebaseConfig } from "./firebase-config.js";
-    import "./auth-guard.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    // --- YOUR FIREBASE CONFIG ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const form = document.getElementById('feedback-form');
-    const err  = document.getElementById('fb-error');
-    const modal= document.getElementById('ok-modal');
+    // Guard: must be signed in to view this page
+    onAuthStateChanged(auth, (user)=>{
+      if(!user){ window.location.replace("login.html"); }
+    });
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault(); err.textContent="";
-      const name  = document.getElementById('fb-name').value.trim();
-      const phone = document.getElementById('fb-phone').value.trim();
-      const email = document.getElementById('fb-email').value.trim();
-      const topic = document.getElementById('fb-topic').value.trim();
-      const msg   = document.getElementById('fb-msg').value.trim();
+    // Sign out buttons
+    const btnSignOut = document.getElementById("btnSignOut");
+    const modalSignOut = document.getElementById("modalSignOut");
+    const doSignOut = async () => {
+      try{ await signOut(auth); }catch(e){}
+      window.location.href = "login.html";
+    };
+    btnSignOut.addEventListener("click", doSignOut);
+    modalSignOut.addEventListener("click", doSignOut);
+
+    // Feedback form handling
+    const form = document.getElementById("feedbackForm");
+    const hint = document.getElementById("saveHint");
+    const backdrop = document.getElementById("thanksBackdrop");
+    const autoMsg = document.getElementById("autoMsg");
+
+    let autoTimer = null;
+
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      hint.textContent = "Saving...";
+      const name = document.getElementById("fbName").value.trim();
+      const email = document.getElementById("fbEmail").value.trim();
+      const message = document.getElementById("fbMessage").value.trim();
 
       try{
         await addDoc(collection(db, "feedback"), {
-          name, phone, email, topic, message: msg,
-          uid: auth.currentUser?.uid || null,
+          name, email, message,
+          page: "coming-soon",
           createdAt: serverTimestamp()
         });
+        hint.textContent = "";
+        // show modal
+        backdrop.style.display = "flex";
+        // auto message + optional auto-redirect (not redirecting automatically here)
+        let seconds = 15;
+        autoMsg.textContent = `This will auto-close in ${seconds}s.`;
+        clearInterval(autoTimer);
+        autoTimer = setInterval(()=>{
+          seconds--;
+          if(seconds <= 0){
+            clearInterval(autoTimer);
+            backdrop.style.display = "none";
+          }else{
+            autoMsg.textContent = `This will auto-close in ${seconds}s.`;
+          }
+        }, 1000);
+
+        // reset form
         form.reset();
-        modal.classList.add('open');
-      }catch(e){
-        err.textContent = "Could not send feedback. Please try again.";
+      }catch(err){
+        hint.textContent = "Failed to save. Please try again.";
+        console.error(err);
       }
     });
   </script>
-
-  <script type="module" src="auth-guard.js"></script>
 </body>
-</html>
+  </html>
