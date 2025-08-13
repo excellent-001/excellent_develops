@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Create Account • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="main">
+    <div class="card stack">
+      <div class="brand">
+        <img class="logo"
+          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
+          alt="Excellent_Develops"
+          onerror="this.src='https://dummyimage.com/300x300/2a1968/ffffff&text=ED'"/>
+        <h1>Create your account</h1>
+        <p class="sub">Fill in your details carefully</p>
+      </div>
+
+      <form id="signup-form" class="stack">
+        <div class="grid-2">
+          <div class="stack">
+            <label class="label" for="first">First name</label>
+            <input id="first" class="input" type="text" required/>
+          </div>
+          <div class="stack">
+            <label class="label" for="last">Last name</label>
+            <input id="last" class="input" type="text" required/>
+          </div>
+        </div>
+
+        <div class="stack">
+          <label class="label" for="username">Username</label>
+          <input id="username" class="input" type="text" minlength="3" placeholder="e.g. excellent_dev" required/>
+        </div>
+
+        <div class="stack">
+          <label class="label" for="email">Email address</label>
+          <input id="email" class="input" type="email" placeholder="you@email.com" required/>
+        </div>
+
+        <div class="stack">
+          <label class="label" for="phone">Phone number</label>
+          <input id="phone" class="input" type="tel" placeholder="+234..." />
+        </div>
+
+        <div class="grid-2">
+          <div class="stack">
+            <label class="label" for="pass">Password (min 6)</label>
+            <input id="pass" class="input" type="password" minlength="6" required/>
+          </div>
+          <div class="stack">
+            <label class="label" for="confirm">Confirm password</label>
+            <input id="confirm" class="input" type="password" minlength="6" required/>
+          </div>
+        </div>
+
+        <div id="signup-error" class="error"></div>
+
+        <button class="btn" type="submit">Create Account</button>
+        <div class="row">
+          <span class="help">Already have an account?</span>
+          <a href="login.html">Back to Login</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    © 2025 Excellent Global Concepts. All rights reserved.
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, setDoc, doc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const form = document.getElementById('signup-form');
+    const err  = document.getElementById('signup-error');
+
+    async function usernameTaken(u){
+      const q = query(collection(db,"users"), where("usernameLower","==", u.toLowerCase()));
+      const snap = await getDocs(q);
+      return !snap.empty;
+    }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.textContent = "";
+
+      const first = document.getElementById('first').value.trim();
+      const last  = document.getElementById('last').value.trim();
+      const usern = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const pass  = document.getElementById('pass').value;
+      const conf  = document.getElementById('confirm').value;
+
+      if(pass !== conf){ err.textContent = "Passwords do not match."; return; }
+      if(await usernameTaken(usern)){ err.textContent = "Username already taken."; return; }
+
+      try{
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: `${first} ${last}` });
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          firstName:first, lastName:last,
+          username:usern, usernameLower:usern.toLowerCase(),
+          email, phone, createdAt: serverTimestamp()
+        });
+
+        alert("Account created! Please log in.");
+        window.location.href = "login.html";
+      }catch(e){
+        const code = (e?.code||"").replace("auth/","");
+        const map = {
+          "email-already-in-use":"Email already in use.",
+          "invalid-email":"Invalid email address.",
+          "weak-password":"Password should be at least 6 characters."
+        };
+        err.textContent = map[code] || "Something went wrong. Please try again.";
+      }
+    });
+  </script>
+</body>
+  </html>
