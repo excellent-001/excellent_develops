@@ -1,146 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projects</title>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>My Projects • Excellent_Develops</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #000;
-        color: #fff;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-    }
-
-    header {
-        display: flex;
-        justify-content: flex-end;
-        padding: 10px 20px;
-    }
-
-    .signout-btn {
-        background-color: #00ff88;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    h1 {
-        font-size: 2rem;
-        margin: 20px 0;
-        text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-    }
-
-    .project-card {
-        background-color: #111;
-        border: 2px solid #00ff88;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 15px auto;
-        max-width: 400px;
-        box-shadow: 0 0 20px #00ff88;
-    }
-
-    .project-card h2 {
-        color: #00ff88;
-    }
-
-    .project-card button {
-        background-color: #00ff88;
-        border: none;
-        padding: 10px 15px;
-        color: #000;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    a {
-        text-decoration: none;
-        color: #00ff88;
-    }
-
-    footer {
-        margin: 20px 0;
-    }
+  :root{--bg:#0b1220;--g1:#4b0082;--g2:#800080;--accent:#22c55e}
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;
+    background: linear-gradient(135deg,#111827 0%, #1f2937 100%);
+    display:flex;flex-direction:column;
+  }
+  .top{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 16px;background:linear-gradient(135deg,var(--g1),var(--g2));
+    position:sticky;top:0;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,.25)
+  }
+  .top .title{font-weight:800;letter-spacing:.3px}
+  .top .actions{display:flex;gap:10px}
+  .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .danger{background:#ef4444;color:#fff}
+  .container{width:min(1100px,94vw);margin:26px auto;padding-bottom:40px}
+  .hero{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .hero h1{margin:0;font-size:28px}
+  .badge{background:#10b981;color:#062; padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  @media(max-width:700px){ .grid{grid-template-columns:1fr} }
+  .card{
+    background:linear-gradient(135deg,#111827,#0b1220);border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.28);display:flex;flex-direction:column;gap:10px
+  }
+  .card .name{font-weight:800}
+  .card .desc{opacity:.9}
+  .card .go{align-self:flex-start;background:var(--accent);color:#062}
 </style>
 </head>
 <body>
+  <div class="top">
+    <div class="title">🚀 Projects</div>
+    <div class="actions">
+      <a class="btn ghost" href="welcome.html">Home</a>
+      <button class="btn danger" id="logoutBtn">Sign Out</button>
+    </div>
+  </div>
 
-<header>
-    <button class="signout-btn" onclick="signOut()">Sign Out</button>
-</header>
+  <div class="container">
+    <div class="hero">
+      <h1>My Projects</h1><span class="badge">Secure Area</span>
+    </div>
 
-<h1>🚀 Projects</h1>
+    <div class="grid">
+      <div class="card">
+        <div class="name">1. Education Website</div>
+        <div class="desc">An engaging platform for learning and academic growth.</div>
+        <a class="btn go" href="coming-soon.html">View Project</a>
+      </div>
 
-<div class="project-card">
-    <h2>1. Education Website</h2>
-    <p>Creating an engaging platform for learning and academic growth.</p>
-    <button onclick="goToComingSoon()">View Project</button>
-</div>
+      <div class="card">
+        <div class="name">2. Social Intelligence Hub</div>
+        <div class="desc">Connecting problem-solvers, innovators, and intellectuals.</div>
+        <a class="btn go" href="coming-soon.html">View Project</a>
+      </div>
 
-<div class="project-card">
-    <h2>2. Social Intelligence Hub</h2>
-    <p>A social website that connects problem-solvers, innovators, and highly intellectual people globally.</p>
-    <button onclick="goToComingSoon()">View Project</button>
-</div>
+      <div class="card">
+        <div class="name">3. Pematech Company</div>
+        <div class="desc">Business website: breaking limits and fostering excellence.</div>
+        <a class="btn go" href="coming-soon.html">View Project</a>
+      </div>
 
-<div class="project-card">
-    <h2>3. Business Website: Pematech Company</h2>
-    <p>Breaking limits and fostering excellence in technology solutions.</p>
-    <button onclick="goToComingSoon()">View Project</button>
-</div>
+      <div class="card">
+        <div class="name">4. Excellent Global Concepts</div>
+        <div class="desc">Global updates, opportunities, and insights.</div>
+        <a class="btn go" href="coming-soon.html">View Project</a>
+      </div>
+    </div>
+  </div>
 
-<div class="project-card">
-    <h2>4. Excellent Global Concepts</h2>
-    <p>A global online hub for news, updates, and opportunities.</p>
-    <button onclick="goToComingSoon()">View Project</button>
-</div>
-
-<footer>
-    <a href="index.html">← Back to Home</a>
-</footer>
-
-<script type="module">
-    // Firebase Import
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    // Firebase Config
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     const firebaseConfig = {
-        apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-        authDomain: "excellent-d056e.firebaseapp.com",
-        projectId: "excellent-d056e",
-        storageBucket: "excellent-d056e.firebasestorage.app",
-        messagingSenderId: "629984941607",
-        appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-        measurementId: "G-G3RCTDSY27"
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
     };
-
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Sign Out Function
-    window.signOut = function () {
-        signOut(auth).then(() => {
-            alert("Signed out successfully!");
-            window.location.href = "index.html";
-        }).catch((error) => {
-            console.error(error);
-        });
-    };
-
-    // Go to Coming Soon
-    window.goToComingSoon = function () {
-        window.location.href = "coming-soon.html";
-    };
-</script>
-
+    onAuthStateChanged(auth,(u)=>{ if(!u) window.location.href="login.html"; });
+    document.getElementById("logoutBtn").onclick = async ()=>{ await signOut(auth); window.location.href="login.html"; };
+  </script>
 </body>
-  </html>
+</html>
