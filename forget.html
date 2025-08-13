@@ -1,98 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Forgot Password • Excellent_Develops</title>
-<style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: url('https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png') no-repeat center center/cover;
-  }
-  .overlay {
-    background: rgba(0,0,0,0.6);
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-  .forgot-box {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-  }
-  .forgot-box h2 {
-    margin-bottom: 15px;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    background: #4A90E2;
-    color: white;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #357ABD;
-  }
-  .links {
-    margin-top: 10px;
-    font-size: 0.9em;
-  }
-  .links a {
-    color: #4A90E2;
-    text-decoration: none;
-  }
-  footer {
-    background: #222;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 0.85em;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password - Excellent_Develops</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6e0dd0, #a445b2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #ff7eb3;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff4f81;
+    }
+  </style>
 </head>
 <body>
 
-<div class="overlay">
-  <div class="forgot-box">
-    <h2>Reset Your Password</h2>
-    <p>Enter your email address to receive a password reset link.</p>
-    <input type="email" id="email" placeholder="Email Address" />
-    <button onclick="resetPassword()">Send Reset Link</button>
-    <div class="links">
-      <a href="index.html">Back to Login</a>
-    </div>
-  </div>
+<div class="container">
+  <h2>Reset Password</h2>
+  <input type="email" id="email" placeholder="Enter your email" required>
+  <button onclick="resetPassword()">Send Reset Link</button>
+  <p id="message"></p>
 </div>
 
-<footer>
-  &copy; 2025 Excellent_Develops. All rights reserved.
-</footer>
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
+<script>
+  // Your Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
     authDomain: "excellent-d056e.firebaseapp.com",
@@ -103,24 +68,25 @@
     measurementId: "G-G3RCTDSY27"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
   function resetPassword() {
-    const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message");
 
     if (!email) {
-      alert("Please enter your email.");
+      message.textContent = "Please enter your email.";
       return;
     }
 
-    sendPasswordResetEmail(auth, email)
+    auth.sendPasswordResetEmail(email)
       .then(() => {
-        alert("Password reset email sent! Please check your inbox.");
-        window.location.href = "index.html";
+        message.textContent = "✅ Reset link sent! Check your email.";
       })
-      .catch((error) => {
-        alert("Error: " + error.message);
+      .catch(error => {
+        message.textContent = "❌ " + error.message;
       });
   }
 </script>
