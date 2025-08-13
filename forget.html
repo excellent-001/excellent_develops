@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Forgot Password • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="main">
+    <div class="card stack">
+      <div class="brand">
+        <img class="logo"
+          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
+          alt="Excellent_Develops"
+          onerror="this.src='https://dummyimage.com/300x300/2a1968/ffffff&text=ED'"/>
+        <h1>Reset your password</h1>
+        <p class="sub">Enter your email or username</p>
+      </div>
+
+      <form id="reset-form" class="stack">
+        <div class="stack">
+          <label class="label" for="id">Email or Username</label>
+          <input id="id" class="input" type="text" required placeholder="you@email.com or yourusername"/>
+        </div>
+
+        <div id="reset-error" class="error"></div>
+        <div id="reset-ok" class="help"></div>
+
+        <button class="btn" type="submit">Send Reset Link</button>
+        <div class="row">
+          <a href="login.html">Back to Login</a>
+          <a href="signup.html">Create new account</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    © 2025 Excellent Global Concepts. All rights reserved.
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const form = document.getElementById('reset-form');
+    const err  = document.getElementById('reset-error');
+    const ok   = document.getElementById('reset-ok');
+
+    async function resolveEmail(input){
+      if(input.includes('@')) return input.trim();
+      const q = query(collection(db, "users"), where("usernameLower","==", input.trim().toLowerCase()));
+      const snap = await getDocs(q);
+      if(!snap.empty) return snap.docs[0].get("email");
+      return null;
+    }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.textContent=""; ok.textContent="";
+      const id = document.getElementById('id').value.trim();
+      try{
+        const email = await resolveEmail(id);
+        if(!email){ err.textContent = "No account found for that email/username."; return; }
+        await sendPasswordResetEmail(auth, email);
+        ok.textContent = "Reset link sent! Check your email (inbox or spam).";
+      }catch(e){
+        err.textContent = "Could not send reset link. Try again later.";
+      }
+    });
+  </script>
+</body>
+            </html>
