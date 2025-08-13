@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Create Account • Excellent_Develops</title>
+<title>Forgot Password • Excellent_Develops</title>
 <style>
   body {
     margin: 0;
@@ -11,26 +11,26 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #f4f4f4;
+    background: url('https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png') no-repeat center center/cover;
   }
-  .main {
+  .overlay {
+    background: rgba(0,0,0,0.6);
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
   }
-  .signup-box {
+  .forgot-box {
     background: white;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     text-align: center;
   }
-  .signup-box img {
-    width: 100px;
+  .forgot-box h2 {
     margin-bottom: 15px;
   }
   input {
@@ -73,17 +73,12 @@
 </head>
 <body>
 
-<div class="main">
-  <div class="signup-box">
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo" />
-    <h2>Create New Account</h2>
-    <input type="text" id="firstName" placeholder="First Name" />
-    <input type="text" id="lastName" placeholder="Last Name" />
-    <input type="text" id="username" placeholder="Username" />
+<div class="overlay">
+  <div class="forgot-box">
+    <h2>Reset Your Password</h2>
+    <p>Enter your email address to receive a password reset link.</p>
     <input type="email" id="email" placeholder="Email Address" />
-    <input type="password" id="password" placeholder="Password" />
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" />
-    <button onclick="register()">Create Account</button>
+    <button onclick="resetPassword()">Send Reset Link</button>
     <div class="links">
       <a href="index.html">Back to Login</a>
     </div>
@@ -96,8 +91,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -111,41 +105,23 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
 
-  async function register() {
-    const firstName = document.getElementById("firstName").value.trim();
-    const lastName = document.getElementById("lastName").value.trim();
-    const username = document.getElementById("username").value.trim();
+  function resetPassword() {
     const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-    if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+    if (!email) {
+      alert("Please enter your email.");
       return;
     }
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "users", user.uid), {
-        firstName,
-        lastName,
-        username,
-        email
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("Password reset email sent! Please check your inbox.");
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
       });
-
-      alert("Account created successfully! Please log in.");
-      window.location.href = "index.html";
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
   }
 </script>
 
