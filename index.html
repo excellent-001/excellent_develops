@@ -1,97 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Login • Excellent_Develops</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excellent_Develops Login</title>
   <style>
     body {
       margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: url('https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png') no-repeat center center/cover;
+      background: linear-gradient(to bottom right, #4b0082, #800080);
       height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      color: white;
     }
-    .container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-top: 40px;
-    }
+
     .login-container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 25px;
-      border-radius: 10px;
-      width: 320px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       text-align: center;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 350px;
+      margin: auto;
     }
+
     .login-container img {
-      width: 100px;
-      height: auto;
+      width: 120px; /* Big logo */
+      height: 120px;
+      border-radius: 50%;
       margin-bottom: 15px;
+      object-fit: cover;
     }
-    input {
+
+    .login-container h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .login-container p {
+      margin: 5px 0 20px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .login-container input {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
     }
-    button {
+
+    .login-container button {
       width: 100%;
       padding: 10px;
-      background: #4A90E2;
-      color: white;
+      background-color: #8a2be2;
       border: none;
-      border-radius: 5px;
+      color: white;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1em;
+      font-size: 15px;
     }
-    button:hover {
-      background: #357ABD;
+
+    .login-container .links {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 8px;
+      color: #ccc;
     }
-    .links {
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-    .links a {
-      color: #4A90E2;
-      text-decoration: none;
-    }
+
     footer {
       background: white;
       color: black;
-      font-size: 0.85em;
       text-align: center;
-      padding: 10px;
+      padding: 10px 0;
+      font-size: 13px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="login-container">
-      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
-      <h2>Login</h2>
-      <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <button onclick="login()">Sign In</button>
-      <div class="links">
-        <a href="forgot.html">Forgot Password?</a><br>
-        <a href="signup.html">Create New Account</a>
-      </div>
+  <div class="login-container">
+    <!-- Logo using your GitHub image link -->
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+    <h2>Excellent_Develops</h2>
+    <p>Please sign in to access the portfolio</p>
+    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
+    <input type="password" id="loginPassword" placeholder="Enter your password">
+    <button onclick="login()">Sign In</button>
+    <div class="links">
+      <span>Forgot password?</span>
+      <span>Create new account</span>
     </div>
+    <p style="font-size: 12px; color: #bbb; margin-top: 10px;">Secure access powered by Firebase</p>
   </div>
 
   <footer>
-    &copy; 2025 Excellent_Develops. All rights reserved.
+    © 2025 Excellent_Develops. All rights reserved.
   </footer>
 
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
@@ -115,7 +134,7 @@
 
       let emailToLogin = input;
       if (!input.includes("@")) {
-        emailToLogin = input + "@example.com"; // Adjust your username-to-email mapping logic
+        emailToLogin = input + "@example.com"; // Replace with your username-to-email logic
       }
 
       try {
