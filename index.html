@@ -2,94 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Login • Excellent_Develops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up • Excellent_Develops</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #4A90E2, #9013FE);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      justify-content: center;
-      align-items: center;
+      background: linear-gradient(135deg, #4A90E2, #9013FE);
       color: white;
     }
-    .container {
-      background: rgba(0,0,0,0.4);
-      padding: 40px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    h1 {
+    .signup-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      height: 50vh; /* Half of screen height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h2 {
+      text-align: center;
       margin-bottom: 20px;
-      font-size: 2em;
     }
     input {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
       border: none;
-      border-radius: 6px;
-      font-size: 1.1em;
+      font-size: 1em;
     }
     button {
-      background: #007BFF;
+      padding: 10px;
+      background: #28a745;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 1.1em;
+      border-radius: 5px;
+      font-size: 1em;
       cursor: pointer;
-      width: 100%;
-      margin-top: 15px;
     }
     button:hover {
-      opacity: 0.9;
+      background: #218838;
     }
     p {
-      margin-top: 15px;
-      font-size: 0.9em;
+      text-align: center;
+      margin-top: 10px;
     }
     a {
       color: #FFD700;
       text-decoration: none;
     }
     footer {
-      margin-top: auto;
-      padding: 15px;
-      font-size: 0.85em;
       text-align: center;
-      color: #ddd;
+      padding: 10px;
+      background: rgba(0,0,0,0.4);
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Login</h1>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button id="loginBtn">Login</button>
-    <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
-  </div>
+  <main>
+    <div class="signup-box">
+      <h2>Create Account</h2>
+      <input type="text" placeholder="Full Name" id="name"/>
+      <input type="email" placeholder="Email" id="email"/>
+      <input type="password" placeholder="Password" id="password"/>
+      <button id="signupBtn">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+  </main>
 
   <footer>
-    &copy; 2025 Excellent Global Concepts. All rights reserved.
+    &copy; 2025 Excellent_Develops. All Rights Reserved.
   </footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
       projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
+      storageBucket: "excellent-d056e.appspot.com",
       messagingSenderId: "629984941607",
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
@@ -98,28 +104,27 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    document.getElementById("signupBtn").addEventListener("click", () => {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      if (!email || !password) {
-        alert("Please enter both email and password.");
+      if (!name || !email || !password) {
+        alert("Please fill in all fields.");
         return;
       }
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "welcome.html"; // Redirect after login
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    // If already logged in, go straight to welcome page
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "welcome.html";
-      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          return updateProfile(userCredential.user, { displayName: name });
+        })
+        .then(() => {
+          alert("Account created successfully! Please log in.");
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
     });
   </script>
 </body>
