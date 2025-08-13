@@ -77,7 +77,7 @@
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
       projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
+      storageBucket: "excellent-d056e.appspot.com",
       messagingSenderId: "629984941607",
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
@@ -108,8 +108,10 @@
       if (!user) {
         window.location.href = "login.html";
       } else {
-        const name = user.displayName ? user.displayName.split(" ")[0] : user.email.split("@")[0];
-        document.getElementById("greeting").textContent = `We’re glad to have you, ${name}.`;
+        const firstName = user.displayName
+          ? user.displayName.split(" ")[0]
+          : user.email.split("@")[0];
+        document.getElementById("greeting").textContent = `We’re glad to have you, ${firstName}.`;
         startAutoLogoutTimer();
       }
     });
