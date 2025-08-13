@@ -1,153 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Create Account • Excellent_Develops</title>
-<style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: #f4f4f4;
-  }
-  .main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-  .signup-box {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-  }
-  .signup-box img {
-    width: 100px;
-    margin-bottom: 15px;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    background: #4A90E2;
-    color: white;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #357ABD;
-  }
-  .links {
-    margin-top: 10px;
-    font-size: 0.9em;
-  }
-  .links a {
-    color: #4A90E2;
-    text-decoration: none;
-  }
-  footer {
-    background: #222;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 0.85em;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password - Excellent_Develops</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4b0082, #8a2be2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .reset-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+    }
+    button {
+      background: purple;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: darkviolet;
+    }
+    a {
+      color: white;
+      text-decoration: underline;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="main">
-  <div class="signup-box">
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo" />
-    <h2>Create New Account</h2>
-    <input type="text" id="firstName" placeholder="First Name" />
-    <input type="text" id="lastName" placeholder="Last Name" />
-    <input type="text" id="username" placeholder="Username" />
-    <input type="email" id="email" placeholder="Email Address" />
-    <input type="password" id="password" placeholder="Password" />
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" />
-    <button onclick="register()">Create Account</button>
-    <div class="links">
-      <a href="index.html">Back to Login</a>
-    </div>
+  <div class="reset-box">
+    <h2>Reset Password</h2>
+    <p>Enter your email to receive a reset link.</p>
+    <input type="email" id="email" placeholder="Enter your email">
+    <button onclick="resetPassword()">Send Reset Link</button>
+    <p><a href="index.html">Back to login</a></p>
   </div>
-</div>
 
-<footer>
-  &copy; 2025 Excellent_Develops. All rights reserved.
-</footer>
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
+    firebase.initializeApp(firebaseConfig);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    function resetPassword() {
+      const email = document.getElementById("email").value;
 
-  async function register() {
-    const firstName = document.getElementById("firstName").value.trim();
-    const lastName = document.getElementById("lastName").value.trim();
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
-
-    if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields.");
-      return;
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          alert("Password reset email sent!");
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
     }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "users", user.uid), {
-        firstName,
-        lastName,
-        username,
-        email
-      });
-
-      alert("Account created successfully! Please log in.");
-      window.location.href = "index.html";
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
-  }
-</script>
+  </script>
 
 </body>
 </html>
