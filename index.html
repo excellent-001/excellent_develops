@@ -1,64 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Excellent Develops</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
-      text-align: center;
-      background-color: #f8f9fa;
-      color: #333;
     }
-    header {
-      padding: 30px 0;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
     }
-    .logo {
+    img {
       width: 150px;
       height: 150px;
       border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #555;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      margin-top: 20px;
     }
     h1 {
-      font-size: 2rem;
-      margin-top: 15px;
-      font-weight: bold;
+      font-size: 24px;
+      color: #333;
+      margin-top: 20px;
     }
-    main {
-      padding: 20px;
+    p {
+      font-size: 16px;
+      color: #555;
     }
-    .logout-btn {
+    button {
       padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #ff4d4d;
+      font-size: 16px;
       color: white;
+      background-color: #f44336;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-    .logout-btn:hover {
-      background-color: #cc0000;
+    button:hover {
+      background-color: #d32f2f;
     }
     footer {
       background-color: #222;
       color: white;
-      padding: 15px 0;
-      margin-top: 30px;
-      font-size: 0.9rem;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 14px;
     }
   </style>
+</head>
+<body>
+  <div class="container">
+    <img src="your-logo.png" alt="Logo">
+    <h1>Welcome to Excellent Develops</h1>
+    <p>This is the official hub for all my web development projects, ideas, and collaborations. Explore my work, learn about my mission, and connect for opportunities.</p>
+    <button id="logoutBtn">Logout</button>
+  </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <footer>
+    All Rights Reserved © Excellent Developers 2025
+  </footer>
 
-  <script>
-    // Firebase config
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -68,41 +80,26 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-    firebase.initializeApp(firebaseConfig);
 
-    // Protect page (redirect to login if not signed in)
-    firebase.auth().onAuthStateChanged(user => {
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Redirect if not signed in
+    onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "login.html";
       }
     });
 
-    // Logout function
-    function logout() {
-      firebase.auth().signOut()
-        .then(() => {
-          window.location.href = "login.html";
-        })
-        .catch(err => alert(err.message));
-    }
+    // Logout button click
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Error signing out: " + error.message);
+      });
+    });
   </script>
-</head>
-<body>
-
-  <header>
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h1>Welcome to Excellent Develops</h1>
-  </header>
-
-  <main>
-    <p>This is the official hub for all my web development projects, ideas, and collaborations.  
-       Explore my work, learn about my mission, and connect for opportunities.</p>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </main>
-
-  <footer>
-    <p>All Rights Reserved © Excellent Developers 2025</p>
-  </footer>
-
 </body>
 </html>
