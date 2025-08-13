@@ -1,83 +1,198 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Excellent Developers - Sign In</title>
-  <link rel="stylesheet" href="style.css"/>
-  <style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Excellent Developers • Sign In</title>
+<style>
     body {
-      background-color: #0d1117;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
     }
     .card {
-      background: #161b22;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      width: min(350px, 90vw);
-      box-shadow: 0px 4px 20px rgba(0,0,0,0.3);
+        background: #1e293b;
+        padding: 30px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
-    .logo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
+    .card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+    h2 {
+        margin: 10px 0 20px;
     }
     input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: none;
-      outline: none;
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 6px;
+        border: none;
+        outline: none;
     }
     button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #238636;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
+        width: 100%;
+        padding: 10px;
+        background: #2563eb;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
     }
     button:hover {
-      background: #2ea043;
+        background: #1d4ed8;
     }
     a {
-      display: block;
-      margin-top: 12px;
-      color: #58a6ff;
-      text-decoration: none;
-      font-size: 14px;
+        color: #60a5fa;
+        cursor: pointer;
+        text-decoration: none;
     }
-    a:hover {
-      text-decoration: underline;
+    .footer {
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        background: #0f172a;
     }
-  </style>
+    .hidden {
+        display: none;
+    }
+</style>
 </head>
 <body>
-  <div class="card">
-    <img src="web-dev-logo.jpg" alt="Logo" class="logo"/>
-    <h2>Excellent Developers</h2>
-    
-    <input type="email" id="email" placeholder="Email" required/>
-    <input type="password" id="password" placeholder="Password" required/>
-    <button id="signinBtn">Sign In</button>
-    <a href="#" id="forgotPassword">Forgot Password?</a>
-    
-    <p id="message" style="color:red; font-size:14px; margin-top:10px;"></p>
-  </div>
 
-  <script type="module" src="auth.js"></script>
+<div class="container">
+    <div class="card">
+        <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+        <h2 id="form-title">Sign In</h2>
+
+        <!-- Sign In Form -->
+        <div id="signin-form">
+            <input type="email" id="signin-email" placeholder="Email Address" required>
+            <input type="password" id="signin-password" placeholder="Password" required>
+            <button onclick="signIn()">Sign In</button>
+            <p><a onclick="showForgot()">Forgot Password?</a></p>
+            <p>New user? <a onclick="showSignup()">Create Account</a></p>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="hidden">
+            <input type="text" id="signup-name" placeholder="Full Name" required>
+            <input type="email" id="signup-email" placeholder="Email Address" required>
+            <input type="password" id="signup-password" placeholder="Password" required>
+            <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
+            <button onclick="signUp()">Create Account</button>
+            <p><a onclick="showSignin()">Back to Sign In</a></p>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgot-form" class="hidden">
+            <input type="email" id="forgot-email" placeholder="Enter your Email" required>
+            <button onclick="resetPassword()">Send Reset Link</button>
+            <p><a onclick="showSignin()">Back to Sign In</a></p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    © 2025 Excellent Global Concepts. All rights reserved.
+</div>
+
+<!-- Firebase Scripts -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    sendPasswordResetEmail 
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// UI Functions
+window.showSignup = () => {
+    document.getElementById('signin-form').classList.add('hidden');
+    document.getElementById('signup-form').classList.remove('hidden');
+    document.getElementById('forgot-form').classList.add('hidden');
+    document.getElementById('form-title').innerText = "Create Account";
+}
+window.showSignin = () => {
+    document.getElementById('signin-form').classList.remove('hidden');
+    document.getElementById('signup-form').classList.add('hidden');
+    document.getElementById('forgot-form').classList.add('hidden');
+    document.getElementById('form-title').innerText = "Sign In";
+}
+window.showForgot = () => {
+    document.getElementById('signin-form').classList.add('hidden');
+    document.getElementById('signup-form').classList.add('hidden');
+    document.getElementById('forgot-form').classList.remove('hidden');
+    document.getElementById('form-title').innerText = "Forgot Password";
+}
+
+// Firebase Functions
+window.signIn = () => {
+    const email = document.getElementById('signin-email').value;
+    const password = document.getElementById('signin-password').value;
+    signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            window.location.href = "portfolio.html";
+        })
+        .catch(err => alert(err.message));
+}
+window.signUp = () => {
+    const name = document.getElementById('signup-name').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const confirm = document.getElementById('signup-confirm').value;
+
+    if(password !== confirm){
+        alert("Passwords do not match!");
+        return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            alert("Account created! Please sign in.");
+            showSignin();
+        })
+        .catch(err => alert(err.message));
+}
+window.resetPassword = () => {
+    const email = document.getElementById('forgot-email').value;
+    sendPasswordResetEmail(auth, email)
+        .then(() => {
+            alert("Password reset link sent! Check your email.");
+            showSignin();
+        })
+        .catch(err => alert(err.message));
+}
+</script>
 </body>
 </html>
