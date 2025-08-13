@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Welcome • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container header-gap center stack-lg">
+    <!-- Logo + Name -->
+    <img class="logo-circle"
+         src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
+         alt="Excellent_Develops Logo"
+         onerror="this.src='https://dummyimage.com/400x400/14162b/ffffff&text=ED'"/>
+
+    <h1 class="brand-title">Welcome to <span class="tag">Excellent_Develops</span></h1>
+    <p class="brand-sub">Crafting ideas in code — secure access only</p>
+
+    <!-- Welcome Card -->
+    <div class="card stack">
+      <p class="lead">
+        Welcome to <strong>Excellent_Develops</strong> — a secure hub for my work and ideas.
+        You’ll find projects, updates, and more once you’re signed in.
+      </p>
+      <p class="lead bold">Please log in to access my portfolio.</p>
+    </div>
+
+    <!-- Auth Tabs -->
+    <div class="card stack" style="width:min(560px, 96vw)">
+      <div class="grid grid-2">
+        <button id="tab-login" class="btn">Login</button>
+        <button id="tab-signup" class="btn ghost">Create Account</button>
+      </div>
+
+      <!-- Login -->
+      <form id="form-login" class="stack section-gap">
+        <div class="stack">
+          <label class="label" for="login-email">Email</label>
+          <input class="input" id="login-email" type="email" placeholder="you@email.com" required/>
+        </div>
+        <div class="stack">
+          <label class="label" for="login-pass">Password</label>
+          <input class="input" id="login-pass" type="password" placeholder="••••••••" minlength="6" required/>
+        </div>
+        <div id="login-error" class="error"></div>
+        <button type="submit" class="btn full">Sign In</button>
+        <p class="muted center-text">New here? <a href="#" id="go-signup">Create an account</a></p>
+      </form>
+
+      <!-- Signup -->
+      <form id="form-signup" class="stack section-gap" style="display:none">
+        <div class="grid grid-2">
+          <div class="stack">
+            <label class="label" for="first-name">First Name</label>
+            <input class="input" id="first-name" type="text" required/>
+          </div>
+          <div class="stack">
+            <label class="label" for="surname">Surname</label>
+            <input class="input" id="surname" type="text" required/>
+          </div>
+        </div>
+        <div class="stack">
+          <label class="label" for="username">Username</label>
+          <input class="input" id="username" type="text" minlength="3" required/>
+        </div>
+        <div class="stack">
+          <label class="label" for="signup-email">Email Address</label>
+          <input class="input" id="signup-email" type="email" required/>
+        </div>
+        <div class="grid grid-2">
+          <div class="stack">
+            <label class="label" for="signup-pass">Password (min 6)</label>
+            <input class="input" id="signup-pass" type="password" minlength="6" required/>
+          </div>
+          <div class="stack">
+            <label class="label" for="confirm-pass">Confirm Password</label>
+            <input class="input" id="confirm-pass" type="password" minlength="6" required/>
+          </div>
+        </div>
+        <div id="signup-error" class="error"></div>
+        <button type="submit" class="btn full">Create Account</button>
+        <p class="muted center-text">Already have an account? <a href="#" id="go-login">Log in</a></p>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      © 2025 Excellent Developers. All rights reserved.
+    </div>
+  </div>
+
+  <!-- Firebase + Page Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    await setPersistence(auth, browserLocalPersistence);
+    const db = getFirestore(app);
+
+    // Tabs
+    const tabLogin = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    const formLogin = document.getElementById('form-login');
+    const formSignup = document.getElementById('form-signup');
+    const goSignup = document.getElementById('go-signup');
+    const goLogin  = document.getElementById('go-login');
+
+    function showLogin(){
+      tabLogin.classList.remove('ghost'); tabLogin.classList.add('btn');
+      tabSignup.classList.add('ghost');
+      formLogin.style.display='grid';
+      formSignup.style.display='none';
+      document.getElementById('login-error').textContent='';
+    }
+    function showSignup(){
+      tabSignup.classList.remove('ghost'); tabSignup.classList.add('btn');
+      tabLogin.classList.add('ghost');
+      formSignup.style.display='grid';
+      formLogin.style.display='none';
+      document.getElementById('signup-error').textContent='';
+    }
+    tabLogin.addEventListener('click', showLogin);
+    tabSignup.addEventListener('click', showSignup);
+    goSignup.addEventListener('click', (e)=>{e.preventDefault(); showSignup();});
+    goLogin.addEventListener('click', (e)=>{e.preventDefault(); showLogin();});
+
+    // Signup
+    formSignup.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const firstName = document.getElementById('first-name').value.trim();
+      const surname   = document.getElementById('surname').value.trim();
+      const username  = document.getElementById('username').value.trim();
+      const email     = document.getElementById('signup-email').value.trim();
+      const pass      = document.getElementById('signup-pass').value;
+      const confirm   = document.getElementById('confirm-pass').value;
+      const errBox    = document.getElementById('signup-error');
+
+      if(pass !== confirm){ errBox.textContent = "Passwords do not match."; return; }
+
+      try{
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await setDoc(doc(db, "users", cred.user.uid), {
+          firstName, surname, username, email, createdAt: serverTimestamp()
+        });
+        // Force them to log in to confirm credentials
+        alert("Account created! Please log in.");
+        showLogin();
+      }catch(err){
+        errBox.textContent = tidy(err);
+      }
+    });
+
+    // Login
+    formLogin.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const pass  = document.getElementById('login-pass').value;
+      const errBox= document.getElementById('login-error');
+      errBox.textContent = "";
+      try{
+        await signInWithEmailAndPassword(auth, email, pass);
+        // Go to welcome page (with your photo + button to portfolio)
+        window.location.href = "welcome.html";
+      }catch(err){
+        errBox.textContent = "Incorrect Email or Password.";
+      }
+    });
+
+    function tidy(err){
+      const code = (err?.code||"").replace("auth/","");
+      const map = {
+        "invalid-email":"Invalid email address",
+        "email-already-in-use":"Email already in use",
+        "weak-password":"Password must be at least 6 characters",
+        "missing-password":"Password required",
+      };
+      return map[code] || "Something went wrong. Please try again.";
+    }
+  </script>
+</body>
+</html>
