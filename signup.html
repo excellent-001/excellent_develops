@@ -1,140 +1,153 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Create Account • Excellent_Develops</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Account • Excellent_Develops</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f4f4;
+  }
+  .main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .signup-box {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+  }
+  .signup-box img {
+    width: 100px;
+    margin-bottom: 15px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #4A90E2;
+    color: white;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #357ABD;
+  }
+  .links {
+    margin-top: 10px;
+    font-size: 0.9em;
+  }
+  .links a {
+    color: #4A90E2;
+    text-decoration: none;
+  }
+  footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.85em;
+  }
+</style>
 </head>
 <body>
-  <main class="main">
-    <div class="card stack">
-      <div class="brand">
-        <img class="logo"
-          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
-          alt="Excellent_Develops"
-          onerror="this.src='https://dummyimage.com/300x300/2a1968/ffffff&text=ED'"/>
-        <h1>Create your account</h1>
-        <p class="sub">Fill in your details carefully</p>
-      </div>
 
-      <form id="signup-form" class="stack">
-        <div class="grid-2">
-          <div class="stack">
-            <label class="label" for="first">First name</label>
-            <input id="first" class="input" type="text" required/>
-          </div>
-          <div class="stack">
-            <label class="label" for="last">Last name</label>
-            <input id="last" class="input" type="text" required/>
-          </div>
-        </div>
-
-        <div class="stack">
-          <label class="label" for="username">Username</label>
-          <input id="username" class="input" type="text" minlength="3" placeholder="e.g. excellent_dev" required/>
-        </div>
-
-        <div class="stack">
-          <label class="label" for="email">Email address</label>
-          <input id="email" class="input" type="email" placeholder="you@email.com" required/>
-        </div>
-
-        <div class="stack">
-          <label class="label" for="phone">Phone number</label>
-          <input id="phone" class="input" type="tel" placeholder="+234..." />
-        </div>
-
-        <div class="grid-2">
-          <div class="stack">
-            <label class="label" for="pass">Password (min 6)</label>
-            <input id="pass" class="input" type="password" minlength="6" required/>
-          </div>
-          <div class="stack">
-            <label class="label" for="confirm">Confirm password</label>
-            <input id="confirm" class="input" type="password" minlength="6" required/>
-          </div>
-        </div>
-
-        <div id="signup-error" class="error"></div>
-
-        <button class="btn" type="submit">Create Account</button>
-        <div class="row">
-          <span class="help">Already have an account?</span>
-          <a href="login.html">Back to Login</a>
-        </div>
-      </form>
+<div class="main">
+  <div class="signup-box">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo" />
+    <h2>Create New Account</h2>
+    <input type="text" id="firstName" placeholder="First Name" />
+    <input type="text" id="lastName" placeholder="Last Name" />
+    <input type="text" id="username" placeholder="Username" />
+    <input type="email" id="email" placeholder="Email Address" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+    <button onclick="register()">Create Account</button>
+    <div class="links">
+      <a href="index.html">Back to Login</a>
     </div>
-  </main>
+  </div>
+</div>
 
-  <footer class="footer">
-    © 2025 Excellent Global Concepts. All rights reserved.
-  </footer>
+<footer>
+  &copy; 2025 Excellent_Develops. All rights reserved.
+</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, setDoc, doc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const form = document.getElementById('signup-form');
-    const err  = document.getElementById('signup-error');
+  async function register() {
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-    async function usernameTaken(u){
-      const q = query(collection(db,"users"), where("usernameLower","==", u.toLowerCase()));
-      const snap = await getDocs(q);
-      return !snap.empty;
+    if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
     }
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      err.textContent = "";
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      const first = document.getElementById('first').value.trim();
-      const last  = document.getElementById('last').value.trim();
-      const usern = document.getElementById('username').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const pass  = document.getElementById('pass').value;
-      const conf  = document.getElementById('confirm').value;
+      await setDoc(doc(db, "users", user.uid), {
+        firstName,
+        lastName,
+        username,
+        email
+      });
 
-      if(pass !== conf){ err.textContent = "Passwords do not match."; return; }
-      if(await usernameTaken(usern)){ err.textContent = "Username already taken."; return; }
+      alert("Account created successfully! Please log in.");
+      window.location.href = "index.html";
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+</script>
 
-      try{
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        await updateProfile(cred.user, { displayName: `${first} ${last}` });
-
-        await setDoc(doc(db, "users", cred.user.uid), {
-          firstName:first, lastName:last,
-          username:usern, usernameLower:usern.toLowerCase(),
-          email, phone, createdAt: serverTimestamp()
-        });
-
-        alert("Account created! Please log in.");
-        window.location.href = "login.html";
-      }catch(e){
-        const code = (e?.code||"").replace("auth/","");
-        const map = {
-          "email-already-in-use":"Email already in use.",
-          "invalid-email":"Invalid email address.",
-          "weak-password":"Password should be at least 6 characters."
-        };
-        err.textContent = map[code] || "Something went wrong. Please try again.";
-      }
-    });
-  </script>
 </body>
-  </html>
+</html>
