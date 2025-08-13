@@ -1,130 +1,103 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up • Excellent_Develops</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(135deg, #4A90E2, #9013FE);
-      color: white;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .signup-box {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 30px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      height: 50vh; /* Half of screen height */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 5px;
-      border: none;
-      font-size: 1em;
-    }
-    button {
-      padding: 10px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
-    p {
-      text-align: center;
-      margin-top: 10px;
-    }
-    a {
-      color: #FFD700;
-      text-decoration: none;
-    }
-    footer {
-      text-align: center;
-      padding: 10px;
-      background: rgba(0,0,0,0.4);
-      font-size: 0.9em;
-    }
-  </style>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign In • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <main>
-    <div class="signup-box">
-      <h2>Create Account</h2>
-      <input type="text" placeholder="Full Name" id="name"/>
-      <input type="email" placeholder="Email" id="email"/>
-      <input type="password" placeholder="Password" id="password"/>
-      <button id="signupBtn">Sign Up</button>
-      <p>Already have an account? <a href="login.html">Login here</a></p>
+  <main class="main">
+    <div class="card stack">
+      <div class="brand">
+        <img class="logo"
+          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
+          alt="Excellent_Develops"
+          onerror="this.src='https://dummyimage.com/300x300/2a1968/ffffff&text=ED'"/>
+        <h1>Excellent_Develops</h1>
+        <p class="sub">Please sign in to access the portfolio</p>
+      </div>
+
+      <form id="login-form" class="stack">
+        <div class="stack">
+          <label class="label" for="id">Email or Username</label>
+          <input id="id" class="input" type="text" placeholder="e.g. you@email.com or yourusername" required/>
+        </div>
+        <div class="stack">
+          <label class="label" for="pass">Password</label>
+          <input id="pass" class="input" type="password" placeholder="Enter your password" minlength="6" required/>
+        </div>
+
+        <div id="login-error" class="error"></div>
+
+        <button class="btn" type="submit">Sign In</button>
+
+        <div class="row">
+          <a href="forgot.html">Forgot password?</a>
+          <a href="signup.html">Create new account</a>
+        </div>
+      </form>
+
+      <p class="help center">Secure access powered by Firebase</p>
     </div>
   </main>
 
-  <footer>
-    &copy; 2025 Excellent_Develops. All Rights Reserved.
+  <footer class="footer">
+    © 2025 Excellent Global Concepts. All rights reserved.
   </footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
       projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.appspot.com",
+      storageBucket: "excellent-d056e.firebasestorage.app",
       messagingSenderId: "629984941607",
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
 
-    const app = initializeApp(firebaseConfig);
+    const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    await setPersistence(auth, browserLocalPersistence);
+    const db   = getFirestore(app);
 
-    document.getElementById("signupBtn").addEventListener("click", () => {
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const form = document.getElementById('login-form');
+    const err  = document.getElementById('login-error');
 
-      if (!name || !email || !password) {
-        alert("Please fill in all fields.");
-        return;
+    async function resolveEmailFromInput(input){
+      // if looks like email, return it
+      if (input.includes('@')) return input.trim();
+      // otherwise treat as username → find email in Firestore
+      const q = query(collection(db, "users"), where("usernameLower", "==", input.trim().toLowerCase()));
+      const snap = await getDocs(q);
+      if (!snap.empty){
+        const doc = snap.docs[0];
+        const email = doc.get("email");
+        return email || null;
       }
+      return null;
+    }
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          return updateProfile(userCredential.user, { displayName: name });
-        })
-        .then(() => {
-          alert("Account created successfully! Please log in.");
-          window.location.href = "login.html";
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.textContent = "";
+      const id   = document.getElementById('id').value.trim();
+      const pass = document.getElementById('pass').value;
+
+      try{
+        const email = await resolveEmailFromInput(id);
+        if(!email){ err.textContent = "Account not found. Check your email/username."; return; }
+        await signInWithEmailAndPassword(auth, email, pass);
+        // success → go to welcome page
+        window.location.href = "welcome.html";
+      }catch(e){
+        err.textContent = "Incorrect email/username or password.";
+      }
     });
   </script>
 </body>
