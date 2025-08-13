@@ -1,104 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Sign In • Excellent_Develops</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login • Excellent_Develops</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f4f4;
+  }
+  .main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .login-box {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  .login-box img {
+    width: 100px;
+    margin-bottom: 15px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #4A90E2;
+    color: white;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #357ABD;
+  }
+  .links {
+    margin-top: 10px;
+    font-size: 0.9em;
+  }
+  .links a {
+    color: #4A90E2;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.85em;
+  }
+</style>
 </head>
 <body>
-  <main class="main">
-    <div class="card stack">
-      <div class="brand">
-        <img class="logo"
-          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
-          alt="Excellent_Develops"
-          onerror="this.src='https://dummyimage.com/300x300/2a1968/ffffff&text=ED'"/>
-        <h1>Excellent_Develops</h1>
-        <p class="sub">Please sign in to access the portfolio</p>
-      </div>
 
-      <form id="login-form" class="stack">
-        <div class="stack">
-          <label class="label" for="id">Email or Username</label>
-          <input id="id" class="input" type="text" placeholder="e.g. you@email.com or yourusername" required/>
-        </div>
-        <div class="stack">
-          <label class="label" for="pass">Password</label>
-          <input id="pass" class="input" type="password" placeholder="Enter your password" minlength="6" required/>
-        </div>
-
-        <div id="login-error" class="error"></div>
-
-        <button class="btn" type="submit">Sign In</button>
-
-        <div class="row">
-          <a href="forgot.html">Forgot password?</a>
-          <a href="signup.html">Create new account</a>
-        </div>
-      </form>
-
-      <p class="help center">Secure access powered by Firebase</p>
+<div class="main">
+  <div class="login-box">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo" />
+    <h2>Login</h2>
+    <input type="text" id="loginInput" placeholder="Email address or Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Sign In</button>
+    <div class="links">
+      <a href="forgot.html">Forgot Password?</a> | 
+      <a href="signup.html">Create New Account</a>
     </div>
-  </main>
+  </div>
+</div>
 
-  <footer class="footer">
-    © 2025 Excellent Global Concepts. All rights reserved.
-  </footer>
+<footer>
+  &copy; 2025 Excellent_Develops. All rights reserved.
+</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
 
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    await setPersistence(auth, browserLocalPersistence);
-    const db   = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const form = document.getElementById('login-form');
-    const err  = document.getElementById('login-error');
+  async function login() {
+    const loginValue = document.getElementById("loginInput").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    async function resolveEmailFromInput(input){
-      // if looks like email, return it
-      if (input.includes('@')) return input.trim();
-      // otherwise treat as username → find email in Firestore
-      const q = query(collection(db, "users"), where("usernameLower", "==", input.trim().toLowerCase()));
-      const snap = await getDocs(q);
-      if (!snap.empty){
-        const doc = snap.docs[0];
-        const email = doc.get("email");
-        return email || null;
-      }
-      return null;
+    if (!loginValue || !password) {
+      alert("Please enter all fields.");
+      return;
     }
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      err.textContent = "";
-      const id   = document.getElementById('id').value.trim();
-      const pass = document.getElementById('pass').value;
+    let emailToLogin = loginValue;
 
-      try{
-        const email = await resolveEmailFromInput(id);
-        if(!email){ err.textContent = "Account not found. Check your email/username."; return; }
-        await signInWithEmailAndPassword(auth, email, pass);
-        // success → go to welcome page
-        window.location.href = "welcome.html";
-      }catch(e){
-        err.textContent = "Incorrect email/username or password.";
+    // If not an email, search by username
+    if (!loginValue.includes("@")) {
+      const q = query(collection(db, "users"), where("username", "==", loginValue));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        emailToLogin = querySnapshot.docs[0].data().email;
+      } else {
+        alert("Username not found.");
+        return;
       }
-    });
-  </script>
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, emailToLogin, password);
+      window.location.href = "welcome.html";
+    } catch (error) {
+      alert("Login failed: " + error.message);
+    }
+  }
+</script>
+
 </body>
 </html>
