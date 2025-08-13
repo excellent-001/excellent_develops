@@ -1,88 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Excellent_develops</title>
-    <style>
-        body {
-            background-color: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-        }
-        .project {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #00ff88;
-            animation: fadeIn 1s ease-in-out;
-        }
-        .project h2 {
-            color: #00ff88;
-        }
-        .btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            color: white;
-            background-color: #00ff88;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background-color: #00ffaa;
-            box-shadow: 0 0 10px #00ffaa;
-        }
-        a {
-            color: #00ff88;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-    </style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>My Projects • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
-    <h1>🚀 Projects</h1>
+<body class="page page--projects">
+  <script type="module" src="auth-guard.js"></script>
 
-    <div class="project">
-        <h2>1. Education Website</h2>
+  <main class="projects-wrap">
+    <header class="topbar">
+      <h1>My Projects</h1>
+      <button class="btn btn-sm" onclick="logout()">Sign out</button>
+    </header>
+
+    <p class="muted">Secure Area</p>
+
+    <section class="project-grid">
+
+      <article class="project-card">
+        <h3>1. Education Website</h3>
         <p>Creating an engaging platform for learning and academic growth.</p>
-        <a href="coming-soon.html" class="btn">View Project</a>
-    </div>
+        <a class="btn" href="coming-soon.html">View Project</a>
+      </article>
 
-    <div class="project">
-        <h2>2. Social Intelligence Hub</h2>
-        <p>A social website that connects problem-solvers, innovators, and highly intellectual people globally.</p>
-        <a href="coming-soon.html" class="btn">View Project</a>
-    </div>
+      <article class="project-card">
+        <h3>2. Social Intelligence Hub</h3>
+        <p>Connecting problem-solvers, innovators, and highly intellectual people.</p>
+        <a class="btn" href="coming-soon.html">View Project</a>
+      </article>
 
-    <div class="project">
-        <h2>3. Business Website: Pematech Company</h2>
+      <article class="project-card">
+        <h3>3. Business Website: Pematech Company</h3>
         <p>Breaking limits and fostering excellence in technology solutions.</p>
-        <a href="coming-soon.html" class="btn">View Project</a>
-    </div>
+        <a class="btn" href="coming-soon.html">View Project</a>
+      </article>
 
-    <div class="project">
-        <h2>4. Excellent Global Concepts</h2>
-        <p>A global online hub for news, updates, and opportunities.</p>
-        <a href="coming-soon.html" class="btn">View Project</a>
-    </div>
+      <article class="project-card">
+        <h3>4. Excellent Global Concepts</h3>
+        <p>Global updates, opportunities, and insights.</p>
+        <a class="btn" href="coming-soon.html">View Project</a>
+      </article>
 
-    <p><a href="index.html">⬅ Back to Home</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Contact: quareebalabi22@gmail.com · +2349046463436 · +2348142370183</p>
+      <p>
+        <a href="https://wa.me/2349046463436" target="_blank" rel="noopener">WhatsApp</a> ·
+        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a> ·
+        <a href="https://twitter.com" target="_blank" rel="noopener">X (Twitter)</a> ·
+        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      </p>
+      <p>Created by Excellent Global Conceptional 2025. Copyright “All rights reserved”.</p>
+    </div>
+  </footer>
 </body>
 </html>
