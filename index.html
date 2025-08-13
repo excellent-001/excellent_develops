@@ -1,117 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_Develops Login</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #4b0082, #800080);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: white;
-    }
-    .login-container {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      width: 90%;
-      max-width: 350px;
-      margin: auto;
-    }
-    .login-container img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      object-fit: cover;
-    }
-    .login-container h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-    .login-container p {
-      margin: 5px 0 20px;
-      font-size: 14px;
-      color: #ddd;
-    }
-    .login-container input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 14px;
-    }
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: #8a2be2;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-    .login-container .links {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-    .login-container .links a {
-      color: #ccc;
-      text-decoration: none;
-    }
-    .login-container .links a:hover {
-      text-decoration: underline;
-    }
-    footer {
-      background: white;
-      color: black;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 13px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Login • Excellent_Develops</title>
+<style>
+  :root{
+    --g1:#4b0082; --g2:#800080; --accent:#8a2be2; --glass:rgba(255,255,255,.06);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;
+    background: radial-gradient(1200px 900px at 20% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
+                linear-gradient(135deg,var(--g1),var(--g2));
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .login{
+    margin:auto; width:min(360px,92vw); text-align:center;
+    background:var(--glass); border:1px solid rgba(255,255,255,.15);
+    border-radius:16px; padding:26px; box-shadow:0 10px 35px rgba(0,0,0,.28);
+    animation:pop .45s ease-out both;
+  }
+  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+  .logo{width:120px;height:120px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block}
+  h2{margin:6px 0 2px}
+  p.sub{margin:0 0 16px;color:#e5e7eb;font-size:13px}
+  .field{margin:10px 0;text-align:left}
+  .field input{
+    width:100%;padding:12px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.12);color:#fff;font-size:14px;outline:none;
+  }
+  .field input::placeholder{color:#f1f5f9}
+  .pw{
+    position:relative;
+  }
+  .toggle{
+    position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    background:transparent;border:0;color:#fff;cursor:pointer;font-size:13px;opacity:.9;
+  }
+  .btn{
+    width:100%;padding:12px 14px;border:0;border-radius:10px;cursor:pointer;
+    background:var(--accent);color:#fff;font-weight:600;margin-top:6px;
+  }
+  .links{display:flex;justify-content:space-between;font-size:12px;margin-top:10px}
+  .links a{color:#fff;text-decoration:none;opacity:.9}
+  .links a:hover{text-decoration:underline}
+  footer{
+    background:#fff;color:#000;text-align:center;padding:10px 0;font-size:13px;
+    position:fixed;bottom:0;left:0;right:0;
+  }
+</style>
 </head>
 <body>
 
-  <div class="login-container">
-    <!-- Logo -->
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+  <div class="login">
+    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo"/>
     <h2>Excellent_Develops</h2>
-    <p>Please sign in to access the portfolio</p>
-    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
-    <input type="password" id="loginPassword" placeholder="Enter your password">
-    <button onclick="login()">Sign In</button>
+    <p class="sub">Please sign in to access the portfolio</p>
+
+    <div class="field">
+      <input id="idOrEmail" type="text" placeholder="Email or Username"/>
+    </div>
+
+    <div class="field pw">
+      <input id="password" type="password" placeholder="Enter your password"/>
+      <button class="toggle" type="button" id="togglePw">Show</button>
+    </div>
+
+    <button class="btn" id="loginBtn">Sign In</button>
+
     <div class="links">
       <a href="forgot.html">Forgot password?</a>
       <a href="signup.html">Create new account</a>
     </div>
-    <p style="font-size: 12px; color: #bbb; margin-top: 10px;">Secure access powered by Firebase</p>
+
+    <p style="font-size:12px;opacity:.85;margin-top:12px">Secure access powered by Firebase</p>
   </div>
 
-  <footer>
-    © 2025 Excellent_Develops. All rights reserved.
-  </footer>
+  <footer>© 2025 Excellent_Develops. All rights reserved.</footer>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -125,24 +96,36 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    window.login = async () => {
-      const input = document.getElementById("loginEmailOrUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
+    // show/hide password
+    const pw = document.getElementById('password');
+    document.getElementById('togglePw').onclick = () => {
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+      document.getElementById('togglePw').textContent = pw.type === 'password' ? 'Show' : 'Hide';
+    };
 
-      let emailToLogin = input;
-      if (!input.includes("@")) {
-        emailToLogin = input + "@example.com"; // Replace with your username-to-email logic
-      }
+    // username -> email lookup in Firestore (collection: usernames, docId: usernameLower)
+    async function resolveEmail(input){
+      if (input.includes('@')) return input;
+      const snap = await getDoc(doc(db, "usernames", input.toLowerCase()));
+      if (!snap.exists()) throw new Error("Username not found.");
+      return snap.data().email;
+    }
 
-      try {
-        await signInWithEmailAndPassword(auth, emailToLogin, password);
+    document.getElementById('loginBtn').onclick = async () => {
+      const idOrEmail = document.getElementById('idOrEmail').value.trim();
+      const password  = document.getElementById('password').value;
+      if(!idOrEmail || !password){ alert("Enter email/username and password."); return; }
+
+      try{
+        const email = await resolveEmail(idOrEmail);
+        await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "welcome.html";
-      } catch (error) {
-        alert(error.message);
+      }catch(err){
+        alert(err.message);
       }
     };
   </script>
-
 </body>
 </html>
