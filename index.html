@@ -74,7 +74,15 @@
       justify-content: space-between;
       font-size: 12px;
       margin-top: 8px;
+    }
+
+    .login-container .links a {
       color: #ccc;
+      text-decoration: none;
+    }
+
+    .login-container .links a:hover {
+      text-decoration: underline;
     }
 
     footer {
@@ -92,7 +100,7 @@
 <body>
 
   <div class="login-container">
-    <!-- Logo using your GitHub image link -->
+    <!-- Logo -->
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Excellent_Develops</h2>
     <p>Please sign in to access the portfolio</p>
@@ -100,8 +108,8 @@
     <input type="password" id="loginPassword" placeholder="Enter your password">
     <button onclick="login()">Sign In</button>
     <div class="links">
-      <span>Forgot password?</span>
-      <span>Create new account</span>
+      <a href="forgot.html">Forgot password?</a>
+      <a href="signup.html">Create new account</a>
     </div>
     <p style="font-size: 12px; color: #bbb; margin-top: 10px;">Secure access powered by Firebase</p>
   </div>
