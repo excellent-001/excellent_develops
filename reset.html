@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Set New Password • Excellent_Develops</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="main">
+    <div class="card stack">
+      <div class="brand">
+        <img class="logo"
+          src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png"
+          alt="Excellent_Develops"/>
+        <h1>Set a new password</h1>
+        <p class="sub">Enter and confirm your new password</p>
+      </div>
+
+      <form id="newpass-form" class="stack">
+        <div class="grid-2">
+          <div class="stack">
+            <label class="label" for="p1">New password (min 6)</label>
+            <input id="p1" class="input" type="password" minlength="6" required/>
+          </div>
+          <div class="stack">
+            <label class="label" for="p2">Confirm password</label>
+            <input id="p2" class="input" type="password" minlength="6" required/>
+          </div>
+        </div>
+        <div id="np-error" class="error"></div>
+        <div id="np-ok" class="help"></div>
+        <button class="btn" type="submit">Save New Password</button>
+        <div class="row"><a href="login.html">Back to Login</a></div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">© 2025 Excellent Global Concepts. All rights reserved.</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const params = new URLSearchParams(location.search);
+    const oobCode = params.get("oobCode");
+    const mode = params.get("mode");
+
+    const form = document.getElementById('newpass-form');
+    const err  = document.getElementById('np-error');
+    const ok   = document.getElementById('np-ok');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.textContent=""; ok.textContent="";
+      if(mode !== "resetPassword" || !oobCode){ err.textContent="Invalid or expired reset link."; return; }
+
+      const p1 = document.getElementById('p1').value;
+      const p2 = document.getElementById('p2').value;
+      if(p1 !== p2){ err.textContent = "Passwords do not match."; return; }
+
+      try{
+        await confirmPasswordReset(auth, oobCode, p1);
+        ok.textContent = "Password updated. You can now log in.";
+      }catch(e){
+        err.textContent = "Could not update password. The link may have expired.";
+      }
+    });
+  </script>
+</body>
+          </html>
