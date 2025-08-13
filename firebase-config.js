@@ -1,4 +1,3 @@
-<!-- firebase-config.js -->
 export const firebaseConfig = {
   apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
   authDomain: "excellent-d056e.firebaseapp.com",
@@ -8,4 +7,3 @@ export const firebaseConfig = {
   appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
   measurementId: "G-G3RCTDSY27"
 };
-export default firebaseConfig;
