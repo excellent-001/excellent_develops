@@ -1,125 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account - Excellent_Develops</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #4b0082, #800080);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: white;
-    }
-
-    .signup-container {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      width: 90%;
-      max-width: 350px;
-      margin: auto;
-    }
-
-    .signup-container img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      object-fit: cover;
-    }
-
-    .signup-container h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .signup-container p {
-      margin: 5px 0 20px;
-      font-size: 14px;
-      color: #ddd;
-    }
-
-    .signup-container input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 14px;
-    }
-
-    .signup-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: #8a2be2;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .signup-container .links {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    .signup-container .links a {
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    .signup-container .links a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      background: white;
-      color: black;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 13px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    }
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Excellent_Develops • Create Account</title>
+<style>
+  :root { --g1:#4b0082; --g2:#800080; --accent:#8a2be2; }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:Arial, sans-serif; color:#fff;
+    background: linear-gradient(135deg,var(--g1),var(--g2));
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:16px;
+  }
+  .card{
+    width:min(380px,92vw); background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.22); border-radius:16px; padding:22px; text-align:center;
+    backdrop-filter: blur(6px); box-shadow:0 10px 28px rgba(0,0,0,.35);
+    animation:pop .35s ease-out both;
+  }
+  @keyframes pop { from{transform:scale(.98);opacity:0} to{transform:scale(1);opacity:1} }
+  img.logo{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:10px}
+  h2{margin:6px 0}
+  p.sub{margin:0 0 14px; color:#e5e5e5; font-size:14px}
+  .row{position:relative; margin:8px 0}
+  input{
+    width:100%; padding:12px 44px 12px 12px; border-radius:10px; border:0;
+    background:rgba(255,255,255,.2); color:#fff; font-size:14px; outline:none;
+  }
+  .toggle-eye{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    border:0; background:transparent; color:#fff; cursor:pointer; font-size:13px;
+  }
+  button.primary{
+    width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer;
+    background:var(--accent); color:#fff; font-weight:700; margin-top:8px;
+  }
+  .links{margin-top:10px; font-size:12px}
+  .links a{color:#ddd; text-decoration:none}
+  .links a:hover{text-decoration:underline}
+  footer{
+    position:fixed; left:0; right:0; bottom:0; background:#fff; color:#000;
+    text-align:center; font-size:13px; padding:8px 10px; border-top:1px solid rgba(0,0,0,.08);
+  }
+  /* modal */
+  .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:50}
+  .modal{width:min(420px,92vw); background:#fff; color:#111; border-radius:16px; padding:22px; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,.35)}
+  .actions{display:flex; gap:10px; justify-content:center; margin-top:12px}
+  .btn{padding:10px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:700}
+  .ghost{background:#f3f4f6}
+</style>
 </head>
 <body>
-
-  <div class="signup-container">
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+  <div class="card">
+    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Create Account</h2>
-    <p>Join Excellent_Develops today</p>
-    <input type="text" id="signupUsername" placeholder="Username">
-    <input type="email" id="signupEmail" placeholder="Email">
-    <input type="password" id="signupPassword" placeholder="Password">
-    <button onclick="signup()">Sign Up</button>
+    <p class="sub">Join Excellent_Develops</p>
+
+    <div class="row">
+      <input type="text" id="firstName" placeholder="First name (shown on Welcome)" autocomplete="given-name">
+    </div>
+    <div class="row">
+      <input type="email" id="email" placeholder="Email" autocomplete="email">
+    </div>
+    <div class="row">
+      <input type="password" id="password" placeholder="Password" autocomplete="new-password">
+      <button class="toggle-eye" type="button" id="togglePw">Show</button>
+    </div>
+    <div class="row">
+      <input type="password" id="confirm" placeholder="Confirm password" autocomplete="new-password">
+      <button class="toggle-eye" type="button" id="togglePw2">Show</button>
+    </div>
+
+    <button class="primary" id="signupBtn">Create Account</button>
+
     <div class="links">
-      Already have an account? <a href="login.html">Login here</a>
+      <a href="login.html">Already have an account? Sign in</a>
     </div>
   </div>
 
-  <footer>
-    © 2025 Excellent Global Conceptional. All rights reserved.
-  </footer>
+  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
+
+  <!-- EmailJS (not required here, but loaded for consistency) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script> emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" }); </script>
+
+  <!-- Modal -->
+  <div class="backdrop" id="okBackdrop">
+    <div class="modal">
+      <h3 id="okTitle">Account created successfully ✅</h3>
+      <p id="okBody">Redirecting in <span id="count">10</span>s…</p>
+      <div class="actions">
+        <button class="btn ghost" id="okBtn">OK</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -130,30 +109,44 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.signup = async () => {
-      const username = document.getElementById("signupUsername").value.trim();
-      const email = document.getElementById("signupEmail").value.trim();
-      const password = document.getElementById("signupPassword").value;
+    // Show/Hide
+    const pw  = document.getElementById('password');
+    const pw2 = document.getElementById('confirm');
+    document.getElementById('togglePw').onclick  = ()=>{ pw.type  = pw.type  === 'password' ? 'text' : 'password';  event.target.textContent = pw.type  === 'password' ? 'Show' : 'Hide'; };
+    document.getElementById('togglePw2').onclick = ()=>{ pw2.type = pw2.type === 'password' ? 'text' : 'password'; event.target.textContent = pw2.type === 'password' ? 'Show' : 'Hide'; };
 
-      if (!username || !email || !password) {
-        alert("Please fill in all fields.");
-        return;
-      }
+    // Modal
+    const showModal = (title, redirectUrl) => {
+      const bd = document.getElementById('okBackdrop');
+      const t  = document.getElementById('okTitle');
+      const c  = document.getElementById('count');
+      t.textContent = title;
+      bd.style.display = 'flex';
+      let n = 10; c.textContent = n;
+      const timer = setInterval(()=>{ n--; c.textContent = n; if(n<=0){ clearInterval(timer); window.location.href = redirectUrl; }},1000);
+      document.getElementById('okBtn').onclick = ()=>{ clearInterval(timer); window.location.href = redirectUrl; };
+    };
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(userCredential.user);
-        alert("Account created! Please check your email for verification.");
-        window.location.href = "login.html";
-      } catch (error) {
-        alert(error.message);
+    document.getElementById('signupBtn').onclick = async ()=>{
+      const first = (document.getElementById('firstName').value||'').trim();
+      const email = (document.getElementById('email').value||'').trim();
+      const pass  = document.getElementById('password').value;
+      const conf  = document.getElementById('confirm').value;
+
+      if(!first || !email || !pass || !conf){ alert('Please fill all fields.'); return; }
+      if(pass !== conf){ alert('Passwords do not match.'); return; }
+
+      try{
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: first });
+        showModal('Account created successfully ✅', 'login.html');
+      }catch(err){
+        alert(err.message);
       }
     };
   </script>
-
 </body>
-  </html>
+      </html>
