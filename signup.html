@@ -1,73 +1,125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Create Account • Excellent_Develops</title>
-<style>
-  :root{ --g1:#4b0082; --g2:#800080; --accent:#8a2be2; --glass:rgba(255,255,255,.06);}
-  *{box-sizing:border-box}
-  body{
-    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;
-    background: radial-gradient(1000px 900px at 80% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
-                linear-gradient(135deg,var(--g1),var(--g2));
-    display:flex;align-items:center;justify-content:center;padding:24px;
-  }
-  .card{
-    width:min(420px,94vw);background:var(--glass);border:1px solid rgba(255,255,255,.15);
-    border-radius:16px;padding:22px;box-shadow:0 12px 36px rgba(0,0,0,.28);animation:pop .45s ease-out both
-  }
-  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
-  h2{margin:6px 0 8px}
-  .row{display:flex;gap:10px}
-  label{font-size:12px;opacity:.95;margin:8px 0 4px;display:block}
-  input{
-    width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);
-    background:rgba(255,255,255,.12);color:#fff;outline:none;
-  }
-  .pw{position:relative}
-  .toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:#fff;cursor:pointer;font-size:12px}
-  .btn{width:100%;padding:12px 14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;margin-top:12px;cursor:pointer}
-  .note{font-size:12px;opacity:.9;margin-top:8px}
-  a{color:#fff}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account - Excellent_Develops</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #4b0082, #800080);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: white;
+    }
+
+    .signup-container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+      margin: auto;
+    }
+
+    .signup-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+
+    .signup-container h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .signup-container p {
+      margin: 5px 0 20px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .signup-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+    }
+
+    .signup-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #8a2be2;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .signup-container .links {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .signup-container .links a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .signup-container .links a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: white;
+      color: black;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 13px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <div class="card">
+
+  <div class="signup-container">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Create Account</h2>
-    <div class="row">
-      <div style="flex:1">
-        <label>First Name</label>
-        <input id="firstName" type="text" placeholder="First name"/>
-      </div>
-      <div style="flex:1">
-        <label>Last Name</label>
-        <input id="lastName" type="text" placeholder="Last name"/>
-      </div>
+    <p>Join Excellent_Develops today</p>
+    <input type="text" id="signupUsername" placeholder="Username">
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPassword" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <div class="links">
+      Already have an account? <a href="login.html">Login here</a>
     </div>
-    <label>Username</label>
-    <input id="username" type="text" placeholder="Choose a username"/>
-    <label>Email</label>
-    <input id="email" type="email" placeholder="you@example.com"/>
-    <div class="row">
-      <div class="pw" style="flex:1">
-        <label>Password</label>
-        <input id="password" type="password" placeholder="••••••••"/>
-        <button class="toggle" type="button" data-target="password">Show</button>
-      </div>
-      <div class="pw" style="flex:1">
-        <label>Confirm Password</label>
-        <input id="confirm" type="password" placeholder="••••••••"/>
-        <button class="toggle" type="button" data-target="confirm">Show</button>
-      </div>
-    </div>
-    <button class="btn" id="createBtn">Create Account</button>
-    <div class="note">Already have an account? <a href="login.html">Back to Login</a></div>
   </div>
 
+  <footer>
+    © 2025 Excellent Global Conceptional. All rights reserved.
+  </footer>
+
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -78,44 +130,30 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db   = getFirestore(app);
 
-    document.querySelectorAll('.toggle').forEach(b=>{
-      b.onclick = ()=>{
-        const id = b.getAttribute('data-target');
-        const el = document.getElementById(id);
-        el.type = el.type === 'password' ? 'text' : 'password';
-        b.textContent = el.type === 'password' ? 'Show' : 'Hide';
-      };
-    });
+    window.signup = async () => {
+      const username = document.getElementById("signupUsername").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value;
 
-    async function usernameAvailable(un){
-      const snap = await getDoc(doc(db,"usernames",un.toLowerCase()));
-      return !snap.exists();
-    }
+      if (!username || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
 
-    document.getElementById('createBtn').onclick = async ()=>{
-      const first = document.getElementById('firstName').value.trim();
-      const last  = document.getElementById('lastName').value.trim();
-      const un    = document.getElementById('username').value.trim();
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const pw    = document.getElementById('password').value;
-      const cpw   = document.getElementById('confirm').value;
-      if(!first || !last || !un || !email || !pw){ alert("Fill all fields."); return; }
-      if(pw !== cpw){ alert("Passwords do not match."); return; }
-      if(!(await usernameAvailable(un))){ alert("Username already taken."); return; }
-
-      try{
-        const cred = await createUserWithEmailAndPassword(auth,email,pw);
-        await updateProfile(cred.user,{ displayName: `${first} ${last}` });
-        await setDoc(doc(db,"usernames",un.toLowerCase()),{ email, uid: cred.user.uid, username: un, first, last });
-        await signOut(auth); // don’t bypass login
-        alert("Account created. Please login.");
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCredential.user);
+        alert("Account created! Please check your email for verification.");
         window.location.href = "login.html";
-      }catch(e){ alert(e.message); }
+      } catch (error) {
+        alert(error.message);
+      }
     };
   </script>
+
 </body>
-</html>
+  </html>
