@@ -1,252 +1,117 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Coming Soon • Excellent_Develops</title>
-  <style>
-    :root{
-      --bg1:#4b0082;   /* deep indigo */
-      --bg2:#800080;   /* purple */
-      --card:#ffffff;
-      --text:#0f0f16;
-      --muted:#6b6b7a;
-      --accent:#7c3aed; /* violet */
-      --accent-2:#4a90e2;
-      --line:#ffffff;  /* footer top line (white) */
-      --footer-bg:#ffffff;
-      --footer-text:#000000;
-      --ok:#16a34a;
-      --danger:#ef4444;
-    }
-
-    /* Page layout */
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
-      color:#fff;
-      background: radial-gradient(1200px 800px at 20% -10%, #6a11cb22, transparent 60%),
-                  radial-gradient(900px 700px at 110% 20%, #2575fc22, transparent 60%),
-                  linear-gradient(135deg, var(--bg1), var(--bg2));
-      display:flex;
-      flex-direction:column;
-    }
-
-    /* Top bar */
-    .topbar{
-      position:sticky; top:0; z-index:10;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:12px 16px;
-      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15), rgba(0,0,0,0));
-      backdrop-filter: blur(4px);
-    }
-    .top-actions{display:flex; gap:10px; align-items:center;}
-    .link, .btn{
-      appearance:none; border:0; cursor:pointer; text-decoration:none;
-      padding:10px 14px; border-radius:999px; font-weight:600; font-size:14px;
-    }
-    .link{ background:#ffffff22; color:#fff; }
-    .link:hover{ background:#ffffff33; }
-    .btn{ background:var(--accent); color:#fff; }
-    .btn:hover{ filter:brightness(1.05); }
-
-    /* Main content area (keeps footer visible) */
-    .page{
-      flex:1 0 auto;
-      display:flex; align-items:flex-start; justify-content:center;
-      padding:28px 14px 120px; /* bottom space so footer doesn't cover content */
-    }
-    .stack{ display:grid; gap:18px; width:min(880px, 100%); }
-
-    /* Card */
-    .card{
-      background:var(--card);
-      color:var(--text);
-      border-radius:18px;
-      padding:22px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-      animation:bounceIn .65s cubic-bezier(.2,.95,.25,1.15);
-    }
-    @keyframes bounceIn{
-      0%{ transform:scale(.9); opacity:0;}
-      60%{ transform:scale(1.03); opacity:1;}
-      100%{ transform:scale(1);}
-    }
-    .title{ font-size:clamp(24px, 3.4vw, 34px); margin:0 0 6px; }
-    .sub{ color:var(--muted); margin:0; }
-
-    /* Feedback form */
-    .grid{ display:grid; gap:12px; }
-    .grid-2{ grid-template-columns:1fr 1fr; }
-    @media (max-width:640px){ .grid-2{ grid-template-columns:1fr; } }
-    label{ font-size:13px; color:#3b3b46; font-weight:600; }
-    input, textarea{
-      width:100%; padding:12px 12px; border-radius:12px; border:1px solid #e6e6ef;
-      outline:none; font-size:15px; background:#fafafa;
-    }
-    textarea{ min-height:120px; resize:vertical; }
-    .submit-row{ display:flex; gap:10px; align-items:center; }
-    .btn-primary{
-      background:var(--accent-2); color:#fff; border:0; padding:12px 16px; border-radius:12px;
-      font-weight:700; cursor:pointer;
-    }
-    .btn-primary:hover{ filter:brightness(1.05); }
-    .hint{ color:var(--muted); font-size:13px; }
-
-    /* Footer (always visible) */
-    footer{
-      flex-shrink:0;
-      background:var(--footer-bg);
-      color:var(--footer-text);
-      border-top:4px solid var(--line);
-      box-shadow:0 -8px 30px rgba(0,0,0,.15);
-    }
-    .footer-inner{
-      max-width:1100px; margin:0 auto; padding:16px 14px;
-      display:grid; gap:10px;
-    }
-    .footer-title{ font-weight:800; letter-spacing:.2px; }
-    .footer-row{ display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
-    .pill{ background:#f3f4f6; color:#111827; border-radius:999px; padding:8px 12px; font-size:14px; }
-    .socials{ display:flex; gap:8px; flex-wrap:wrap; }
-    .icon{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:36px; height:36px; border-radius:50%; font-weight:900; text-decoration:none;
-      background:#111827; color:#fff;
-    }
-    .icon.whatsapp{ background:#25D366; }
-    .icon.facebook{ background:#1877F2; }
-    .icon.instagram{ background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-    .icon.linkedin{ background:#0A66C2; }
-    .icon.x{ background:#000; }
-
-    .foot-note{ font-size:13px; color:#111; }
-
-    /* Modal (thank you) */
-    .modal-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.55);
-      display:none; align-items:center; justify-content:center; z-index:50;
-    }
-    .modal{
-      width:min(520px, 92vw);
-      background:#fff; color:#111827; border-radius:22px; padding:22px;
-      box-shadow:0 25px 60px rgba(0,0,0,.35);
-      transform:scale(.9); opacity:0;
-      animation: pop .45s cubic-bezier(.2,.95,.25,1.2) forwards;
-      text-align:center;
-    }
-    @keyframes pop{
-      to{ transform:scale(1); opacity:1; }
-    }
-    .badge-ok{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:64px; height:64px; border-radius:50%; background:#e8f7ed; color:var(--ok);
-      font-size:30px; margin-bottom:12px;
-    }
-    .modal-actions{ display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
-    .btn-ghost{ background:#eff0f3; color:#111; }
-    .btn-danger{ background:var(--danger); color:#fff; }
-    .small{ font-size:13px; color:#444; }
-
-  </style>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Coming Soon • Excellent_Develops</title>
+<style>
+  :root{--g1:#4b0082;--g2:#800080;--accent:#8a2be2}
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;display:flex;flex-direction:column;
+    background: radial-gradient(1200px 900px at 20% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
+                linear-gradient(135deg,var(--g1),var(--g2));
+  }
+  .top{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 16px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.15);
+    position:sticky;top:0;z-index:10;backdrop-filter:blur(6px)
+  }
+  .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .danger{background:#ef4444;color:#fff}
+  .container{width:min(900px,94vw);margin:22px auto 120px;display:grid;gap:16px}
+  .card{
+    background:#fff;color:#0f172a;border-radius:18px;padding:20px;box-shadow:0 12px 32px rgba(0,0,0,.28);
+    animation:pop .5s ease-out both
+  }
+  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+  .center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+  .big{font-size:28px;font-weight:900;margin:0}
+  form textarea, form input{
+    width:100%;padding:12px;border-radius:12px;border:1px solid #e5e7eb;font-size:14px
+  }
+  form textarea{min-height:110px;resize:vertical}
+  form .row{display:grid;gap:10px}
+  .submit{background:var(--accent);color:#fff}
+  .err{color:#dc2626;margin-top:8px;min-height:16px}
+  footer{
+    margin-top:auto;background:#111827;color:#e5e7eb;padding:16px 12px;border-top:1px solid rgba(255,255,255,.12)
+  }
+  .foot-wrap{width:min(900px,94vw);margin:0 auto;font-size:14px}
+  .icons{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+  .icon{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.2);text-decoration:none;color:#e5e7eb}
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50}
+  .hidden{display:none}
+  .modal{width:min(420px,92vw);background:#fff;color:#111;border-radius:18px;padding:22px;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.35);animation:drop .35s ease-out both}
+  @keyframes drop{0%{transform:translateY(-10px) scale(.98);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+  .check{width:58px;height:58px;margin:4px auto 10px;border-radius:50%;border:3px solid #22c55e;display:grid;place-items:center;animation:pulse 1.2s ease-in-out 2}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  .check::after{content:"✔";font-size:28px;color:#22c55e;line-height:1;position:relative;top:-1px}
+</style>
 </head>
 <body>
+  <div class="top">
+    <a class="btn ghost" href="projects.html">← Projects</a>
+    <button class="btn danger" id="logoutBtn">Sign Out</button>
+  </div>
 
-  <!-- Top Bar -->
-  <div class="topbar">
-    <div class="top-actions">
-      <a class="link" href="welcome.html">← Return Home</a>
+  <div class="container">
+    <!-- Title -->
+    <div class="card center">
+      <h1 class="big">🚀 Coming Soon</h1>
+      <p style="margin:6px 0 0;color:#475569;text-align:center">This project is coming soon. We’d love your feedback!</p>
     </div>
-    <div class="top-actions">
-      <button class="btn" id="btnSignOut">Sign Out</button>
+
+    <!-- Feedback -->
+    <div class="card">
+      <h3 style="margin:0 0 8px">Send Feedback</h3>
+      <form id="feedbackForm">
+        <div class="row">
+          <input id="name" type="text" placeholder="Your name (optional)"/>
+          <input id="email" type="email" placeholder="Your email"/>
+          <textarea id="message" placeholder="Tell me what you think and what you'd like to see"></textarea>
+        </div>
+        <button class="btn submit" type="submit" id="sendBtn">Submit</button>
+      </form>
+      <div class="err" id="err"></div>
     </div>
   </div>
 
-  <!-- Main -->
-  <main class="page">
-    <div class="stack">
-      <!-- Coming Soon -->
-      <section class="card">
-        <h1 class="title">🚀 Coming Soon</h1>
-        <p class="sub">I’m building something exciting. Please check back soon.</p>
-      </section>
-
-      <!-- Feedback -->
-      <section class="card">
-        <h2 class="title" style="font-size:22px; margin-bottom:2px;">Send Feedback</h2>
-        <p class="sub">Tell me what you think about my portfolio or what you’d love to see.</p>
-
-        <form id="feedbackForm" class="grid" autocomplete="on">
-          <div class="grid grid-2">
-            <div>
-              <label for="fbName">Name</label>
-              <input id="fbName" name="name" placeholder="Your name"/>
-            </div>
-            <div>
-              <label for="fbEmail">Email</label>
-              <input id="fbEmail" name="email" type="email" placeholder="you@email.com"/>
-            </div>
-          </div>
-          <div>
-            <label for="fbMessage">Message</label>
-            <textarea id="fbMessage" name="message" placeholder="Write your feedback..."></textarea>
-          </div>
-
-          <div class="submit-row">
-            <button class="btn-primary" type="submit">Submit Feedback</button>
-            <span class="hint" id="saveHint"></span>
-          </div>
-        </form>
-      </section>
-    </div>
-  </main>
-
-  <!-- Footer (always visible, white) -->
+  <!-- Footer -->
   <footer>
-    <div class="footer-inner">
-      <div class="footer-title">Contact Us</div>
-
-      <div class="footer-row">
-        <a class="pill" href="mailto:quareebalabi22@gmail.com">📧 quareebalabi22@gmail.com</a>
-        <a class="pill" href="tel:+2349046463436">📞 +234 904 646 3436</a>
+    <div class="foot-wrap">
+      <div style="font-weight:800;margin-bottom:6px">Contact Us</div>
+      <div class="icons">
+        <a class="icon" href="mailto:quareebalabi22@gmail.com" target="_blank">📧 Gmail</a>
+        <a class="icon" href="https://wa.me/2349046463436" target="_blank">🟢 WhatsApp</a>
+        <a class="icon" href="https://x.com/TheOlodo_Nation" target="_blank">X Twitter</a>
+        <a class="icon" href="https://www.facebook.com/EminiExcellent" target="_blank">F Facebook</a>
+        <a class="icon" href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank">📷 Instagram</a>
+        <a class="icon" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">in LinkedIn</a>
+        <span class="icon">📞 +2349046463436</span>
       </div>
-
-      <div class="footer-row">
-        <div class="socials">
-          <a class="icon whatsapp" href="https://wa.me/2349046463436" target="_blank" aria-label="WhatsApp">W</a>
-          <a class="icon facebook" href="https://www.facebook.com/EminiExcellent" target="_blank" aria-label="Facebook">F</a>
-          <a class="icon instagram" href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank" aria-label="Instagram">📷</a>
-          <a class="icon x" href="https://x.com/TheOlodo_Nation" target="_blank" aria-label="X">X</a>
-          <a class="icon linkedin" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank" aria-label="LinkedIn">in</a>
-        </div>
-      </div>
-
-      <div class="foot-note">© Powered by Excellent Global Concepts — All Rights Reserved, 2025</div>
+      <div>© Powered by Excellent Global Concepts — All Rights Reserved, 2025</div>
     </div>
   </footer>
 
-  <!-- Thank-you Modal -->
-  <div class="modal-backdrop" id="thanksBackdrop" role="dialog" aria-modal="true">
-    <div class="modal" role="document">
-      <div class="badge-ok">✅</div>
-      <h3 style="margin:6px 0 6px;">Thank you for your feedback!</h3>
-      <p class="small">We appreciate you. Choose where to go next:</p>
-      <div class="modal-actions">
-        <a class="btn-ghost link" href="welcome.html">Back to Home</a>
-        <button class="btn-danger" id="modalSignOut">Sign Out</button>
+  <!-- Success modal -->
+  <div class="backdrop hidden" id="okBackdrop">
+    <div class="modal">
+      <div class="check"></div>
+      <h3 style="margin:6px 0 0">Thank you ✅</h3>
+      <p>Your feedback was sent successfully. We’ll reach out to you shortly.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <a class="btn ghost" href="projects.html">Back to Projects</a>
+        <button class="btn danger" id="modalLogout">Sign Out</button>
       </div>
-      <p class="small" id="autoMsg" style="margin-top:10px;"></p>
     </div>
   </div>
 
-  <!-- Firebase + Page Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // --- YOUR FIREBASE CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -256,71 +121,48 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
+    const db   = getFirestore(app);
 
-    // Guard: must be signed in to view this page
-    onAuthStateChanged(auth, (user)=>{
-      if(!user){ window.location.replace("login.html"); }
-    });
+    // Require login
+    onAuthStateChanged(auth,(u)=>{ if(!u) window.location.href="login.html"; });
 
-    // Sign out buttons
-    const btnSignOut = document.getElementById("btnSignOut");
-    const modalSignOut = document.getElementById("modalSignOut");
-    const doSignOut = async () => {
-      try{ await signOut(auth); }catch(e){}
-      window.location.href = "login.html";
-    };
-    btnSignOut.addEventListener("click", doSignOut);
-    modalSignOut.addEventListener("click", doSignOut);
+    // Logout (both buttons)
+    const doLogout = async ()=>{ await signOut(auth); window.location.href="login.html"; };
+    document.getElementById("logoutBtn").onclick = doLogout;
+    document.getElementById("modalLogout").onclick = doLogout;
 
-    // Feedback form handling
+    // Feedback form (fix submitting + success popup)
     const form = document.getElementById("feedbackForm");
-    const hint = document.getElementById("saveHint");
-    const backdrop = document.getElementById("thanksBackdrop");
-    const autoMsg = document.getElementById("autoMsg");
-
-    let autoTimer = null;
-
+    const okBackdrop = document.getElementById("okBackdrop");
+    const sendBtn = document.getElementById("sendBtn");
     form.addEventListener("submit", async (e)=>{
       e.preventDefault();
-      hint.textContent = "Saving...";
-      const name = document.getElementById("fbName").value.trim();
-      const email = document.getElementById("fbEmail").value.trim();
-      const message = document.getElementById("fbMessage").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const email= document.getElementById("email").value.trim();
+      const msg  = document.getElementById("message").value.trim();
+      const err  = document.getElementById("err");
+      err.textContent = "";
 
+      if(!email || !msg){ err.textContent = "Email and message are required."; return; }
+
+      sendBtn.disabled = true; sendBtn.textContent = "Submitting…";
       try{
-        await addDoc(collection(db, "feedback"), {
-          name, email, message,
-          page: "coming-soon",
-          createdAt: serverTimestamp()
+        const projectName = sessionStorage.getItem("projectName") || "Unknown Project";
+        const uid = auth.currentUser?.uid || null;
+        await addDoc(collection(db,"feedback"),{
+          name,email,message:msg, project: projectName, uid, createdAt: serverTimestamp()
         });
-        hint.textContent = "";
-        // show modal
-        backdrop.style.display = "flex";
-        // auto message + optional auto-redirect (not redirecting automatically here)
-        let seconds = 15;
-        autoMsg.textContent = `This will auto-close in ${seconds}s.`;
-        clearInterval(autoTimer);
-        autoTimer = setInterval(()=>{
-          seconds--;
-          if(seconds <= 0){
-            clearInterval(autoTimer);
-            backdrop.style.display = "none";
-          }else{
-            autoMsg.textContent = `This will auto-close in ${seconds}s.`;
-          }
-        }, 1000);
-
-        // reset form
         form.reset();
-      }catch(err){
-        hint.textContent = "Failed to save. Please try again.";
-        console.error(err);
+        okBackdrop.classList.remove("hidden");
+      }catch(e){
+        console.error(e);
+        err.textContent = "Could not send. Please try again.";
+      }finally{
+        sendBtn.disabled = false; sendBtn.textContent = "Submit";
       }
     });
   </script>
 </body>
-  </html>
+</html>
