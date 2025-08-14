@@ -13,7 +13,8 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
       color: white;
     }
 
@@ -25,7 +26,6 @@
       text-align: center;
       width: 90%;
       max-width: 350px;
-      margin: auto;
     }
 
     .login-container img {
@@ -34,17 +34,6 @@
       border-radius: 50%;
       margin-bottom: 15px;
       object-fit: cover;
-    }
-
-    .login-container h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .login-container p {
-      margin: 5px 0 20px;
-      font-size: 14px;
-      color: #ddd;
     }
 
     .login-container input {
@@ -58,10 +47,6 @@
       font-size: 14px;
     }
 
-    .login-container input::placeholder {
-      color: #ccc;
-    }
-
     .login-container button {
       width: 100%;
       padding: 10px;
@@ -73,7 +58,7 @@
       font-size: 15px;
     }
 
-    .login-container .links {
+    .links {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
@@ -81,66 +66,32 @@
       color: #ccc;
     }
 
-    .login-container .links a {
+    .links a {
       color: #ccc;
       text-decoration: none;
-    }
-
-    .login-container .links a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      background: white;
-      color: black;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 13px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
     }
   </style>
 </head>
 <body>
 
   <div class="login-container">
-    <!-- LOGO -->
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
-    <h2>Excellent_Develops</h2>
-    <p>Please sign in to access the portfolio</p>
+    <h2>Sign In</h2>
 
-    <!-- EMAIL/USERNAME -->
     <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
-
-    <!-- PASSWORD -->
     <input type="password" id="loginPassword" placeholder="Enter your password">
-
-    <!-- LOGIN BUTTON -->
     <button onclick="login()">Sign In</button>
 
-    <!-- LINKS -->
     <div class="links">
       <a href="forgot-password.html">Forgot Password?</a>
       <a href="create-account.html">Create new account</a>
     </div>
-
-    <p style="font-size: 12px; color: #bbb; margin-top: 10px;">
-      Secure access powered by Firebase
-    </p>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    © 2025 Excellent, Global, Conceptional. All rights reserved.
-  </footer>
-
-  <!-- FIREBASE AUTH SCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -151,11 +102,9 @@
       measurementId: "G-G3RCTDSY27"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // LOGIN FUNCTION
     window.login = async () => {
       const input = document.getElementById("loginEmailOrUsername").value.trim();
       const password = document.getElementById("loginPassword").value;
@@ -165,21 +114,19 @@
         return;
       }
 
-      // If user enters username instead of email
       let emailToLogin = input;
       if (!input.includes("@")) {
-        emailToLogin = input + "@example.com"; // change to your real domain if needed
+        emailToLogin = input + "@example.com"; // change if you use real domain
       }
 
       try {
         await signInWithEmailAndPassword(auth, emailToLogin, password);
         alert("✅ Login Successful!");
-        window.location.href = "welcome.html"; // redirect after login
+        window.location.href = "dashboard.html"; // redirect after login
       } catch (error) {
         alert("❌ " + error.message);
       }
     };
   </script>
-
 </body>
 </html>
