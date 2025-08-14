@@ -1,107 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Excellent_Develops • Login</title>
-<style>
-  :root { --g1:#4b0082; --g2:#800080; --accent:#8a2be2; }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:Arial, sans-serif; color:#fff;
-    background: linear-gradient(135deg,var(--g1),var(--g2));
-    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:16px;
-  }
-  .card{
-    width:min(360px,92vw);
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.22);
-    border-radius:16px; padding:24px; text-align:center;
-    box-shadow:0 10px 28px rgba(0,0,0,.35);
-    backdrop-filter: blur(6px);
-    animation:pop .35s ease-out both;
-  }
-  @keyframes pop { from{transform:scale(.98);opacity:0} to{transform:scale(1);opacity:1} }
-  img.logo{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:12px}
-  h2{margin:6px 0 4px}
-  p.sub{margin:0 0 16px; color:#e5e5e5; font-size:14px}
-  .row{position:relative; margin:10px 0}
-  input{
-    width:100%; padding:12px 44px 12px 12px; border-radius:10px; border:0;
-    background:rgba(255,255,255,.2); color:#fff; font-size:14px; outline:none;
-  }
-  .toggle-eye{
-    position:absolute; right:10px; top:50%; transform:translateY(-50%);
-    border:0; background:transparent; color:#fff; cursor:pointer; font-size:13px;
-  }
-  button.primary{
-    width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer;
-    background:var(--accent); color:#fff; font-weight:700; margin-top:6px;
-  }
-  .links{
-    display:flex; justify-content:space-between; font-size:12px; margin-top:10px; color:#ddd;
-  }
-  .links a{color:#ddd; text-decoration:none}
-  .links a:hover{text-decoration:underline}
-  .small{font-size:12px; color:#cfcfcf; margin-top:12px}
-  footer{
-    position:fixed; left:0; right:0; bottom:0;
-    background:#fff; color:#000; text-align:center; font-size:13px; padding:8px 10px;
-    border-top:1px solid rgba(0,0,0,.08);
-  }
-  /* modal */
-  .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:50}
-  .modal{
-    width:min(420px,92vw); background:#fff; color:#111; border-radius:16px; padding:22px; text-align:center;
-    box-shadow:0 12px 32px rgba(0,0,0,.35);
-  }
-  .actions{display:flex; gap:10px; justify-content:center; margin-top:12px}
-  .btn{padding:10px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:700}
-  .ghost{background:#f3f4f6}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excellent_Develops Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #4b0082, #800080);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: white;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+      margin: auto;
+    }
+
+    .login-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+
+    .login-container h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .login-container p {
+      margin: 5px 0 20px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+    }
+
+    .login-container input::placeholder {
+      color: #ccc;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #8a2be2;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .login-container .links {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 8px;
+      color: #ccc;
+    }
+
+    .login-container .links a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .login-container .links a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: white;
+      color: black;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 13px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <div class="card">
-    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+
+  <div class="login-container">
+    <!-- LOGO -->
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Excellent_Develops</h2>
-    <p class="sub">Please sign in to access the portfolio</p>
+    <p>Please sign in to access the portfolio</p>
 
-    <div class="row">
-      <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
-    </div>
-    <div class="row">
-      <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
-      <button class="toggle-eye" type="button" id="toggleLoginPw">Show</button>
-    </div>
+    <!-- EMAIL/USERNAME -->
+    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
 
-    <button class="primary" id="loginBtn">Sign In</button>
+    <!-- PASSWORD -->
+    <input type="password" id="loginPassword" placeholder="Enter your password">
 
+    <!-- LOGIN BUTTON -->
+    <button onclick="login()">Sign In</button>
+
+    <!-- LINKS -->
     <div class="links">
-      <a href="forgot.html">Forgot password?</a>
-      <a href="signup.html">Create new account</a>
+      <a href="forgot-password.html">Forgot Password?</a>
+      <a href="create-account.html">Create new account</a>
     </div>
-    <p class="small">Secure access powered by Firebase</p>
+
+    <p style="font-size: 12px; color: #bbb; margin-top: 10px;">
+      Secure access powered by Firebase
+    </p>
   </div>
 
-  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Excellent, Global, Conceptional. All rights reserved.
+  </footer>
 
-  <!-- Success Modal -->
-  <div class="backdrop" id="okBackdrop">
-    <div class="modal">
-      <h3 id="okTitle">Login successful ✅</h3>
-      <p id="okBody">Redirecting in <span id="count">10</span>s…</p>
-      <div class="actions">
-        <button class="btn ghost" id="okBtn">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Firebase -->
+  <!-- FIREBASE AUTH SCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -111,42 +150,36 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
+
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Show/Hide password
-    const lpw = document.getElementById('loginPassword');
-    document.getElementById('toggleLoginPw').onclick = (e) => {
-      lpw.type = lpw.type === 'password' ? 'text' : 'password';
-      e.target.textContent = lpw.type === 'password' ? 'Show' : 'Hide';
-    };
+    // LOGIN FUNCTION
+    window.login = async () => {
+      const input = document.getElementById("loginEmailOrUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
 
-    // Success modal helper (10s auto redirect)
-    const showModal = (title, redirectUrl) => {
-      const bd = document.getElementById('okBackdrop');
-      const t  = document.getElementById('okTitle');
-      const c  = document.getElementById('count');
-      t.textContent = title;
-      bd.style.display = 'flex';
-      let n = 10; c.textContent = n;
-      const timer = setInterval(()=>{ n--; c.textContent = n; if(n<=0){ clearInterval(timer); window.location.href = redirectUrl; }},1000);
-      document.getElementById('okBtn').onclick = ()=>{ clearInterval(timer); window.location.href = redirectUrl; };
-    };
+      if (!input || !password) {
+        alert("Please enter both email/username and password.");
+        return;
+      }
 
-    document.getElementById('loginBtn').onclick = async () => {
-      const email = (document.getElementById('loginEmail').value || '').trim();
-      const password = document.getElementById('loginPassword').value;
-      if(!email || !password){ alert('Please enter email and password.'); return; }
-      try{
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        // Save first name for welcome.html
-        const first = cred.user.displayName ? cred.user.displayName.split(' ')[0] : 'User';
-        localStorage.setItem('firstName', first);
-        showModal('Login successful ✅', 'welcome.html');
-      }catch(err){
-        alert(err.message);
+      // If user enters username instead of email
+      let emailToLogin = input;
+      if (!input.includes("@")) {
+        emailToLogin = input + "@example.com"; // change to your real domain if needed
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, emailToLogin, password);
+        alert("✅ Login Successful!");
+        window.location.href = "welcome.html"; // redirect after login
+      } catch (error) {
+        alert("❌ " + error.message);
       }
     };
   </script>
+
 </body>
-  </html>
+</html>
