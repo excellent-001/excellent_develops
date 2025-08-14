@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4B0082, #8A2BE2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    width: 300px;
+    text-align: center;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.toggle-pass {
+    position: absolute;
+    right: 35px;
+    margin-top: -35px;
+    cursor: pointer;
+}
+.links {
+    margin-top: 10px;
+}
+.links a {
+    color: #ffccff;
+    text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email">
+    
+    <div style="position: relative;">
+        <input type="password" id="password" placeholder="Password">
+        <span class="toggle-pass" onclick="togglePassword()">👁</span>
+    </div>
+    
+    <button onclick="login()">Login</button>
+    <div class="links">
+        <a href="forgot.html">Forgot Password?</a><br>
+        <a href="signup.html">Create Account</a>
+    </div>
+</div>
+
+<script type="module">
+// ================= FIREBASE CONFIG =================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ================= LOGIN FUNCTION =================
+window.login = function() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+        alert("Please enter both email and password");
+        return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            window.location.href = "welcome.html";
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+};
+
+// ================= PASSWORD TOGGLE =================
+window.togglePassword = function() {
+    const passField = document.getElementById("password");
+    passField.type = passField.type === "password" ? "text" : "password";
+};
+
+// ================= AUTO REDIRECT IF LOGGED IN =================
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.location.href = "welcome.html";
+    }
+});
+</script>
+
+</body>
+</html>
