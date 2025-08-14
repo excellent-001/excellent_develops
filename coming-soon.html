@@ -1,82 +1,184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coming Soon</title>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Coming Soon • Excellent_Develops</title>
 <style>
-body { background: black; color: white; font-family: Arial, sans-serif; text-align: center; }
-h1 { color: limegreen; text-shadow: 0 0 10px limegreen; }
-form { margin-top: 20px; }
-input, textarea { width: 80%; padding: 10px; margin: 8px 0; border: 1px solid limegreen; border-radius: 5px; }
-button { background: limegreen; color: black; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; }
-.footer { margin-top: 30px; color: limegreen; font-size: 0.9em; }
-.popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: limegreen; padding: 20px; border-radius: 8px; color: black; font-weight: bold; }
+  :root{--g1:#4b0082;--g2:#800080;--accent:#8a2be2;--ok:#16a34a}
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;
+    background: radial-gradient(1200px 900px at 20% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
+                linear-gradient(135deg,var(--g1),var(--g2));
+    display:flex;flex-direction:column;
+  }
+  .top{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 16px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.15);
+    position:sticky;top:0;z-index:10;backdrop-filter:blur(6px)
+  }
+  .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .danger{background:#ef4444;color:#fff}
+  .container{width:min(900px,94vw);margin:22px auto 110px;display:grid;gap:16px}
+  .card{
+    background:#fff;color:#0f172a;border-radius:18px;padding:20px;box-shadow:0 12px 32px rgba(0,0,0,.28);
+    animation:pop .5s ease-out both
+  }
+  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+  .center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+  .big{font-size:28px;font-weight:900;margin:0}
+  .muted{color:#475569}
+  form textarea, form input{
+    width:100%;padding:12px;border-radius:12px;border:1px solid #e5e7eb;font-size:14px
+  }
+  form textarea{min-height:110px;resize:vertical}
+  form .row{display:grid;gap:10px}
+  .submit{background:var(--accent);color:#fff}
+  footer{
+    margin-top:auto;background:#111827;color:#e5e7eb;padding:16px 12px;border-top:1px solid rgba(255,255,255,.12);
+    position:fixed; left:0; right:0; bottom:0;  /* fixed visible footer */
+  }
+  .foot-wrap{width:min(900px,94vw);margin:0 auto;font-size:14px}
+  .icons{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+  .icon{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.2);text-decoration:none;color:#e5e7eb}
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal{width:min(420px,92vw);background:#fff;color:#111;border-radius:18px;padding:22px;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.35)}
+  .check{width:58px;height:58px;margin:4px auto 10px;border-radius:50%;border:3px solid #22c55e;display:grid;place-items:center}
+  .check::after{content:"✔";font-size:28px;color:#22c55e;line-height:1;position:relative;top:-1px}
 </style>
 </head>
 <body>
-<h1 id="projectTitle">This project is coming soon...</h1>
-<p>Tell me what you think about my portfolio and what you'd like to see.</p>
+  <div class="top">
+    <a class="btn ghost" href="welcome.html">← Home</a>
+    <button class="btn danger" id="logoutBtn">Sign Out</button>
+  </div>
 
-<form id="feedbackForm">
-    <input type="text" id="name" placeholder="Your Name" required><br>
-    <input type="email" id="email" placeholder="Your Email" required><br>
-    <textarea id="message" placeholder="Your Message" required></textarea><br>
-    <button type="submit">Send Feedback</button>
-</form>
+  <div class="container">
+    <div class="card center">
+      <h1 class="big" id="projectTitle">🚧 Coming Soon</h1>
+      <p class="muted" id="projectSubtitle">We’re crafting something excellent. Stay tuned!</p>
+    </div>
 
-<div class="popup" id="popup">✅ Feedback Sent Successfully!</div>
+    <div class="card">
+      <h3 style="margin:0 0 8px">Send Feedback</h3>
+      <form id="feedbackForm">
+        <div class="row">
+          <input id="name" type="text" placeholder="Your name (optional)"/>
+          <input id="email" type="email" placeholder="Your email"/>
+          <textarea id="message" placeholder="Your message"></textarea>
+        </div>
+        <button class="btn submit" type="submit" id="sendBtn">Submit</button>
+      </form>
+      <div id="err" style="color:#dc2626;margin-top:8px;min-height:16px"></div>
+    </div>
+  </div>
 
-<div class="footer">
-    <p>Contact: your@email.com</p>
-    <p>Follow: Twitter | Instagram | LinkedIn</p>
-    <p>© Excellent Global Conception</p>
-</div>
+  <footer>
+    <div class="foot-wrap">
+      <div style="font-weight:800;margin-bottom:6px">Contact Us</div>
+      <div class="icons">
+        <a class="icon" href="mailto:quareebalabi22@gmail.com" target="_blank">📧 Gmail</a>
+        <a class="icon" href="https://wa.me/2349046463436" target="_blank">🟢 WhatsApp</a>
+        <a class="icon" href="https://twitter.com/TheOlodo_Nation" target="_blank">𝕏 Twitter</a>
+        <a class="icon" href="https://www.facebook.com/EminiExcellent" target="_blank">F Facebook</a>
+        <a class="icon" href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank">📷 Instagram</a>
+        <a class="icon" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">in LinkedIn</a>
+        <span class="icon">📞 +2349046463436</span>
+      </div>
+      <div>© Powered by Excellent Global Concepts — All Rights Reserved, 2025</div>
+    </div>
+  </footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import emailjs from 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
-emailjs.init("h5LWzY8YUESb4sZbS");
+  <!-- Success Modal -->
+  <div class="backdrop" id="okBackdrop">
+    <div class="modal">
+      <div class="check"></div>
+      <h3 style="margin:6px 0 0">Thank you ✅</h3>
+      <p>Your feedback was sent successfully. Redirecting in <span id="count">10</span>s…</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <a class="btn ghost" href="welcome.html" id="backHome">Back to Home</a>
+        <button class="btn danger" id="modalLogout">Sign Out</button>
+      </div>
+    </div>
+  </div>
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-onAuthStateChanged(auth, user => {
-    if (!user) window.location.href = "login.html";
-});
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
 
-document.getElementById("feedbackForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
+    // Auth guard
+    onAuthStateChanged(auth,(u)=>{ if(!u) window.location.href="login.html"; });
 
-    try {
-        await addDoc(collection(db, "feedback"), {
-            name, email, message, createdAt: serverTimestamp()
+    // Logout buttons
+    const logoutAll = async ()=>{ try{ await signOut(auth); }catch(e){} window.location.href="login.html"; };
+    document.getElementById("logoutBtn").onclick = logoutAll;
+    document.getElementById("modalLogout").onclick = logoutAll;
+
+    // Project title/subtitle from storage
+    const title = localStorage.getItem('projectTitle');
+    const subtitle = localStorage.getItem('projectSubtitle');
+    if (title) document.getElementById("projectTitle").textContent = `🚧 ${title}`;
+    if (subtitle) document.getElementById("projectSubtitle").textContent = subtitle;
+
+    // Feedback form
+    const form = document.getElementById("feedbackForm");
+    const okBackdrop = document.getElementById("okBackdrop");
+    const countEl = document.getElementById("count");
+
+    form.onsubmit = async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email= document.getElementById("email").value.trim();
+      const msg  = document.getElementById("message").value.trim();
+      if(!email || !msg){ document.getElementById("err").textContent="Email and message are required."; return; }
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("sendBtn").textContent = "Submitting…";
+      document.getElementById("err").textContent = "";
+      try{
+        await addDoc(collection(db,"feedback"),{
+          name,email,message:msg, project:title||'N/A', createdAt: serverTimestamp()
         });
-        await emailjs.send("service_cvvr3vn", "template_6xgms6a", { name, email, message });
-        document.getElementById("popup").style.display = "block";
-        setTimeout(() => document.getElementById("popup").style.display = "none", 3000);
-        e.target.reset();
-    } catch (err) {
-        alert("Error sending feedback: " + err.message);
-    }
-});
+        // Show success modal with 10s auto redirect
+        okBackdrop.style.display = 'flex';
+        let n = 10; countEl.textContent = n;
+        const timer = setInterval(()=>{ n--; countEl.textContent = n; if(n<=0){ clearInterval(timer); window.location.href='welcome.html'; }},1000);
+        document.getElementById('backHome').onclick = ()=>{ window.location.href='welcome.html'; };
+      }catch(e){
+        console.error(e);
+        document.getElementById("err").textContent = "Could not send. Try again.";
+      }finally{
+        document.getElementById("sendBtn").disabled = false;
+        document.getElementById("sendBtn").textContent = "Submit";
+        form.reset();
+      }
+    };
 
-document.getElementById("projectTitle").innerText = sessionStorage.getItem("projectName") + " is coming soon...";
-</script>
+    // 60-min auto sign-out
+    let idleTimer;
+    const resetIdle = ()=>{
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(async ()=>{
+        try{ await signOut(auth); }catch(e){}
+        window.location.href = 'login.html';
+      }, 60*60*1000);
+    };
+    ['click','mousemove','keydown','scroll','touchstart'].forEach(evt=>window.addEventListener(evt, resetIdle, {passive:true}));
+    resetIdle();
+  </script>
 </body>
-</html>
+          </html>
