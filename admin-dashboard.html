@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard — Excellent_Develops</title>
   <style>
-    :root {
-      --bg1:#0f172a; --bg2:#111827; --card:#1f2937; --ink:#e5e7eb; --muted:#9ca3af; --accent:#3b82f6; --bad:#ef4444; --warn:#f59e0b; --ok:#10b981;
+    :root{
+      --bg1:#0f172a; --bg2:#111827; --card:#1f2937; --ink:#e5e7eb; --muted:#9ca3af;
+      --accent:#3b82f6; --bad:#ef4444; --warn:#f59e0b; --ok:#10b981;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #00000040;background:rgba(0,0,0,.2);backdrop-filter:blur(6px)}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--ink);
+      min-height:100vh;display:flex;flex-direction:column}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;
+      padding:16px 20px;border-bottom:1px solid #00000040;background:rgba(0,0,0,.2);backdrop-filter:blur(6px)}
     header h1{font-size:18px;margin:0}
-    .chip{padding:4px 10px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff22;color:var(--ink);font-size:12px}
+    .chip{padding:4px 10px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff22;font-size:12px}
     main{padding:18px;max-width:1200px;margin:0 auto;width:100%;display:grid;gap:16px}
     .card{background:var(--card);border:1px solid #ffffff12;border-radius:14px;box-shadow:0 10px 30px #00000040}
-    .card.pad{padding:16px}
+    .pad{padding:16px}
     .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    input,button,select{border-radius:10px;border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:10px 12px}
+    input,button,select,textarea{border-radius:10px;border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:10px 12px}
+    textarea{width:100%;min-height:90px}
     button{cursor:pointer}
     button.primary{background:var(--accent);border-color:#0000}
     button.ghost{background:#ffffff10}
+    button.bad{background:var(--bad);border-color:#0000}
+    button.ok{background:var(--ok);border-color:#0000}
     table{width:100%;border-collapse:separate;border-spacing:0}
     th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #ffffff14;font-size:14px;vertical-align:middle}
     th{position:sticky;top:0;background:#111827;z-index:1}
-    .scroll{max-height:65vh;overflow:auto;border-radius:12px}
+    .scroll{max-height:60vh;overflow:auto;border-radius:12px}
     .pill{padding:2px 8px;border-radius:999px;font-size:12px;display:inline-block}
     .pill.ok{background:#10b98122;color:var(--ok);border:1px solid #10b98155}
     .pill.warn{background:#f59e0b22;color:var(--warn);border:1px solid #f59e0b55}
@@ -32,7 +39,10 @@
     .muted{color:var(--muted)}
     .right{margin-left:auto}
     .hidden{display:none}
-    .login{max-width:380px;margin:10vh auto;padding:22px}
+    .login{max-width:380px;margin:10vh auto}
+    nav.tabs{display:flex;gap:8px}
+    nav.tabs button{padding:10px 12px}
+    nav.tabs button.active{background:#ffffff22}
     .footer{padding:16px 20px;color:var(--muted);font-size:12px;text-align:center}
   </style>
 </head>
@@ -47,27 +57,34 @@
   </header>
 
   <main>
-    <!-- LOGIN CARD -->
+    <!-- ADMIN LOGIN -->
     <section id="loginCard" class="card pad login">
       <h2 style="margin:0 0 10px;">Admin Login</h2>
       <p class="muted" style="margin:0 0 14px;">Only approved emails can access this page.</p>
       <div class="row" style="flex-direction:column;align-items:stretch;gap:10px">
-        <input id="loginEmail" type="email" placeholder="Admin email" />
-        <input id="loginPass" type="password" placeholder="Password" />
+        <input id="loginEmail" type="email" placeholder="Admin email" autocomplete="email"/>
+        <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password"/>
         <button id="loginBtn" class="primary">Sign in</button>
       </div>
       <p id="loginErr" class="muted" style="margin-top:10px;"></p>
     </section>
 
-    <!-- DASHBOARD CONTENT -->
+    <!-- DASHBOARD -->
     <section id="dash" class="hidden">
+      <nav class="tabs">
+        <button class="ghost active" data-tab="usersTab">Users</button>
+        <button class="ghost" data-tab="attemptsTab">Login Attempts</button>
+        <button class="ghost" data-tab="blockTab">Blocklist</button>
+      </nav>
+
+      <!-- FILTERS / STATS -->
       <div class="card pad">
         <div class="row">
           <strong>Filters:</strong>
-          <input id="qEmail" placeholder="Search email…" />
-          <input id="qIP" placeholder="Filter by IP…" />
-          <input id="qISP" placeholder="Filter by ISP…" />
-          <input id="qCity" placeholder="Filter by City…" />
+          <input id="qEmail" placeholder="Search email…"/>
+          <input id="qIP" placeholder="Filter by IP…"/>
+          <input id="qISP" placeholder="Filter by ISP…"/>
+          <input id="qCity" placeholder="Filter by City…"/>
           <button id="clearFilters" class="ghost">Clear</button>
           <span class="right muted" id="lastUpdated">—</span>
         </div>
@@ -79,50 +96,99 @@
             <div><strong>Total Users:</strong> <span id="countTotal">0</span></div>
             <div><strong>Unique IPs:</strong> <span id="countIPs">0</span></div>
             <div><strong>Unique ISP+City:</strong> <span id="countIspCity">0</span></div>
-            <div><strong>Violations (IP &gt;= 2 or ISP+City &gt;= 2):</strong> <span id="countViolations">0</span></div>
+            <div><strong>Violations (IP ≥ 2 or ISP+City ≥ 2):</strong> <span id="countViolations">0</span></div>
             <button id="exportCSV" class="right ghost">Export CSV</button>
           </div>
         </div>
       </div>
 
-      <div class="card">
+      <!-- USERS TAB -->
+      <section id="usersTab" class="card">
         <div class="scroll">
           <table id="usersTable">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>IP</th>
-                <th>ISP</th>
-                <th>City</th>
-                <th>Created (Lagos)</th>
-                <th>IP Count</th>
-                <th>ISP+City Count</th>
+                <th>Name</th><th>Email</th><th>IP</th><th>ISP</th><th>City</th>
+                <th>Created (Lagos)</th><th>IP Cnt</th><th>ISP+City Cnt</th><th>Actions</th>
               </tr>
             </thead>
-            <tbody id="tbody"></tbody>
+            <tbody id="tbodyUsers"></tbody>
           </table>
         </div>
-      </div>
+      </section>
+
+      <!-- ATTEMPTS TAB -->
+      <section id="attemptsTab" class="card hidden">
+        <div class="scroll">
+          <table id="attemptsTable">
+            <thead>
+              <tr>
+                <th>Email</th><th>IP</th><th>ISP</th><th>City</th>
+                <th>Status</th><th>Reason</th><th>Time (Lagos)</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAttempts"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- BLOCKLIST TAB -->
+      <section id="blockTab" class="card hidden pad">
+        <h3 style="margin-top:0">Blocked Users / IPs</h3>
+        <div class="row" style="align-items:flex-start">
+          <div class="card pad" style="flex:2">
+            <div class="scroll">
+              <table id="blockTable">
+                <thead>
+                  <tr>
+                    <th>IP</th><th>ISP+City</th><th>Email</th><th>Reason</th><th>Blocked At</th><th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyBlock"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card pad" style="flex:1;min-width:280px">
+            <h4 style="margin:0 0 8px">Add to Blocklist</h4>
+            <input id="blkIP" placeholder="IP (optional)"/>
+            <input id="blkIspCity" placeholder="ISP_City (optional)"/>
+            <input id="blkEmail" placeholder="Email (optional)"/>
+            <textarea id="blkReason" placeholder="Reason (required)"></textarea>
+            <div class="row">
+              <button id="addBlockBtn" class="bad">Block</button>
+              <button id="clearBlockInputs" class="ghost">Clear</button>
+            </div>
+            <p class="muted" style="margin-top:10px">
+              You can block by IP, by ISP+City (e.g. “MTN Nigeria_Lagos”), or email.  
+              Provide at least one identifier and a reason.
+            </p>
+          </div>
+        </div>
+      </section>
     </section>
   </main>
 
   <div class="footer">© 2025 Excellent, Global, Conceptional. All rights reserved.</div>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script> emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" }); </script>
 
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import {
-      getFirestore, collection, onSnapshot, query, orderBy
+      getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp,
+      doc, deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ====== CONFIG (EDIT ADMIN EMAILS HERE) ======
+    // ====== ADMIN ALLOW LIST ======
     const ADMIN_EMAILS = [
-      "quareebalabi22@gmail.com"   // add more admin emails if needed
+      "quareebalabi22@gmail.com" // add more if needed
     ];
 
-    // Your Firebase Config
+    // ====== FIREBASE CONFIG (yours) ======
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -133,199 +199,347 @@
       measurementId: "G-G3RCTDSY27"
     };
 
-    // Init Firebase
+    // ====== INIT ======
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // UI elements
+    // UI refs
     const loginCard = document.getElementById("loginCard");
     const dash = document.getElementById("dash");
     const adminEmailEl = document.getElementById("adminEmail");
+    const signOutBtn = document.getElementById("signOutBtn");
     const loginBtn = document.getElementById("loginBtn");
     const loginEmail = document.getElementById("loginEmail");
     const loginPass = document.getElementById("loginPass");
     const loginErr = document.getElementById("loginErr");
-    const signOutBtn = document.getElementById("signOutBtn");
 
+    const lastUpdated = document.getElementById("lastUpdated");
     const qEmail = document.getElementById("qEmail");
     const qIP = document.getElementById("qIP");
     const qISP = document.getElementById("qISP");
     const qCity = document.getElementById("qCity");
     const clearFilters = document.getElementById("clearFilters");
-
-    const tbody = document.getElementById("tbody");
-    const lastUpdated = document.getElementById("lastUpdated");
-    const countTotal = document.getElementById("countTotal");
-    const countIPs = document.getElementById("countIPs");
-    const countIspCity = document.getElementById("countIspCity");
-    const countViolations = document.getElementById("countViolations");
     const exportCSV = document.getElementById("exportCSV");
 
-    // State
-    let allUsers = []; // raw docs
-    let ipCounts = new Map();
-    let ispCityCounts = new Map();
+    const usersTab = document.getElementById("usersTab");
+    const attemptsTab = document.getElementById("attemptsTab");
+    const blockTab = document.getElementById("blockTab");
 
-    // Auth state
+    const tbodyUsers = document.getElementById("tbodyUsers");
+    const tbodyAttempts = document.getElementById("tbodyAttempts");
+    const tbodyBlock = document.getElementById("tbodyBlock");
+
+    const blkIP = document.getElementById("blkIP");
+    const blkIspCity = document.getElementById("blkIspCity");
+    const blkEmail = document.getElementById("blkEmail");
+    const blkReason = document.getElementById("blkReason");
+    const addBlockBtn = document.getElementById("addBlockBtn");
+    const clearBlockInputs = document.getElementById("clearBlockInputs");
+
+    // Tab switching
+    document.querySelectorAll('nav.tabs button').forEach(btn=>{
+      btn.onclick=()=>{
+        document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        [usersTab, attemptsTab, blockTab].forEach(s=>s.classList.add('hidden'));
+        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+      };
+    });
+
+    // ====== AUTH GUARD ======
     onAuthStateChanged(auth, (user) => {
       if (user && ADMIN_EMAILS.includes(user.email)) {
         adminEmailEl.textContent = user.email;
         loginCard.classList.add("hidden");
         dash.classList.remove("hidden");
-        bootStream();
+        bootStreams();
       } else {
         if (user) signOut(auth);
         adminEmailEl.textContent = "";
         dash.classList.add("hidden");
         loginCard.classList.remove("hidden");
+        stopStreams();
       }
     });
 
-    // Login
     loginBtn.onclick = async () => {
       loginErr.textContent = "";
       try {
-        await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value);
+        await signInWithEmailAndPassword(auth, (loginEmail.value||"").trim(), loginPass.value);
       } catch (e) {
         loginErr.textContent = "Login failed: " + (e?.message || e);
       }
     };
 
-    // Sign out
     signOutBtn.onclick = async () => {
       await signOut(auth);
     };
 
-    // Real-time stream
-    let unsub = null;
-    function bootStream() {
-      if (unsub) { unsub(); unsub = null; }
-      const usersRef = collection(db, "users");
-      const qRef = query(usersRef, orderBy("createdAt", "desc"));
-      unsub = onSnapshot(qRef, (snap) => {
-        allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // ====== STREAMS ======
+    let unsubUsers=null, unsubAttempts=null, unsubBlocks=null;
+    let allUsers=[], ipCounts=new Map(), ispCityCounts=new Map();
+    let allAttempts=[], allBlocks=[];
+
+    function bootStreams(){
+      // Users
+      unsubUsers = onSnapshot(query(collection(db,"users"), orderBy("createdAt","desc")), snap=>{
+        allUsers = snap.docs.map(d=>({id:d.id, ...d.data()}));
         recomputeCounts();
-        render();
-      }, (err) => {
-        console.error(err);
+        renderUsers();
+        updateStats();
+      });
+
+      // Login attempts
+      unsubAttempts = onSnapshot(query(collection(db,"login_attempts"), orderBy("ts","desc")), snap=>{
+        allAttempts = snap.docs.map(d=>({id:d.id, ...d.data()}));
+        renderAttempts();
+        updateStats();
+      });
+
+      // Blocklist
+      unsubBlocks = onSnapshot(query(collection(db,"blockedUsers"), orderBy("createdAt","desc")), snap=>{
+        allBlocks = snap.docs.map(d=>({id:d.id, ...d.data()}));
+        renderBlocks();
       });
     }
 
-    // Compute IP and ISP+City counts and violations
-    function recomputeCounts() {
-      ipCounts = new Map();
-      ispCityCounts = new Map();
-
-      for (const u of allUsers) {
-        const ip = (u.ip || "").trim();
-        const ispc = (u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim();
-
-        if (ip) ipCounts.set(ip, (ipCounts.get(ip) || 0) + 1);
-        if (ispc) ispCityCounts.set(ispc, (ispCityCounts.get(ispc) || 0) + 1);
-      }
+    function stopStreams(){
+      if (unsubUsers) {unsubUsers(); unsubUsers=null;}
+      if (unsubAttempts) {unsubAttempts(); unsubAttempts=null;}
+      if (unsubBlocks) {unsubBlocks(); unsubBlocks=null;}
+      allUsers=[]; allAttempts=[]; allBlocks=[];
     }
 
-    // Filter + render
-    function passFilters(u) {
-      const fEmail = qEmail.value.trim().toLowerCase();
-      const fIP = qIP.value.trim().toLowerCase();
-      const fISP = qISP.value.trim().toLowerCase();
-      const fCity = qCity.value.trim().toLowerCase();
-
-      if (fEmail && !(u.email||"").toLowerCase().includes(fEmail)) return false;
-      if (fIP && !(u.ip||"").toLowerCase().includes(fIP)) return false;
-      if (fISP && !(u.isp||"").toLowerCase().includes(fISP)) return false;
-      if (fCity && !(u.city||"").toLowerCase().includes(fCity)) return false;
+    // ====== RENDER HELPERS ======
+    function lagosTime(ts){
+      try{
+        if(!ts) return "";
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString("en-NG",{ timeZone:"Africa/Lagos" });
+      }catch{ return ""; }
+    }
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+    function passFiltersByObj(obj){
+      const fEmail = (qEmail.value||"").trim().toLowerCase();
+      const fIP    = (qIP.value||"").trim().toLowerCase();
+      const fISP   = (qISP.value||"").trim().toLowerCase();
+      const fCity  = (qCity.value||"").trim().toLowerCase();
+      const e=(obj.email||"").toLowerCase(), ip=(obj.ip||"").toLowerCase(), isp=(obj.isp||"").toLowerCase(), city=(obj.city||"").toLowerCase();
+      if (fEmail && !e.includes(fEmail)) return false;
+      if (fIP && !ip.includes(fIP)) return false;
+      if (fISP && !isp.includes(fISP)) return false;
+      if (fCity && !city.includes(fCity)) return false;
       return true;
     }
 
-    function lagosTime(ts) {
-      try {
-        if (!ts) return "";
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
-        return d.toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
-      } catch { return ""; }
+    // Users
+    function recomputeCounts(){
+      ipCounts = new Map(); ispCityCounts = new Map();
+      for (const u of allUsers){
+        const ip=(u.ip||"").trim();
+        const ispc=(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim();
+        if (ip) ipCounts.set(ip,(ipCounts.get(ip)||0)+1);
+        if (ispc) ispCityCounts.set(ispc,(ispCityCounts.get(ispc)||0)+1);
+      }
     }
 
-    function render() {
-      const filtered = allUsers.filter(passFilters);
+    function renderUsers(){
+      const filtered = allUsers.filter(passFiltersByObj);
+      tbodyUsers.innerHTML="";
+      for (const u of filtered){
+        const ip=(u.ip||"").trim(), isp=(u.isp||"").trim(), city=(u.city||"").trim();
+        const ispcKey=(u.ispCity || (isp+"_"+city)).trim();
+        const ipCount = ip ? (ipCounts.get(ip)||0) : 0;
+        const ispcCount = ispcKey ? (ispCityCounts.get(ispcKey)||0) : 0;
+        const ipPill = ipCount>=2 ? "bad" : ipCount===1 ? "ok" : "warn";
+        const ispcPill = ispcCount>=2 ? "bad" : ispcCount===1 ? "ok" : "warn";
 
-      // Stats
-      countTotal.textContent = filtered.length;
-      const ips = new Set(filtered.map(u => (u.ip||"").trim()).filter(Boolean));
-      const ispc = new Set(filtered.map(u => (u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim()).filter(Boolean));
-      countIPs.textContent = ips.size;
-      countIspCity.textContent = ispc.size;
-
-      let violations = 0;
-
-      tbody.innerHTML = "";
-      for (const u of filtered) {
-        const ip = (u.ip || "").trim();
-        const isp = (u.isp || "").trim();
-        const city = (u.city || "").trim();
-        const ispcKey = (u.ispCity || (isp+"_"+city)).trim();
-
-        const ipCount = ip ? (ipCounts.get(ip) || 0) : 0;
-        const ispcCount = ispcKey ? (ispCityCounts.get(ispcKey) || 0) : 0;
-
-        const ipPillClass = ipCount >= 2 ? "bad" : ipCount === 1 ? "ok" : "warn";
-        const ispcPillClass = ispcCount >= 2 ? "bad" : ispcCount === 1 ? "ok" : "warn";
-
-        if (ipCount >= 2 || ispcCount >= 2) violations++;
-
-        const tr = document.createElement("tr");
+        const tr=document.createElement("tr");
         tr.innerHTML = `
-          <td>${escapeHtml(u.name || "")}</td>
-          <td>${escapeHtml(u.email || "")}</td>
+          <td>${escapeHtml(u.name||"")}</td>
+          <td>${escapeHtml(u.email||"")}</td>
           <td>${escapeHtml(ip)}</td>
           <td>${escapeHtml(isp)}</td>
           <td>${escapeHtml(city)}</td>
           <td class="muted">${escapeHtml(lagosTime(u.createdAt))}</td>
-          <td><span class="pill ${ipPillClass}">${ipCount}</span></td>
-          <td><span class="pill ${ispcPillClass}">${ispcCount}</span></td>
+          <td><span class="pill ${ipPill}">${ipCount}</span></td>
+          <td><span class="pill ${ispcPill}">${ispcCount}</span></td>
+          <td class="row">
+            <button class="bad" data-act="block-ip" data-ip="${escapeHtml(ip)}" title="Block IP">Block IP</button>
+            <button class="ghost" data-act="warn-email" data-email="${escapeHtml(u.email||"")}" title="Warn via Email">Warn</button>
+          </td>
         `;
-        tbody.appendChild(tr);
+        tbodyUsers.appendChild(tr);
       }
-
-      countViolations.textContent = violations;
-      lastUpdated.textContent = "Last updated: " + new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
+      bindUserRowActions();
     }
 
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    function bindUserRowActions(){
+      tbodyUsers.querySelectorAll("button[data-act='block-ip']").forEach(btn=>{
+        btn.onclick = ()=> addToBlocklist({ ip: btn.dataset.ip, reason: "Manual block from Users table" });
+      });
+      tbodyUsers.querySelectorAll("button[data-act='warn-email']").forEach(btn=>{
+        btn.onclick = async ()=>{
+          const to = btn.dataset.email;
+          const msg = prompt("Warning message to send via EmailJS:", "Suspicious activity detected on your account. Please reply if this wasn’t you.");
+          if (!to || !msg) return;
+          try{
+            await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+              to_email: to,
+              from_name: "Excellent_Develops Security",
+              message: msg
+            });
+            alert("Warning email sent.");
+          }catch(e){ alert("Email failed: "+(e?.message||e)); }
+        };
+      });
     }
 
-    // Filters
-    [qEmail, qIP, qISP, qCity].forEach(inp => inp.addEventListener("input", render));
-    clearFilters.onclick = () => { qEmail.value=""; qIP.value=""; qISP.value=""; qCity.value=""; render(); };
+    // Attempts
+    function renderAttempts(){
+      const filtered = allAttempts.filter(passFiltersByObj);
+      tbodyAttempts.innerHTML = "";
+      for (const a of filtered){
+        const status = a.success ? "Success" : "Failed";
+        const pill = a.success ? "ok" : "bad";
+        const tr=document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(a.email||"")}</td>
+          <td>${escapeHtml(a.ip||"")}</td>
+          <td>${escapeHtml(a.isp||"")}</td>
+          <td>${escapeHtml(a.city||"")}</td>
+          <td><span class="pill ${pill}">${status}</span></td>
+          <td class="muted">${escapeHtml(a.reason||"")}</td>
+          <td class="muted">${escapeHtml(lagosTime(a.ts))}</td>
+          <td class="row">
+            <button class="bad" data-act="block-ip" data-ip="${escapeHtml(a.ip||"")}">Block IP</button>
+            <button class="ghost" data-act="warn-email" data-email="${escapeHtml(a.email||"")}">Warn</button>
+          </td>
+        `;
+        tbodyAttempts.appendChild(tr);
+      }
+      tbodyAttempts.querySelectorAll("button[data-act='block-ip']").forEach(b=>{
+        b.onclick = ()=> addToBlocklist({ ip: b.dataset.ip, reason: "Manual block from Attempts table" });
+      });
+      tbodyAttempts.querySelectorAll("button[data-act='warn-email']").forEach(b=>{
+        b.onclick = async ()=>{
+          const to=b.dataset.email;
+          if(!to) return alert("No email recorded for this attempt.");
+          const msg = prompt("Warning message to send via EmailJS:", "Multiple failed logins detected from your address. If this wasn’t you, please reset your password.");
+          if(!msg) return;
+          try{
+            await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+              to_email: to,
+              from_name: "Excellent_Develops Security",
+              message: msg
+            });
+            alert("Warning email sent.");
+          }catch(e){ alert("Email failed: "+(e?.message||e)); }
+        };
+      });
+    }
 
-    // CSV Export
-    exportCSV.onclick = () => {
-      const rows = [["Name","Email","IP","ISP","City","Region","Country","Created(Lagos)","IP Count","ISP+City Count"]];
-      for (const u of allUsers.filter(passFilters)) {
-        const ip = (u.ip||"").trim();
-        const isp = (u.isp||"").trim();
-        const city = (u.city||"").trim();
-        const ispcKey = (u.ispCity || (isp+"_"+city)).trim();
+    // Blocklist
+    function renderBlocks(){
+      tbodyBlock.innerHTML = "";
+      for (const b of allBlocks){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(b.ip||"")}</td>
+          <td>${escapeHtml(b.ispCity||"")}</td>
+          <td>${escapeHtml(b.email||"")}</td>
+          <td class="muted">${escapeHtml(b.reason||"")}</td>
+          <td class="muted">${escapeHtml(lagosTime(b.createdAt))}</td>
+          <td><button class="ok" data-unblock="${b.id}">Unblock</button></td>
+        `;
+        tbodyBlock.appendChild(tr);
+      }
+      tbodyBlock.querySelectorAll("button[data-unblock]").forEach(btn=>{
+        btn.onclick = async ()=>{
+          if (!confirm("Remove this block?")) return;
+          try{
+            await deleteDoc(doc(db,"blockedUsers", btn.dataset.unblock));
+          }catch(e){ alert("Unblock failed: "+(e?.message||e)); }
+        };
+      });
+    }
+
+    // Add to blocklist
+    async function addToBlocklist({ip="", ispCity="", email="", reason=""}){
+      const r = reason || prompt("Reason for block:", "Suspicious activity / exceeded limits");
+      if (!ip && !ispCity && !email) return alert("Provide at least IP, ISP_City or Email to block.");
+      if (!r) return;
+      try{
+        await addDoc(collection(db,"blockedUsers"), {
+          ip: ip || null,
+          ispCity: ispCity || null,
+          email: email || null,
+          reason: r,
+          createdAt: serverTimestamp()
+        });
+        alert("Added to blocklist.");
+      }catch(e){ alert("Block failed: "+(e?.message||e)); }
+    }
+
+    addBlockBtn.onclick = ()=> addToBlocklist({
+      ip: (blkIP.value||"").trim(),
+      ispCity: (blkIspCity.value||"").trim(),
+      email: (blkEmail.value||"").trim(),
+      reason: (blkReason.value||"").trim()
+    });
+    clearBlockInputs.onclick = ()=>{ blkIP.value=""; blkIspCity.value=""; blkEmail.value=""; blkReason.value=""; };
+
+    // Stats / filters
+    function updateStats(){
+      const filtered = allUsers.filter(passFiltersByObj);
+      const ips = new Set(filtered.map(u=>(u.ip||"").trim()).filter(Boolean));
+      const ispc = new Set(filtered.map(u=>(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim()).filter(Boolean));
+      document.getElementById("countTotal").textContent = filtered.length;
+      document.getElementById("countIPs").textContent = ips.size;
+      document.getElementById("countIspCity").textContent = ispc.size;
+
+      let violations=0;
+      for (const u of filtered){
+        const ip=(u.ip||"").trim();
+        const ispcKey=(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim();
+        const ipCount = ip ? (ipCounts.get(ip)||0) : 0;
+        const ispcCount = ispcKey ? (ispCityCounts.get(ispcKey)||0) : 0;
+        if (ipCount>=2 || ispcCount>=2) violations++;
+      }
+      document.getElementById("countViolations").textContent = violations;
+      lastUpdated.textContent = "Last updated: " + new Date().toLocaleString("en-NG",{timeZone:"Africa/Lagos"});
+    }
+
+    [qEmail,qIP,qISP,qCity].forEach(i=>i.addEventListener("input",()=>{
+      renderUsers(); renderAttempts(); updateStats();
+    }));
+    clearFilters.onclick = ()=>{ qEmail.value=qIP.value=qISP.value=qCity.value=""; renderUsers(); renderAttempts(); updateStats(); };
+
+    // CSV export of filtered Users
+    exportCSV.onclick = ()=>{
+      const rows = [["Name","Email","IP","ISP","City","Created(Lagos)","IP Count","ISP+City Count"]];
+      const filtered = allUsers.filter(passFiltersByObj);
+      for (const u of filtered){
+        const ip=(u.ip||"").trim(), isp=(u.isp||"").trim(), city=(u.city||"").trim();
+        const ispcKey=(u.ispCity || (isp+"_"+city)).trim();
         rows.push([
-          u.name||"", u.email||"", ip, isp, city, u.region||"", u.country||"",
-          lagosTime(u.createdAt),
+          u.name||"", u.email||"", ip, isp, city, lagosTime(u.createdAt),
           ip ? (ipCounts.get(ip)||0) : 0,
-          ispcKey ? (ispCityCounts.get(ispcKey)||0) : 0
+          ispcKey ? (ispCityCounts.get(ispcKey)||0 : 0)
         ]);
       }
       const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = "users_export.csv"; a.click();
+      a.href=url; a.download="users_export.csv"; a.click();
       URL.revokeObjectURL(url);
     };
   </script>
 </body>
-  </html>
+</html>
