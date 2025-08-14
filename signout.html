@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Signing Out...</title>
-  <script type="module">
-    // Firebase config
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signing Out...</title>
+<script type="module">
+  // Firebase config
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+  import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    // Sign out immediately on page load
-    signOut(auth)
-      .then(() => {
-        window.location.href = "login.html"; // Redirect after logout
-      })
-      .catch((error) => {
-        console.error("Error signing out:", error);
-        alert("Sign out failed. Please try again.");
-        window.location.href = "login.html";
-      });
-  </script>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-    }
-    h2 {
-      color: #333;
-    }
-  </style>
+  // Sign out immediately on page load
+  signOut(auth)
+    .then(() => {
+      window.location.href = "index.html"; // ✅ Redirect after successful logout
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error);
+      alert("Sign out failed. Please try again.");
+      window.location.href = "index.html"; // ✅ Redirect even if logout fails
+    });
+</script>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+  }
+  h2 {
+    color: #333;
+  }
+</style>
 </head>
 <body>
   <h2>Signing you out...</h2>
