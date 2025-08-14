@@ -1,179 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Welcome • Excellent_Develops</title>
-<style>
-  :root{
-    --g1:#0ea5e9; /* sky-500 */
-    --g2:#14b8a6; /* teal-500 */
-    --accent:#0ea5e9;
-    --card-bg: rgba(255,255,255,.08);
-    --border: rgba(255,255,255,.22);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; min-height:100vh; color:#fff; font-family:system-ui, Segoe UI, Arial, sans-serif;
-    background: radial-gradient(1200px 900px at 10% 0%, rgba(255,255,255,.12) 0%, transparent 60%),
-                linear-gradient(135deg, var(--g1), var(--g2));
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:18px;
-  }
-  .wrap{
-    width:min(720px,94vw);
-    display:flex; flex-direction:column; align-items:center; gap:18px;
-  }
-  .card{
-    width:100%;
-    background:var(--card-bg);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:24px;
-    text-align:center;
-    box-shadow:0 14px 36px rgba(0,0,0,.28);
-    backdrop-filter: blur(8px);
-    animation:pop .35s ease-out both;
-  }
-  @keyframes pop{from{transform:scale(.98);opacity:0} to{transform:scale(1);opacity:1}}
-
-  .avatar{
-    width:110px;height:110px;border-radius:50%;
-    object-fit:cover;border:3px solid rgba(255,255,255,.75);
-    box-shadow:0 8px 24px rgba(0,0,0,.35);
-  }
-  h1{margin:10px 0 6px; font-size:28px}
-  p.muted{margin:0 0 10px; color:#e5e5e5}
-
-  .actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px}
-  .btn{
-    padding:12px 16px; border-radius:12px; border:0; cursor:pointer; font-weight:800;
-    transition:transform .08s ease, box-shadow .2s ease;
-  }
-  .btn:active{transform:translateY(1px)}
-  .primary{background:#0ea5e9;color:#fff; box-shadow:0 6px 18px rgba(14,165,233,.35)}
-  .danger {background:#ef4444;color:#fff; box-shadow:0 6px 18px rgba(239,68,68,.35)}
-
-  footer{
-    position:fixed; left:0; right:0; bottom:0;
-    background:#ffffff; color:#000000; text-align:center; font-size:13px;
-    padding:8px 10px; border-top:1px solid rgba(0,0,0,.08);
-  }
-
-  /* tiny toast for "Welcome back" (3s) */
-  .toast{
-    position:fixed; top:18px; left:50%; transform:translateX(-50%);
-    background:#ffffff; color:#111; border-radius:12px; padding:10px 14px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35); font-weight:700; display:none; z-index:60;
-  }
-  .toast.show{display:block; animation:fadein .2s ease-out, fadeout .3s ease-in 2.8s forwards}
-  @keyframes fadein{from{opacity:0; transform:translate(-50%,-6px)} to{opacity:1; transform:translate(-50%,0)}}
-  @keyframes fadeout{to{opacity:0; transform:translate(-50%,-6px)}}
-
-  /* 60-min session modal */
-  .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:70}
-  .modal{
-    width:min(440px,92vw); background:#fff; color:#111; border-radius:18px; padding:22px; text-align:center;
-    box-shadow:0 12px 36px rgba(0,0,0,.35); animation:drop .25s ease-out both;
-  }
-  @keyframes drop{from{transform:translateY(-8px);opacity:0} to{transform:translateY(0);opacity:1}}
-  .modal .btn{background:#111827;color:#fff}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome • Excellent_Develops</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1FA2FF, #12D8FA, #06A9F4);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      color: white;
+      width: 90%;
+      max-width: 400px;
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    p {
+      margin: 5px 0 20px;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    button {
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .projects-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+    .logout-btn {
+      background-color: #f44336;
+      color: white;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+  </style>
 </head>
 <body>
-  <!-- welcome toast -->
-  <div class="toast" id="welcomeToast">Login successful — welcome back 🎉</div>
-
-  <div class="wrap">
-    <div class="card">
-      <img class="avatar"
-           src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg"
-           alt="Profile">
-      <h1>Welcome, <span id="firstName">Friend</span> 👋</h1>
-      <p class="muted">Great to see you again on Excellent_Develops.</p>
-
-      <div class="actions">
-        <button class="btn primary" id="projectsBtn">View My Projects</button>
-        <button class="btn danger"  id="logoutBtn">Logout</button>
-      </div>
-    </div>
+  <div class="card">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile" class="profile-img">
+    <h1>Welcome, <span id="userName">Friend</span> 👋</h1>
+    <p>Great to see you again on Excellent_Develops.</p>
+    <button class="projects-btn" onclick="window.location.href='projects.html'">View My Projects</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
   <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
 
-  <!-- 60-min session modal -->
-  <div class="backdrop" id="sessionBackdrop">
-    <div class="modal">
-      <h3>Session Ended 🔒</h3>
-      <p>You’ve been signed out for security. Redirecting to login…</p>
-      <button class="btn" id="sessionOk">OK</button>
-    </div>
-  </div>
-
-  <!-- Firebase (Auth only) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
+      apiKey: "YOUR_FIREBASE_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const nameSpan = document.getElementById('firstName');
-    const projectsBtn = document.getElementById('projectsBtn');
-    const logoutBtn   = document.getElementById('logoutBtn');
-
-    // Route buttons
-    projectsBtn.onclick = ()=> window.location.href = 'projects.html';
-    logoutBtn.onclick   = async ()=> { try{ await signOut(auth); }catch(_){} window.location.href='login.html'; };
-
-    // Auth guard + greeting
-    onAuthStateChanged(auth, (user)=>{
-      if(!user){
-        window.location.href = 'login.html';
-        return;
+    // Display user first name
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const name = user.displayName ? user.displayName.split(' ')[0] : "Friend";
+        document.getElementById("userName").textContent = name;
+      } else {
+        window.location.href = "login.html";
       }
-      // Prefer firstName saved at login; fallback to displayName; else "Friend"
-      const localFirst = localStorage.getItem('firstName');
-      const first = (localFirst && localFirst.trim()) || (user.displayName ? user.displayName.split(' ')[0] : 'Friend');
-      nameSpan.textContent = first;
-
-      // Show 3s toast only if just logged in
-      if(localStorage.getItem('justLoggedIn') === '1'){
-        localStorage.removeItem('justLoggedIn');
-        const t = document.getElementById('welcomeToast');
-        t.classList.add('show');
-        // It auto-fades via CSS after ~3s
-      }
-
-      // Start 60-minute auto-logout timer
-      startSessionTimer();
     });
 
-    // 60-minute sign-out
-    function startSessionTimer(){
-      const MS = 60 * 60 * 1000; // 60 minutes
-      setTimeout(async ()=>{
-        // show modal, then sign out and redirect
-        const bd = document.getElementById('sessionBackdrop');
-        bd.style.display = 'flex';
-        const go = ()=>{ window.location.href = 'login.html'; };
-        document.getElementById('sessionOk').onclick = go;
-
-        try{ await signOut(auth); }catch(_){}
-        // auto-redirect after a short pause to let the user see the modal
-        setTimeout(go, 1500);
-      }, MS);
+    // Logout function
+    function logout() {
+      auth.signOut().then(() => {
+        alert("Logged out successfully!");
+        window.location.href = "login.html";
+      });
     }
   </script>
 </body>
-  </html>
+</html>
