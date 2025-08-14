@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Excellent_Develops • Create Account</title>
+<title>Excellent_Develops • Reset Password</title>
 <style>
   :root { --g1:#4b0082; --g2:#800080; --accent:#8a2be2; }
   *{box-sizing:border-box}
@@ -22,14 +22,10 @@
   img.logo{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:10px}
   h2{margin:6px 0}
   p.sub{margin:0 0 14px; color:#e5e5e5; font-size:14px}
-  .row{position:relative; margin:8px 0}
+  .row{margin:8px 0}
   input{
-    width:100%; padding:12px 44px 12px 12px; border-radius:10px; border:0;
+    width:100%; padding:12px; border-radius:10px; border:0;
     background:rgba(255,255,255,.2); color:#fff; font-size:14px; outline:none;
-  }
-  .toggle-eye{
-    position:absolute; right:10px; top:50%; transform:translateY(-50%);
-    border:0; background:transparent; color:#fff; cursor:pointer; font-size:13px;
   }
   button.primary{
     width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer;
@@ -53,42 +49,33 @@
 <body>
   <div class="card">
     <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
-    <h2>Create Account</h2>
-    <p class="sub">Join Excellent_Develops</p>
+    <h2>Reset Password</h2>
+    <p class="sub">Enter your email to receive a reset link</p>
 
     <div class="row">
-      <input type="text" id="firstName" placeholder="First name (shown on Welcome)" autocomplete="given-name">
+      <input type="email" id="email" placeholder="Your email" autocomplete="email">
     </div>
-    <div class="row">
-      <input type="email" id="email" placeholder="Email" autocomplete="email">
-    </div>
-    <div class="row">
-      <input type="password" id="password" placeholder="Password" autocomplete="new-password">
-      <button class="toggle-eye" type="button" id="togglePw">Show</button>
-    </div>
-    <div class="row">
-      <input type="password" id="confirm" placeholder="Confirm password" autocomplete="new-password">
-      <button class="toggle-eye" type="button" id="togglePw2">Show</button>
-    </div>
-
-    <button class="primary" id="signupBtn">Create Account</button>
+    <button class="primary" id="resetBtn">Send Reset Link</button>
 
     <div class="links">
-      <a href="login.html">Already have an account? Sign in</a>
+      <a href="login.html">← Back to login</a>
     </div>
+    <p class="sub" style="margin-top:10px">Secure access powered by Firebase • EmailJS alert enabled</p>
   </div>
 
   <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
 
-  <!-- EmailJS (not required here, but loaded for consistency) -->
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script> emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" }); </script>
+  <script>
+    emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" });
+  </script>
 
   <!-- Modal -->
   <div class="backdrop" id="okBackdrop">
     <div class="modal">
-      <h3 id="okTitle">Account created successfully ✅</h3>
-      <p id="okBody">Redirecting in <span id="count">10</span>s…</p>
+      <h3 id="okTitle">Email sent ✅</h3>
+      <p id="okBody">Check your inbox for the reset link. Redirecting in <span id="count">10</span>s…</p>
       <div class="actions">
         <button class="btn ghost" id="okBtn">OK</button>
       </div>
@@ -98,7 +85,7 @@
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -112,12 +99,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Show/Hide
-    const pw  = document.getElementById('password');
-    const pw2 = document.getElementById('confirm');
-    document.getElementById('togglePw').onclick  = ()=>{ pw.type  = pw.type  === 'password' ? 'text' : 'password';  event.target.textContent = pw.type  === 'password' ? 'Show' : 'Hide'; };
-    document.getElementById('togglePw2').onclick = ()=>{ pw2.type = pw2.type === 'password' ? 'text' : 'password'; event.target.textContent = pw2.type === 'password' ? 'Show' : 'Hide'; };
-
     // Modal
     const showModal = (title, redirectUrl) => {
       const bd = document.getElementById('okBackdrop');
@@ -130,23 +111,28 @@
       document.getElementById('okBtn').onclick = ()=>{ clearInterval(timer); window.location.href = redirectUrl; };
     };
 
-    document.getElementById('signupBtn').onclick = async ()=>{
-      const first = (document.getElementById('firstName').value||'').trim();
+    document.getElementById('resetBtn').onclick = async ()=>{
       const email = (document.getElementById('email').value||'').trim();
-      const pass  = document.getElementById('password').value;
-      const conf  = document.getElementById('confirm').value;
-
-      if(!first || !email || !pass || !conf){ alert('Please fill all fields.'); return; }
-      if(pass !== conf){ alert('Passwords do not match.'); return; }
+      if(!email){ alert('Please enter your email.'); return; }
 
       try{
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        await updateProfile(cred.user, { displayName: first });
-        showModal('Account created successfully ✅', 'login.html');
+        // 1) Firebase reset email to the user
+        await sendPasswordResetEmail(auth, email);
+
+        // 2) EmailJS notification (to your inbox via your template)
+        // Adjust template variables to match your EmailJS template fields
+        await emailjs.send(
+          "service_cvvr3vn",
+          "template_6xgms6a",
+          { user_email: email, note: "Password reset link requested" }
+        );
+
+        showModal('Email sent ✅', 'login.html');
       }catch(err){
         alert(err.message);
       }
     };
   </script>
 </body>
+</html></body>
       </html>
