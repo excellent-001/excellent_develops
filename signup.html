@@ -63,13 +63,13 @@
     <a href="index.html">Already have an account? Login</a>
   </div>
 
-  <!-- EmailJS CDN -->
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, serverTimestamp, query, where, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     // Firebase Config
     const firebaseConfig = {
@@ -82,15 +82,13 @@
       measurementId: "G-G3RCTDSY27"
     };
 
-    // Initialize Firebase
+    // Init Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    // Initialize EmailJS
     emailjs.init("h5LWzY8YUESb4sZbS");
 
-    // Register User Function
+    // Register Function
     window.registerUser = async () => {
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
@@ -102,20 +100,42 @@
       }
 
       try {
-        // Create Auth User
+        // 1. Get IP + ISP + City
+        const res = await fetch("https://ipapi.co/json/");
+        const geoData = await res.json();
+        const ip = geoData.ip;
+        const isp = geoData.org || "Unknown ISP";
+        const city = geoData.city || "Unknown City";
+
+        // 2. Check Firestore for existing accounts
+        const ipQuery = query(collection(db, "users"), where("ip", "==", ip));
+        const ispCityQuery = query(collection(db, "users"), where("ispCity", "==", `${isp}_${city}`));
+
+        const ipSnapshot = await getDocs(ipQuery);
+        const ispCitySnapshot = await getDocs(ispCityQuery);
+
+        if (ipSnapshot.size >= 2 || ispCitySnapshot.size >= 2) {
+          alert("❌ Signup limit reached for this network/location.");
+          return;
+        }
+
+        // 3. Create Auth User
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Save to Firestore
+        // 4. Save to Firestore
         await setDoc(doc(db, "users", user.uid), {
-          name: name,
-          email: email,
+          name,
+          email,
+          ip,
+          isp,
+          city,
+          ispCity: `${isp}_${city}`,
           createdAt: serverTimestamp()
         });
 
-        // Send Email Notification
-        const now = new Date();
-        const signupTime = now.toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
+        // 5. Send Email Notification
+        const signupTime = new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
         await emailjs.send("service_cvvr3vn", "template_6xgms6a", {
           from_name: "Excellent_Develops System",
           to_name: "Admin",
@@ -125,6 +145,9 @@
 
 👤 Name: ${name}
 📧 Email: ${email}
+🌐 IP: ${ip}
+🏢 ISP: ${isp}
+🏙️ City: ${city}
 🕒 Signup Time: ${signupTime} (Nigeria Time)
           `
         });
@@ -137,6 +160,5 @@
       }
     };
   </script>
-
 </body>
-</html>
+      </html>
