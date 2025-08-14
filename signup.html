@@ -106,10 +106,41 @@
         const ip = geoData.ip;
         const isp = geoData.org || "Unknown ISP";
         const city = geoData.city || "Unknown City";
+        const ispCity = `${isp}_${city}`;
 
-        // 2. Check Firestore for existing accounts
+        // 2. BLOCK LIST CHECK
+        const blockIpQuery = query(collection(db, "blockedUsers"), where("ip", "==", ip));
+        const blockIspCityQuery = query(collection(db, "blockedUsers"), where("ispCity", "==", ispCity));
+
+        const blockIpSnapshot = await getDocs(blockIpQuery);
+        const blockIspCitySnapshot = await getDocs(blockIspCityQuery);
+
+        if (!blockIpSnapshot.empty || !blockIspCitySnapshot.empty) {
+          // Send alert to admin
+          const blockTime = new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
+          await emailjs.send("service_cvvr3vn", "template_6xgms6a", {
+            from_name: "Excellent_Develops Security",
+            to_name: "Admin",
+            to_email: "quareebalabi22@gmail.com",
+            message: `
+🚫 BLOCKED SIGNUP ATTEMPT
+
+👤 Name: ${name}
+📧 Email: ${email}
+🌐 IP: ${ip}
+🏢 ISP: ${isp}
+🏙️ City: ${city}
+🕒 Time: ${blockTime} (Nigeria Time)
+            `
+          });
+
+          alert("🚫 You are blocked from creating an account.");
+          return;
+        }
+
+        // 3. Check Firestore for existing accounts (max 2)
         const ipQuery = query(collection(db, "users"), where("ip", "==", ip));
-        const ispCityQuery = query(collection(db, "users"), where("ispCity", "==", `${isp}_${city}`));
+        const ispCityQuery = query(collection(db, "users"), where("ispCity", "==", ispCity));
 
         const ipSnapshot = await getDocs(ipQuery);
         const ispCitySnapshot = await getDocs(ispCityQuery);
@@ -119,22 +150,22 @@
           return;
         }
 
-        // 3. Create Auth User
+        // 4. Create Auth User
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // 4. Save to Firestore
+        // 5. Save to Firestore
         await setDoc(doc(db, "users", user.uid), {
           name,
           email,
           ip,
           isp,
           city,
-          ispCity: `${isp}_${city}`,
+          ispCity,
           createdAt: serverTimestamp()
         });
 
-        // 5. Send Email Notification
+        // 6. Send Email Notification
         const signupTime = new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
         await emailjs.send("service_cvvr3vn", "template_6xgms6a", {
           from_name: "Excellent_Develops System",
@@ -161,4 +192,4 @@
     };
   </script>
 </body>
-      </html>
+  </html>
