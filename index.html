@@ -1,75 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Excellent_Develops Login</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #4b0082, #800080);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
+    :root { --g1:#4b0082; --g2:#800080; --accent:#8a2be2; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; padding:0; font-family:Arial, sans-serif; color:#fff;
+      background: linear-gradient(135deg,var(--g1),var(--g2));
+      min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:16px;
     }
-
-    .login-container {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      width: 90%;
-      max-width: 350px;
+    .login-container{
+      background: rgba(255,255,255,0.06);
+      padding: 28px; border-radius: 16px; width:min(360px,92vw); text-align:center;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35); backdrop-filter: blur(6px);
     }
-
-    .login-container img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      object-fit: cover;
+    .login-container img{
+      width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:12px;
     }
-
-    .login-container input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 14px;
+    h2{margin:6px 0 4px}
+    .row{position:relative; margin:10px 0}
+    input{
+      width:100%; padding:12px; border:none; border-radius:10px;
+      background: rgba(255,255,255,0.2); color:#fff; font-size:14px; outline:none;
     }
-
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: #8a2be2;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
+    button.primary{
+      width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer;
+      background: var(--accent); color:#fff; font-weight:700; margin-top:8px;
     }
-
-    .links {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 8px;
-      color: #ccc;
+    .links{display:flex; justify-content:space-between; font-size:12px; margin-top:8px}
+    .links a{color:#ddd; text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    footer{
+      position:fixed; left:0; right:0; bottom:0; background:#fff; color:#000; text-align:center;
+      font-size:13px; padding:8px 10px; border-top:1px solid rgba(0,0,0,.08);
     }
-
-    .links a {
-      color: #ccc;
-      text-decoration: none;
-    }
+    /* modal */
+    .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:50}
+    .modal{width:min(420px,92vw); background:#fff; color:#111; border-radius:16px; padding:22px; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,.35)}
+    .actions{display:flex; gap:10px; justify-content:center; margin-top:12px}
+    .btn{padding:10px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:700}
+    .ghost{background:#f3f4f6}
+    .note{font-size:11px; color:#e6e6e6; margin-top:10px}
   </style>
 </head>
 <body>
@@ -78,55 +53,36 @@
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Sign In</h2>
 
-    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
-    <input type="password" id="loginPassword" placeholder="Enter your password">
-    <button onclick="login()">Sign In</button>
+    <div class="row">
+      <input type="text" id="loginEmailOrUsername" placeholder="Email or Username" autocomplete="username">
+    </div>
+    <div class="row">
+      <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+    </div>
+
+    <button class="primary" id="loginBtn">Sign In</button>
 
     <div class="links">
       <a href="forgot-password.html">Forgot Password?</a>
       <a href="create-account.html">Create new account</a>
     </div>
+    <div class="note">Secure access powered by Firebase • Security monitoring enabled</div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
+  <!-- Success Modal -->
+  <div class="backdrop" id="okBackdrop">
+    <div class="modal">
+      <h3 id="okTitle">Login successful ✅</h3>
+      <p id="okBody">Redirecting in <span id="count">3</span>s…</p>
+      <div class="actions">
+        <button class="btn ghost" id="okBtn">OK</button>
+      </div>
+    </div>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    window.login = async () => {
-      const input = document.getElementById("loginEmailOrUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
-
-      if (!input || !password) {
-        alert("Please enter both email/username and password.");
-        return;
-      }
-
-      let emailToLogin = input;
-      if (!input.includes("@")) {
-        emailToLogin = input + "@example.com"; // change if you use real domain
-      }
-
-      try {
-        await signInWithEmailAndPassword(auth, emailToLogin, password);
-        alert("✅ Login Successful!");
-        window.location.href = "dashboard.html"; // redirect after login
-      } catch (error) {
-        alert("❌ " + error.message);
-      }
-    };
-  </script>
-</body>
-</html>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init({ public
