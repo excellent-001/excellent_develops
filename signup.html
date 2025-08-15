@@ -1,77 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create Account</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #0066cc, #003366);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .signup-container {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #3399ff;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    a {
-      color: #ddd;
-      font-size: 13px;
-      display: block;
-      margin-top: 15px;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Account</title>
+<style>
+  body{font-family:Arial, sans-serif;background:linear-gradient(135deg,#0066cc,#003366);color:#fff;
+       min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .card{width:min(380px,92vw);background:rgba(255,255,255,.08);border:1px solid #ffffff22;border-radius:16px;
+        padding:22px;text-align:center;box-shadow:0 10px 28px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+  h2{margin:6px 0}
+  .row{margin:8px 0}
+  input{width:100%;padding:12px;border:0;border-radius:10px;background:rgba(255,255,255,.2);color:#fff}
+  button.primary{width:100%;padding:12px;border:0;border-radius:10px;cursor:pointer;background:#3399ff;color:#fff;font-weight:700;margin-top:8px}
+  .links{margin-top:10px;font-size:12px}
+  .links a{color:#eee;text-decoration:none}
+  .links a:hover{text-decoration:underline}
+  footer{position:fixed;left:0;right:0;bottom:0;background:#fff;color:#000;text-align:center;font-size:13px;padding:8px 10px;border-top:1px solid rgba(0,0,0,.08)}
+</style>
 </head>
 <body>
-
-  <div class="signup-container">
+  <div class="card">
+    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:8px">
     <h2>Create Account</h2>
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="email" id="email" placeholder="Email Address" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="registerUser()">Sign Up</button>
-    <a href="index.html">Already have an account? Login</a>
+    <div class="row"><input id="name" placeholder="Full name" autocomplete="name"></div>
+    <div class="row"><input id="email" type="email" placeholder="Email address" autocomplete="email"></div>
+    <div class="row"><input id="password" type="password" placeholder="Password" autocomplete="new-password"></div>
+    <button class="primary" id="signupBtn">Sign Up</button>
+    <div class="links"><a href="index.html">Already have an account? Login</a></div>
   </div>
 
+  <footer>© 2025 Excellent, Global, Conceptional. All rights reserved.</footer>
+
   <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script> emailjs.init({ publicKey:"h5LWzY8YUESb4sZbS" }); </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp, query, where, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -81,115 +49,59 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-
-    // Init Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    emailjs.init("h5LWzY8YUESb4sZbS");
 
-    // Register Function
-    window.registerUser = async () => {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    async function getGeo(){
+      try{ const r=await fetch("https://ipapi.co/json/"); const j=await r.json(); return { ip:j.ip, isp:j.org||"Unknown ISP", city:j.city||"Unknown City" }; }
+      catch{ return { ip:"", isp:"", city:"" }; }
+    }
 
-      if (!name || !email || !password) {
-        alert("Please fill in all fields.");
-        return;
-      }
+    document.getElementById('signupBtn').onclick = async ()=>{
+      const name = (document.getElementById('name').value||"").trim();
+      const email = (document.getElementById('email').value||"").trim();
+      const pass = document.getElementById('password').value;
+      if(!name || !email || !pass){ alert("Please fill in all fields."); return; }
 
-      try {
-        // 1. Get IP + ISP + City
-        const res = await fetch("https://ipapi.co/json/");
-        const geoData = await res.json();
-        const ip = geoData.ip;
-        const isp = geoData.org || "Unknown ISP";
-        const city = geoData.city || "Unknown City";
+      try{
+        const {ip, isp, city} = await getGeo();
         const ispCity = `${isp}_${city}`;
 
-        // 2. BLOCK LIST CHECK
-        const blockIpQuery = query(collection(db, "blockedUsers"), where("ip", "==", ip));
-        const blockIspCityQuery = query(collection(db, "blockedUsers"), where("ispCity", "==", ispCity));
-
-        const blockIpSnapshot = await getDocs(blockIpQuery);
-        const blockIspCitySnapshot = await getDocs(blockIspCityQuery);
-
-        if (!blockIpSnapshot.empty || !blockIspCitySnapshot.empty) {
-          // Send alert to admin
-          const blockTime = new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
-          await emailjs.send("service_cvvr3vn", "template_6xgms6a", {
-            from_name: "Excellent_Develops Security",
-            to_name: "Admin",
-            to_email: "quareebalabi22@gmail.com",
-            message: `
-🚫 BLOCKED SIGNUP ATTEMPT
-
-👤 Name: ${name}
-📧 Email: ${email}
-🌐 IP: ${ip}
-🏢 ISP: ${isp}
-🏙️ City: ${city}
-🕒 Time: ${blockTime} (Nigeria Time)
-            `
+        // Blocked list check
+        const q1 = query(collection(db,"blockedUsers"), where("ip","==",ip));
+        const q2 = query(collection(db,"blockedUsers"), where("ispCity","==",ispCity));
+        const s1 = await getDocs(q1); const s2 = await getDocs(q2);
+        if(!s1.empty || !s2.empty){
+          await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+            from_name:"Excellent_Develops Security",to_name:"Admin",to_email:"quareebalabi22@gmail.com",
+            message:`🚫 BLOCKED SIGNUP ATTEMPT\n\nName: ${name}\nEmail: ${email}\nIP: ${ip}\nISP: ${isp}\nCity: ${city}`
           });
-
           alert("🚫 You are blocked from creating an account.");
           return;
         }
 
-        // 3. Check Firestore for existing accounts (max 2)
-        const ipQuery = query(collection(db, "users"), where("ip", "==", ip));
-        const ispCityQuery = query(collection(db, "users"), where("ispCity", "==", ispCity));
+        // Throttle: max 2 signups per IP / ispCity
+        const ipQ = query(collection(db,"users"), where("ip","==",ip));
+        const icQ = query(collection(db,"users"), where("ispCity","==",ispCity));
+        const ipS = await getDocs(ipQ); const icS = await getDocs(icQ);
+        if(ipS.size >= 2 || icS.size >= 2){ alert("❌ Signup limit reached for this network/location."); return; }
 
-        const ipSnapshot = await getDocs(ipQuery);
-        const ispCitySnapshot = await getDocs(ispCityQuery);
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: name });
 
-        if (ipSnapshot.size >= 2 || ispCitySnapshot.size >= 2) {
-          alert("❌ Signup limit reached for this network/location.");
-          return;
-        }
-
-        // 4. Create Auth User
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // 5. Save to Firestore
-        await setDoc(doc(db, "users", user.uid), {
-          name,
-          email,
-          ip,
-          isp,
-          city,
-          ispCity,
-          createdAt: serverTimestamp()
+        await setDoc(doc(db,"users", cred.user.uid), {
+          name, email, ip, isp, city, ispCity, createdAt: serverTimestamp()
         });
 
-        // 6. Send Email Notification
-        const signupTime = new Date().toLocaleString("en-NG", { timeZone: "Africa/Lagos" });
-        await emailjs.send("service_cvvr3vn", "template_6xgms6a", {
-          from_name: "Excellent_Develops System",
-          to_name: "Admin",
-          to_email: "quareebalabi22@gmail.com",
-          message: `
-📋 New User Signup Report
-
-👤 Name: ${name}
-📧 Email: ${email}
-🌐 IP: ${ip}
-🏢 ISP: ${isp}
-🏙️ City: ${city}
-🕒 Signup Time: ${signupTime} (Nigeria Time)
-          `
+        await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+          from_name:"Excellent_Develops System",to_name:"Admin",to_email:"quareebalabi22@gmail.com",
+          message:`📋 New User Signup\nName: ${name}\nEmail: ${email}\nIP: ${ip}\nISP: ${isp}\nCity: ${city}`
         });
 
-        alert("✅ Account created successfully!");
-        window.location.href = "index.html";
-
-      } catch (error) {
-        alert("❌ " + error.message);
-      }
+        location.href = "index.html?msg=Account%20created%20successfully%20%E2%9C%85";
+      }catch(e){ alert("❌ " + (e?.message||e)); }
     };
   </script>
 </body>
-  </html>
+</html>
