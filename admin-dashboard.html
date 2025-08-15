@@ -1,3 +1,31 @@
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+  // same allow-list as index.html
+  const ADMIN_EMAILS = ["quareebalabi22@gmail.com"];
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, async (user)=>{
+    const ok = !!user && ADMIN_EMAILS.includes((user.email||"").toLowerCase());
+    if (!ok) {
+      try { await signOut(auth); } catch {}
+      // bounce to admin entry
+      location.replace("index.html?admin=1");
+    }
+  });
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
