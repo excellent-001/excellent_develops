@@ -1,184 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Coming Soon • Excellent_Develops</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Project Feedback — Excellent Developers</title>
 <style>
-  :root{--g1:#4b0082;--g2:#800080;--accent:#8a2be2;--ok:#16a34a}
-  *{box-sizing:border-box}
-  body{
-    margin:0;font-family:system-ui,Segoe UI,Arial;min-height:100vh;color:#fff;
-    background: radial-gradient(1200px 900px at 20% 10%, rgba(255,255,255,.12) 0%, transparent 60%),
-                linear-gradient(135deg,var(--g1),var(--g2));
-    display:flex;flex-direction:column;
+  :root {
+    --accent1: #3b82f6;
+    --accent2: #10b981;
+    --accent3: #f59e0b;
+    --accent4: #8b5cf6;
+    --bg: #f3f4f6;
+    --text: #111827;
+    --card: #ffffffdd;
   }
-  .top{
-    display:flex;justify-content:space-between;align-items:center;gap:10px;
-    padding:14px 16px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.15);
-    position:sticky;top:0;z-index:10;backdrop-filter:blur(6px)
-  }
-  .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
-  .ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
-  .danger{background:#ef4444;color:#fff}
-  .container{width:min(900px,94vw);margin:22px auto 110px;display:grid;gap:16px}
-  .card{
-    background:#fff;color:#0f172a;border-radius:18px;padding:20px;box-shadow:0 12px 32px rgba(0,0,0,.28);
-    animation:pop .5s ease-out both
-  }
-  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
-  .center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
-  .big{font-size:28px;font-weight:900;margin:0}
-  .muted{color:#475569}
-  form textarea, form input{
-    width:100%;padding:12px;border-radius:12px;border:1px solid #e5e7eb;font-size:14px
-  }
-  form textarea{min-height:110px;resize:vertical}
-  form .row{display:grid;gap:10px}
-  .submit{background:var(--accent);color:#fff}
-  footer{
-    margin-top:auto;background:#111827;color:#e5e7eb;padding:16px 12px;border-top:1px solid rgba(255,255,255,.12);
-    position:fixed; left:0; right:0; bottom:0;  /* fixed visible footer */
-  }
-  .foot-wrap{width:min(900px,94vw);margin:0 auto;font-size:14px}
-  .icons{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
-  .icon{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.2);text-decoration:none;color:#e5e7eb}
-  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50}
-  .modal{width:min(420px,92vw);background:#fff;color:#111;border-radius:18px;padding:22px;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.35)}
-  .check{width:58px;height:58px;margin:4px auto 10px;border-radius:50%;border:3px solid #22c55e;display:grid;place-items:center}
-  .check::after{content:"✔";font-size:28px;color:#22c55e;line-height:1;position:relative;top:-1px}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;}
+  body{min-height:100vh;background:linear-gradient(135deg,#f3f4f6,#e5e7eb);color:var(--text);display:flex;flex-direction:column;}
+  header{padding:20px;text-align:center;font-size:22px;font-weight:bold;}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;}
+  .intro{max-width:800px;text-align:center;margin-bottom:30px;}
+  .form-card{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:30px;border-radius:20px;max-width:500px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.1);}
+  .form-card h2{color:white;text-align:center;margin-bottom:20px;font-size:24px;}
+  .form-card input, .form-card textarea{width:100%;padding:12px;border-radius:10px;border:none;margin-bottom:15px;font-size:16px;}
+  .form-card textarea{resize:none;min-height:100px;}
+  .form-card button{width:100%;padding:12px;background:#fff;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:16px;}
+  .success-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:var(--accent2);color:white;padding:30px 40px;border-radius:20px;text-align:center;font-size:20px;font-weight:bold;z-index:1000;transition:0.3s;}
+  .success-popup.show{transform:translate(-50%,-50%) scale(1);}
+  .projects-header{font-size:28px;margin-bottom:20px;text-align:center;}
 </style>
 </head>
 <body>
-  <div class="top">
-    <a class="btn ghost" href="welcome.html">← Home</a>
-    <button class="btn danger" id="logoutBtn">Sign Out</button>
+<header>Excellent Developers — Feedback</header>
+<main>
+  <div class="intro" id="projectIntro">
+    <!-- Project intro will appear here -->
   </div>
-
-  <div class="container">
-    <div class="card center">
-      <h1 class="big" id="projectTitle">🚧 Coming Soon</h1>
-      <p class="muted" id="projectSubtitle">We’re crafting something excellent. Stay tuned!</p>
-    </div>
-
-    <div class="card">
-      <h3 style="margin:0 0 8px">Send Feedback</h3>
-      <form id="feedbackForm">
-        <div class="row">
-          <input id="name" type="text" placeholder="Your name (optional)"/>
-          <input id="email" type="email" placeholder="Your email"/>
-          <textarea id="message" placeholder="Your message"></textarea>
-        </div>
-        <button class="btn submit" type="submit" id="sendBtn">Submit</button>
-      </form>
-      <div id="err" style="color:#dc2626;margin-top:8px;min-height:16px"></div>
-    </div>
+  <div class="form-card">
+    <h2>Share your Feedback</h2>
+    <input type="text" id="fbName" placeholder="Your Name" required/>
+    <input type="email" id="fbEmail" placeholder="Your Email" required/>
+    <textarea id="fbMessage" placeholder="Your Feedback" required></textarea>
+    <button id="fbSubmit">Send Feedback</button>
   </div>
+</main>
 
-  <footer>
-    <div class="foot-wrap">
-      <div style="font-weight:800;margin-bottom:6px">Contact Us</div>
-      <div class="icons">
-        <a class="icon" href="mailto:quareebalabi22@gmail.com" target="_blank">📧 Gmail</a>
-        <a class="icon" href="https://wa.me/2349046463436" target="_blank">🟢 WhatsApp</a>
-        <a class="icon" href="https://twitter.com/TheOlodo_Nation" target="_blank">𝕏 Twitter</a>
-        <a class="icon" href="https://www.facebook.com/EminiExcellent" target="_blank">F Facebook</a>
-        <a class="icon" href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank">📷 Instagram</a>
-        <a class="icon" href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">in LinkedIn</a>
-        <span class="icon">📞 +2349046463436</span>
-      </div>
-      <div>© Powered by Excellent Global Concepts — All Rights Reserved, 2025</div>
-    </div>
-  </footer>
+<div class="success-popup" id="successPopup">✅ Your feedback has been sent!</div>
 
-  <!-- Success Modal -->
-  <div class="backdrop" id="okBackdrop">
-    <div class="modal">
-      <div class="check"></div>
-      <h3 style="margin:6px 0 0">Thank you ✅</h3>
-      <p>Your feedback was sent successfully. Redirecting in <span id="count">10</span>s…</p>
-      <div style="display:flex;gap:10px;justify-content:center">
-        <a class="btn ghost" href="welcome.html" id="backHome">Back to Home</a>
-        <button class="btn danger" id="modalLogout">Sign Out</button>
-      </div>
-    </div>
-  </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+  authDomain: "excellent-d056e.firebaseapp.com",
+  projectId: "excellent-d056e",
+  storageBucket: "excellent-d056e.firebasestorage.app",
+  messagingSenderId: "629984941607",
+  appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+  measurementId: "G-G3RCTDSY27"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
+// Get project from URL
+const params = new URLSearchParams(window.location.search);
+const project = params.get('project') || 'Excellent Global Concept';
 
-    // Auth guard
-    onAuthStateChanged(auth,(u)=>{ if(!u) window.location.href="login.html"; });
+const projectIntro = document.getElementById('projectIntro');
+const accentColors = {
+  "Excellent Global Concept":"#3b82f6",
+  "Pematech Company":"#10b981",
+  "Social Intelligence Hub":"#f59e0b",
+  "LMS Platform":"#8b5cf6"
+};
+const projectDescriptions = {
+  "Excellent Global Concept":"Our main brand delivering excellence globally.",
+  "Pematech Company":"Innovative tech and engineering solutions.",
+  "Social Intelligence Hub":"Connecting social intelligence to real world problems.",
+  "LMS Platform":"Educational platform providing high-quality learning."
+};
 
-    // Logout buttons
-    const logoutAll = async ()=>{ try{ await signOut(auth); }catch(e){} window.location.href="login.html"; };
-    document.getElementById("logoutBtn").onclick = logoutAll;
-    document.getElementById("modalLogout").onclick = logoutAll;
+// Set intro dynamically
+projectIntro.innerHTML = `
+  <h3>${project}</h3>
+  <p>${projectDescriptions[project] || "Exciting project under development!"}</p>
+  <p>We're working hard to bring this project to life. Please share your feedback below to help us improve it!</p>
+`;
 
-    // Project title/subtitle from storage
-    const title = localStorage.getItem('projectTitle');
-    const subtitle = localStorage.getItem('projectSubtitle');
-    if (title) document.getElementById("projectTitle").textContent = `🚧 ${title}`;
-    if (subtitle) document.getElementById("projectSubtitle").textContent = subtitle;
+// Set gradient dynamically
+const formCard = document.querySelector('.form-card');
+formCard.style.background = `linear-gradient(135deg, ${accentColors[project] || '#3b82f6'}, #ffffff33)`;
 
-    // Feedback form
-    const form = document.getElementById("feedbackForm");
-    const okBackdrop = document.getElementById("okBackdrop");
-    const countEl = document.getElementById("count");
+// Elements
+const fbName = document.getElementById('fbName');
+const fbEmail = document.getElementById('fbEmail');
+const fbMessage = document.getElementById('fbMessage');
+const fbSubmit = document.getElementById('fbSubmit');
+const successPopup = document.getElementById('successPopup');
 
-    form.onsubmit = async (e)=>{
-      e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const email= document.getElementById("email").value.trim();
-      const msg  = document.getElementById("message").value.trim();
-      if(!email || !msg){ document.getElementById("err").textContent="Email and message are required."; return; }
-      document.getElementById("sendBtn").disabled = true;
-      document.getElementById("sendBtn").textContent = "Submitting…";
-      document.getElementById("err").textContent = "";
-      try{
-        await addDoc(collection(db,"feedback"),{
-          name,email,message:msg, project:title||'N/A', createdAt: serverTimestamp()
-        });
-        // Show success modal with 10s auto redirect
-        okBackdrop.style.display = 'flex';
-        let n = 10; countEl.textContent = n;
-        const timer = setInterval(()=>{ n--; countEl.textContent = n; if(n<=0){ clearInterval(timer); window.location.href='welcome.html'; }},1000);
-        document.getElementById('backHome').onclick = ()=>{ window.location.href='welcome.html'; };
-      }catch(e){
-        console.error(e);
-        document.getElementById("err").textContent = "Could not send. Try again.";
-      }finally{
-        document.getElementById("sendBtn").disabled = false;
-        document.getElementById("sendBtn").textContent = "Submit";
-        form.reset();
-      }
-    };
+// Function to get IP/ISP/Location
+async function getUserInfo(){
+  try{
+    const res = await fetch('https://ipapi.co/json/');
+    return await res.json();
+  }catch{return {};}
+}
 
-    // 60-min auto sign-out
-    let idleTimer;
-    const resetIdle = ()=>{
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(async ()=>{
-        try{ await signOut(auth); }catch(e){}
-        window.location.href = 'login.html';
-      }, 60*60*1000);
-    };
-    ['click','mousemove','keydown','scroll','touchstart'].forEach(evt=>window.addEventListener(evt, resetIdle, {passive:true}));
-    resetIdle();
-  </script>
+// Submit feedback
+fbSubmit.onclick = async ()=>{
+  const name = fbName.value.trim();
+  const email = fbEmail.value.trim();
+  const message = fbMessage.value.trim();
+  if(!name || !email || !message){ alert("Please fill all fields"); return; }
+
+  fbSubmit.disabled = true;
+  const info = await getUserInfo();
+  try{
+    await addDoc(collection(db,"feedbacks"),{
+      project,name,email,message,ip:info.ip||'',city:info.city||'',region:info.region||'',country:info.country_name||'',isp:info.org||'',createdAt:serverTimestamp()
+    });
+
+    // Optional: Send email via MailJS here (configure your MailJS)
+    // await sendMailJS({project,name,email,message});
+
+    successPopup.classList.add('show');
+    setTimeout(()=>successPopup.classList.remove('show'),2500);
+
+    fbName.value=''; fbEmail.value=''; fbMessage.value='';
+  }catch(e){
+    alert("Error submitting feedback: "+e);
+  }
+  fbSubmit.disabled = false;
+};
+</script>
 </body>
-          </html>
+</html>
