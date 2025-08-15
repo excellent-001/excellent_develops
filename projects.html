@@ -1,129 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projects</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Projects • Excellent_Develops</title>
 <style>
-body {
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding-top: 20px;
-}
-h1 {
-    color: limegreen;
-    text-shadow: 0 0 10px limegreen;
-}
-.card {
-    border: 2px solid limegreen;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 20px 0;
-    box-shadow: 0 0 15px limegreen;
-}
-button {
-    background: limegreen;
-    border: none;
-    padding: 8px 16px;
-    color: black;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-}
-.logout {
-    background: red;
-    float: right;
-}
-a {
-    color: limegreen;
-    text-decoration: none;
-}
-footer{
-  position:fixed; left:0; right:0; bottom:0; background:#fff; color:#000;
-  text-align:center; font-size:13px; padding:8px 10px;
-}
+  :root{ --g1:#1d4ed8; --g2:#0f172a }
+  *{box-sizing:border-box}
+  body{ margin:0; font-family:Arial, sans-serif; color:#fff; background:linear-gradient(135deg,var(--g1),var(--g2)); min-height:100vh; display:flex; flex-direction:column }
+  header{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px}
+  .brand{display:flex;gap:10px;align-items:center}
+  .brand img{width:40px;height:40px;border-radius:50%}
+  .row{display:flex;gap:10px;align-items:center}
+  a.btn,button.btn{padding:10px 14px;border-radius:10px;border:0;text-decoration:none;font-weight:700;color:#fff;background:#2563eb}
+  .ghost{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2)}
+  main{padding:18px; max-width:1100px; width:100%; margin:0 auto; display:grid; gap:16px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px}
+  .card{background:rgba(255,255,255,.08); border:1px solid #ffffff22; border-radius:14px; padding:14px; text-align:center; cursor:pointer}
+  .card:hover{transform:translateY(-2px); transition:.15s}
+  footer{margin-top:auto;background:#fff;color:#000;text-align:center;font-size:13px;padding:8px 10px;border-top:1px solid rgba(0,0,0,.08)}
+  .adminLink{display:none}
 </style>
 </head>
 <body>
-<div class="container">
-    <button class="logout" id="logoutBtn">Sign Out</button>
-    <h1>🚀 Projects</h1>
-
-    <div class="card">
-        <h2>1. Education Website</h2>
-        <p>Creating an engaging platform for learning and academic growth.</p>
-        <button onclick="goToProject('Education Website')">View Project</button>
+  <header>
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+      <strong>Projects</strong>
     </div>
-
-    <div class="card">
-        <h2>2. Social Intelligence Hub</h2>
-        <p>A social website connecting innovators and problem-solvers globally.</p>
-        <button onclick="goToProject('Social Intelligence Hub')">View Project</button>
+    <div class="row">
+      <a class="btn ghost" href="welcome.html">Back</a>
+      <button id="logoutBtn" class="btn ghost">Logout</button>
+      <a id="adminBtn" class="btn ghost adminLink" href="dashboard.html">Admin</a>
     </div>
+  </header>
 
-    <div class="card">
-        <h2>3. Business Website: Pematech Company</h2>
-        <p>Breaking limits and fostering excellence in technology solutions.</p>
-        <button onclick="goToProject('Pematech Company')">View Project</button>
+  <main>
+    <div class="grid" id="grid">
+      <!-- Every card routes to coming-soon.html -->
+      <div class="card" data-go="coming-soon.html"><h3>PEMATECH</h3><p>Click to preview</p></div>
+      <div class="card" data-go="coming-soon.html"><h3>Portfolio v2</h3><p>Click to preview</p></div>
+      <div class="card" data-go="coming-soon.html"><h3>Client CRM</h3><p>Click to preview</p></div>
+      <div class="card" data-go="coming-soon.html"><h3>Analytics</h3><p>Click to preview</p></div>
     </div>
+  </main>
 
-    <div class="card">
-        <h2>4. Excellent Global Concepts</h2>
-        <p>A global online hub for news, updates, and opportunities.</p>
-        <button onclick="goToProject('Excellent Global Concepts')">View Project</button>
-    </div>
+  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
 
-    <a href="welcome.html">← Back to Home</a>
-</div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-<footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    // Protect page
+    onAuthStateChanged(auth, (u)=>{ if(!u){ window.location.href='index.html'; } });
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-  authDomain: "excellent-d056e.firebaseapp.com",
-  projectId: "excellent-d056e",
-  storageBucket: "excellent-d056e.firebasestorage.app",
-  messagingSenderId: "629984941607",
-  appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-  measurementId: "G-G3RCTDSY27"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+    // Admin button visibility
+    if(localStorage.getItem('isAdmin') === "1"){
+      document.getElementById('adminBtn').style.display = 'inline-block';
+    }
 
-onAuthStateChanged(auth, user => { if (!user) window.location.href = "login.html"; });
+    // Logout
+    document.getElementById('logoutBtn').onclick = async ()=>{ try{await signOut(auth);}catch{} window.location.href='index.html'; };
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  try{ await signOut(auth); window.location.href = "login.html"; }catch(e){ alert(e.message); }
-});
-
-window.goToProject = function(name) {
-  // Pass title/subtitle into Coming Soon
-  localStorage.setItem('projectTitle', name);
-  localStorage.setItem('projectSubtitle', 'This project is coming soon…');
-  window.location.href = "coming-soon.html";
-};
-
-// 60-min auto sign-out
-let idleTimer;
-const resetIdle = ()=>{
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(async ()=>{
-    try{ await signOut(auth); }catch(e){}
-    window.location.href = 'login.html';
-  }, 60*60*1000);
-};
-['click','mousemove','keydown','scroll','touchstart'].forEach(evt=>window.addEventListener(evt, resetIdle, {passive:true}));
-resetIdle();
-</script>
+    // Route all cards to coming-soon.html
+    document.getElementById('grid').addEventListener('click', (e)=>{
+      const card = e.target.closest('.card'); if(!card) return;
+      window.location.href = card.dataset.go || 'coming-soon.html';
+    });
+  </script>
 </body>
 </html>
