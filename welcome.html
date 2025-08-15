@@ -1,19 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome • Excellent_Develops</title>
+<style>
+  :root{ --g1:#0ea5e9; --g2:#1e3a8a; --blue:#2563eb }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:Arial, sans-serif; color:#fff;
+    background: linear-gradient(135deg,var(--g1),var(--g2));
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px;
+  }
+  .card{width:min(520px,94vw); background:rgba(255,255,255,.08); border:1px solid #ffffff22; border-radius:16px; padding:24px; text-align:center; box-shadow:0 10px 28px rgba(0,0,0,.35)}
+  .avatar{width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.6);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  h1{margin:12px 0 4px}
+  p{margin:0 0 14px}
+  .row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+  a.btn, button.btn{padding:12px 16px; border-radius:10px; text-decoration:none; border:0; cursor:pointer; font-weight:700}
+  a.btn.primary, button.btn.primary{background:var(--blue); color:#fff}
+  button.btn.ghost{background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.2)}
+  .adminLink{display:none}
+  footer{position:fixed;left:0;right:0;bottom:0;background:#fff;color:#000;text-align:center;font-size:13px;padding:8px 10px;border-top:1px solid rgba(0,0,0,.08)}
+</style>
 </head>
 <body>
-  <h1>Welcome to Your Account</h1>
-  <a href="profile.html">My Profile</a>
-  <a id="adminLink" href="dashboard.html" style="display:none;">Admin Panel</a>
-  <button onclick="logout()">Logout</button>
+  <div class="card">
+    <img class="avatar" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/Screenshot_20250811-105613.jpg" alt="Profile">
+    <h1>Welcome, <span id="firstName">Guest</span> 👋</h1>
+    <p>Glad to have you here.</p>
+    <div class="row" style="margin-top:8px">
+      <a class="btn primary" href="projects.html">View my projects</a>
+      <button id="logoutBtn" class="btn ghost">Logout</button>
+      <a id="adminBtn" class="btn ghost adminLink" href="dashboard.html">Admin</a>
+    </div>
+  </div>
+
+  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
 
   <script type="module">
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -24,25 +50,24 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-      } else {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists() && userDoc.data().role === "admin") {
-          document.getElementById("adminLink").style.display = "inline-block";
-        }
-      }
-    });
+    // Fill name
+    document.getElementById('firstName').textContent = localStorage.getItem('firstName') || 'User';
 
-    window.logout = async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
+    // Show admin button only for admins
+    const isAdmin = localStorage.getItem('isAdmin') === "1";
+    if(isAdmin){ document.getElementById('adminBtn').style.display = 'inline-block'; }
+
+    // Protect page
+    onAuthStateChanged(auth, (u)=>{ if(!u){ window.location.href = 'index.html'; } });
+
+    // Logout
+    document.getElementById('logoutBtn').onclick = async ()=>{
+      try{ await signOut(auth); }catch{}
+      localStorage.removeItem('isAdmin');
+      window.location.href = 'index.html';
     };
   </script>
 </body>
