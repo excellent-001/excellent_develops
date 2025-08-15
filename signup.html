@@ -1,305 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Excellent_Develops — Sign In</title>
-  <style>
-    :root{
-      --ink:#fff; --muted:#cbd5e1; --accent:#4f46e5; --bg1:#0b1020; --bg2:#131a35; --card:#1a2244;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      color:var(--ink);
-      background: radial-gradient(1000px 500px at 20% -10%, #1e3a8a40, transparent 70%),
-                  radial-gradient(800px 600px at 120% 120%, #7c3aed30, transparent 60%),
-                  linear-gradient(135deg, var(--bg1), var(--bg2));
-      padding:24px;
-    }
-    .card{
-      width:100%; max-width:380px; background:linear-gradient(180deg,#1a2042aa,#101738aa);
-      border:1px solid #ffffff20; border-radius:16px; padding:22px;
-      box-shadow:0 20px 60px #0008; backdrop-filter: blur(8px);
-    }
-    .logo{
-      width:84px; height:84px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 10px;
-      border:1px solid #ffffff30;
-    }
-    h1{margin:6px 0 4px; font-size:20px; text-align:center}
-    p.sub{margin:0 0 16px; font-size:13px; color:var(--muted); text-align:center}
-    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
-    input{
-      width:100%; padding:12px 12px; border-radius:10px; border:1px solid #ffffff25;
-      background:#0d1330; color:var(--ink); outline:none;
-    }
-    .row{display:flex; justify-content:space-between; gap:10px; margin-top:10px}
-    .btn{
-      flex:1; padding:12px; border-radius:10px; border:1px solid #0000; cursor:pointer; font-weight:600;
-    }
-    .btn.primary{ background:var(--accent); color:#fff }
-    .btn.ghost{ background:#ffffff14; color:#fff; border:1px solid #ffffff22 }
-    .links{display:flex; justify-content:space-between; margin-top:12px; font-size:12px}
-    .links a{color:var(--muted); text-decoration:none}
-    .links a:hover{text-decoration:underline}
-    .adminTag{display:none; text-align:center; margin-top:8px; font-size:12px; color:#a5b4fc}
-    .error{margin-top:10px; color:#fecaca; font-size:12px; min-height:16px}
-    .hint{margin-top:8px; font-size:11px; color:#94a3b8; text-align:center}
-    .hide{display:none}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops"/>
-    <h1 id="title">Sign in</h1>
-    <p id="subtitle" class="sub">Welcome back to Excellent_Develops</p>
-
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="you@example.com" autocomplete="email"/>
-
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
-
-    <div class="row" style="margin-top:16px">
-      <button id="loginBtn" class="btn primary">Sign In</button>
-      <button id="adminBtn" class="btn ghost hide" title="Admin mode">Login as Admin</button>
-    </div>
-
-    <div class="links">
-      <a href="forgot-password.html">Forgot password?</a>
-      <a href="create-account.html">Create account</a>
-    </div>
-
-    <div id="adminTag" class="adminTag">Admin mode enabled</div>
-    <div id="error" class="error"></div>
-    <div id="hint" class="hint"></div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-    // ===== Admin allow-list =====
-    const ADMIN_EMAILS = ["quareebalabi22@gmail.com"]; // add more later if needed
-
-    // ===== Firebase config (yours) =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // ===== DOM =====
-    const q = (s)=>document.querySelector(s);
-    const title = q('#title');
-    const subtitle = q('#subtitle');
-    const email = q('#email');
-    const password = q('#password');
-    const loginBtn = q('#loginBtn');
-    const adminBtn = q('#adminBtn');
-    const adminTag = q('#adminTag');
-    const errorEl = q('#error');
-    const hintEl = q('#hint');
-
-    // ===== Utils =====
-    const params = new URLSearchParams(location.search);
-    const hasAdminParam = params.get('admin') === '1';
-
-    let adminMode = false; // when true, attempt is admin-only
-    if (hasAdminParam) {
-      adminMode = true;
-      title.textContent = "Admin Sign in";
-      subtitle.textContent = "Restricted area — administrators only";
-      adminTag.style.display = "block";
-      adminBtn.classList.add('hide'); // already in admin mode, no need to show toggle
-      hintEl.textContent = "Tip: bookmark this URL with ?admin=1 to access admin login quickly.";
-    } else {
-      // show a small toggle button only to YOU when you know to click it:
-      adminBtn.classList.remove('hide'); // still hidden from URL unless you click it
-      adminBtn.onclick = ()=>{
-        // soft toggle to admin mode (no URL param)
-        adminMode = true;
-        title.textContent = "Admin Sign in";
-        subtitle.textContent = "Restricted area — administrators only";
-        adminTag.style.display = "block";
-        adminBtn.classList.add('hide');
-        hintEl.textContent = "Admin mode enabled on this session.";
-      };
-    }
-
-    // If already signed in, route them correctly
-    onAuthStateChanged(auth, (user)=>{
-      if (!user) return;
-      const isAdmin = ADMIN_EMAILS.includes((user.email||"").toLowerCase());
-      if (isAdmin && (adminMode || hasAdminParam)) {
-        location.replace("admin-dashboars.html");
-      } else {
-        location.replace("welcome.html");
-      }
-    });
-
-    loginBtn.onclick = async ()=>{
-      errorEl.textContent = "";
-      const e = email.value.trim();
-      const p = password.value;
-      if (!e || !p) { errorEl.textContent = "Please enter email and password."; return; }
-
-      try {
-        const cred = await signInWithEmailAndPassword(auth, e, p);
-        const isAdmin = ADMIN_EMAILS.includes((cred.user.email||"").toLowerCase());
-
-        if (adminMode || hasAdminParam) {
-          if (!isAdmin) {
-            errorEl.textContent = "You are not authorized for admin access.";
-            return;
-          }
-          location.replace("admin-dashboars.html");
-          return;
-        }
-
-        // normal user flow
-        location.replace("welcome.html");
-      } catch (err) {
-        errorEl.textContent = err?.message || String(err);
-      }
-    };
-  </script>
-</body>
-  </html><!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Excellent Developers</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>User Signup</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1b1f3b, #4e73df);
-      color: white;
+      background: #f4f6f8;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-    h1 { margin-bottom: 20px; }
-    form {
-      background: rgba(0,0,0,0.4);
-      padding: 20px;
+    .signup-container {
+      background: white;
+      padding: 25px;
       border-radius: 10px;
-      width: 300px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
     input {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
-      border: none;
       border-radius: 5px;
+      border: 1px solid #ccc;
     }
     button {
       width: 100%;
       padding: 10px;
-      background: #4e73df;
-      border: none;
+      background: #4CAF50;
       color: white;
-      font-size: 16px;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 16px;
     }
-    button:hover { background: #2e59d9; }
-    .hidden { display: none; }
+    button:hover {
+      background: #45a049;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .link {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .link a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Welcome Back</h1>
+<div class="signup-container">
+  <h2>Create Account</h2>
+  <input type="text" id="name" placeholder="Full Name" required>
+  <input type="email" id="email" placeholder="Email Address" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <button onclick="signup()">Sign Up</button>
+  <div id="error-message" class="error"></div>
+  <div class="link">
+    Already have an account? <a href="login.html">Login</a>
+  </div>
+</div>
 
-  <!-- Normal User Login -->
-  <form id="user-login">
-    <h2>User Login</h2>
-    <input type="email" id="user-email" placeholder="Email" required>
-    <input type="password" id="user-password" placeholder="Password" required>
-    <button type="submit">Login as User</button>
-  </form>
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-  <!-- Admin Login (Hidden by Default) -->
-  <form id="admin-login" class="hidden">
-    <h2>Admin Login</h2>
-    <input type="email" id="admin-email" placeholder="Admin Email" required>
-    <input type="password" id="admin-password" placeholder="Password" required>
-    <button type="submit">Login as Admin</button>
-  </form>
+<script>
+  // Your Firebase Config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-  <script type="module">
-    // ===== Firebase Config =====
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-    const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_FIREBASE_PROJECT.firebaseapp.com",
-      projectId: "YOUR_FIREBASE_PROJECT_ID",
-    };
+  function signup() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorMessage = document.getElementById("error-message");
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // ===== Admin Allowed Emails =====
-    const allowedAdmins = [
-      "youremail@example.com",
-      "anotheradmin@example.com"
-    ];
-
-    // ===== Show Admin Login if URL Parameter Exists =====
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === 'true') {
-      document.getElementById('admin-login').classList.remove('hidden');
+    if (!name || !email || !password) {
+      errorMessage.textContent = "Please fill in all fields.";
+      return;
     }
 
-    // ===== User Login =====
-    document.getElementById('user-login').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('user-email').value;
-      const password = document.getElementById('user-password').value;
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        return userCredential.user.updateProfile({ displayName: name });
+      })
+      .then(() => {
+        window.location.href = "welcome.html"; // Redirect after signup
+      })
+      .catch(error => {
+        errorMessage.textContent = error.message;
+      });
+  }
+</script>
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert("User logged in successfully!");
-          window.location.href = "user-dashboard.html";
-        })
-        .catch((error) => {
-          alert("User login failed: " + error.message);
-        });
-    });
-
-    // ===== Admin Login =====
-    document.getElementById('admin-login').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('admin-email').value;
-      const password = document.getElementById('admin-password').value;
-
-      if (!allowedAdmins.includes(email)) {
-        alert("You are not authorized as an admin.");
-        return;
-      }
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert("Admin logged in successfully!");
-          window.location.href = "admin-dashboard.html";
-        })
-        .catch((error) => {
-          alert("Admin login failed: " + error.message);
-        });
-    });
-  </script>
 </body>
-  </html>
+</html>
