@@ -1,55 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Projects • Excellent_Develops</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Projects — Excellent_Develops</title>
 <style>
-  :root{ --g1:#1d4ed8; --g2:#0f172a }
+  :root{
+    --ink:#e8eef7; --muted:#a7b3c7;
+    --card:#0b1120; --glass:#0b132480;
+    --ring:#ffffff33; --ok:#10b981; --accent:#60a5fa;
+  }
   *{box-sizing:border-box}
-  body{ margin:0; font-family:Arial, sans-serif; color:#fff; background:linear-gradient(135deg,var(--g1),var(--g2)); min-height:100vh; display:flex; flex-direction:column }
-  header{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px}
-  .brand{display:flex;gap:10px;align-items:center}
-  .brand img{width:40px;height:40px;border-radius:50%}
-  .row{display:flex;gap:10px;align-items:center}
-  a.btn,button.btn{padding:10px 14px;border-radius:10px;border:0;text-decoration:none;font-weight:700;color:#fff;background:#2563eb}
-  .ghost{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2)}
-  main{padding:18px; max-width:1100px; width:100%; margin:0 auto; display:grid; gap:16px}
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px}
-  .card{background:rgba(255,255,255,.08); border:1px solid #ffffff22; border-radius:14px; padding:14px; text-align:center; cursor:pointer}
-  .card:hover{transform:translateY(-2px); transition:.15s}
-  footer{margin-top:auto;background:#fff;color:#000;text-align:center;font-size:13px;padding:8px 10px;border-top:1px solid rgba(0,0,0,.08)}
-  .adminLink{display:none}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+    color:var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #0ea5e9 0%, transparent 60%),
+      radial-gradient(1000px 500px at 110% 10%, #a855f7 0%, transparent 60%),
+      linear-gradient(135deg, #0f172a, #0b1020 55%, #0a0f1a);
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; border-bottom:1px solid #00000040;
+    background:linear-gradient(180deg,#00000060,#00000020);
+    backdrop-filter: blur(8px);
+  }
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand img{width:36px; height:36px; border-radius:8px}
+  .pill{padding:4px 10px; border-radius:999px; background:#ffffff12; border:1px solid var(--ring); font-size:12px}
+  .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  main{max-width:1200px; margin:0 auto; padding:18px}
+  .grid{display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(260px,1fr))}
+  .card{
+    position:relative; overflow:hidden;
+    border:1px solid #ffffff22; border-radius:16px;
+    background:var(--card); box-shadow: 0 10px 30px #00000055;
+    min-height:180px;
+  }
+  .card::after{
+    content:""; position:absolute; inset:0; pointer-events:none; border-radius:16px;
+    box-shadow: inset 0 0 0 1px #ffffff10;
+  }
+  .pad{padding:16px}
+  h2,h3{margin:0 0 8px}
+  p{margin:0}
+  .muted{color:var(--muted)}
+  .btn{border:1px solid #ffffff22; background:#ffffff15; color:var(--ink); padding:10px 12px; border-radius:10px; cursor:pointer}
+  .btn.primary{background:var(--accent); border-color:transparent}
+  .btn.ghost{background:#ffffff12}
+  .badgelike{display:inline-flex; gap:6px; align-items:center; font-size:12px; padding:4px 8px; border-radius:999px; background:#ffffff14; border:1px solid #ffffff20}
+  .footer{padding:24px 18px; text-align:center; color:var(--muted); font-size:12px}
+
+  /* Project gradients (no white backgrounds) */
+  .p1{background:
+      radial-gradient(120% 120% at 100% 0%, #22d3ee40 0%, #0000 60%),
+      radial-gradient(120% 120% at 0% 100%, #14b8a640 0%, #0000 55%),
+      linear-gradient(135deg,#0b1222,#0d1b2a 55%,#0b1120);}
+  .p2{background:
+      radial-gradient(100% 120% at 0% 0%, #93c5fd33 0%, #0000 60%),
+      radial-gradient(120% 90% at 100% 100%, #22c55e33 0%, #0000 60%),
+      linear-gradient(135deg,#0b1420,#09111b 60%,#08101a);}
+  .p3{background:
+      radial-gradient(120% 100% at 0% 100%, #f472b633 0%, #0000 60%),
+      radial-gradient(120% 120% at 100% 0%, #60a5fa33 0%, #0000 60%),
+      linear-gradient(135deg,#0a1220,#0a1020 60%,#0a0f1a);}
+  .p4{background:
+      radial-gradient(120% 100% at 100% 100%, #34d39933 0%, #0000 60%),
+      radial-gradient(120% 120% at 0% 0%, #c084fc33 0%, #0000 60%),
+      linear-gradient(135deg,#0b1020,#0a1322 55%,#0a101c);}
+
+  .card .title{font-weight:700; letter-spacing:.3px}
+  .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+  .tagline{font-size:13px; opacity:.9}
+
+  /* FEEDBACK MODAL */
+  .scrim{
+    position:fixed; inset:0; background:#00000090; display:none; align-items:center; justify-content:center; z-index:50;
+  }
+  .modal{
+    width:95%; max-width:520px; border-radius:18px; overflow:hidden;
+    border:1px solid #ffffff22; background:#0b1324;
+    transform: scale(.96); opacity:0;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .scrim.show{display:flex}
+  .scrim.show .modal{transform: scale(1); opacity:1}
+
+  /* per-project modal headers */
+  .mh{padding:18px 18px 14px; border-bottom:1px solid #ffffff1e}
+  .mh.p1{background:linear-gradient(135deg,#0ea5e9, #22d3ee)}
+  .mh.p2{background:linear-gradient(135deg,#16a34a,#22c55e)}
+  .mh.p3{background:linear-gradient(135deg,#8b5cf6,#60a5fa)}
+  .mh.p4{background:linear-gradient(135deg,#06b6d4,#a78bfa)}
+  .mh h3{margin:0; color:white}
+  .mc{padding:16px; background:
+      radial-gradient(140% 120% at 0% 0%, #ffffff10 0%, transparent 55%),
+      linear-gradient(180deg,#0a152a,#0b1324)}
+  label{display:block; font-size:13px; color:#cbd5e1; margin:8px 0 6px}
+  input, textarea, select{
+    width:100%; border:1px solid #ffffff25; background:#0b1222; color:#e5e7eb;
+    padding:10px 12px; border-radius:10px; outline:none;
+  }
+  textarea{min-height:120px; resize:vertical}
+  .modal .row{justify-content:space-between}
+  .modal .row .btn{flex:1}
+  .closeX{
+    position:absolute; top:10px; right:12px; font-size:20px; color:#fff; opacity:.9; cursor:pointer;
+    text-shadow: 0 1px 2px #0008;
+  }
+
+  /* Success state with dancing check */
+  .successBox{display:none; text-align:center; padding:26px}
+  .checkWrap{width:84px; height:84px; margin:0 auto 14px; border-radius:50%;
+    background: radial-gradient(60% 60% at 50% 50%, #16a34a 0%, #10b981 60%, #059669 100%);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 28px #10b98155;
+    animation: dance 1.2s ease-in-out infinite;
+  }
+  .check{font-size:44px; color:white; filter: drop-shadow(0 2px 4px #0006)}
+  @keyframes dance{
+    0%{ transform: translateY(0) rotate(0deg) scale(1); }
+    25%{ transform: translateY(-4px) rotate(-4deg) scale(1.03); }
+    50%{ transform: translateY(0) rotate(0deg) scale(1); }
+    75%{ transform: translateY(-4px) rotate(4deg) scale(1.03); }
+    100%{ transform: translateY(0) rotate(0deg) scale(1); }
+  }
 </style>
 </head>
 <body>
+
   <header>
     <div class="brand">
       <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
-      <strong>Projects</strong>
+      <strong>Excellent_Develops</strong>
+      <span class="pill">Projects</span>
     </div>
     <div class="row">
-      <a class="btn ghost" href="welcome.html">Back</a>
-      <button id="logoutBtn" class="btn ghost">Logout</button>
-      <a id="adminBtn" class="btn ghost adminLink" href="dashboard.html">Admin</a>
+      <a class="btn ghost" href="welcome.html">Back to Welcome</a>
+      <a id="adminBtn" class="btn ghost" href="dashboard.html" style="display:none">Admin</a>
+      <a class="btn" href="coming-soon.html">Coming Soon</a>
+      <button id="logoutBtn" class="btn">Logout</button>
     </div>
   </header>
 
   <main>
-    <div class="grid" id="grid">
-      <!-- Every card routes to coming-soon.html -->
-      <div class="card" data-go="coming-soon.html"><h3>PEMATECH</h3><p>Click to preview</p></div>
-      <div class="card" data-go="coming-soon.html"><h3>Portfolio v2</h3><p>Click to preview</p></div>
-      <div class="card" data-go="coming-soon.html"><h3>Client CRM</h3><p>Click to preview</p></div>
-      <div class="card" data-go="coming-soon.html"><h3>Analytics</h3><p>Click to preview</p></div>
-    </div>
+    <h2 style="margin:8px 0 12px">Our Projects</h2>
+    <p class="muted" style="margin:0 0 14px">Select a project to explore or send quick feedback.</p>
+
+    <section class="grid">
+      <!-- 1. Excellent Global Concept -->
+      <article class="card p1 pad">
+        <h3 class="title">Excellent Global Concept</h3>
+        <p class="tagline muted">Core brand: digital products, consulting, engineering.</p>
+        <div class="actions">
+          <a class="btn ghost" href="coming-soon.html">Open</a>
+          <button class="btn primary" data-project="Excellent Global Concept" data-theme="p1" onclick="openFeedback(event)">Feedback</button>
+        </div>
+      </article>
+
+      <!-- 2. Pematech Company -->
+      <article class="card p2 pad">
+        <h3 class="title">Pematech Company</h3>
+        <p class="tagline muted">Tech & engineering company — innovation & delivery.</p>
+        <div class="actions">
+          <a class="btn ghost" href="coming-soon.html">Open</a>
+          <button class="btn primary" data-project="Pematech Company" data-theme="p2" onclick="openFeedback(event)">Feedback</button>
+        </div>
+      </article>
+
+      <!-- 3. Social Intelligence Hub -->
+      <article class="card p3 pad">
+        <h3 class="title">Social Intelligence Hub</h3>
+        <p class="tagline muted">Community + insights + collaboration tools.</p>
+        <div class="actions">
+          <a class="btn ghost" href="coming-soon.html">Open</a>
+          <button class="btn primary" data-project="Social Intelligence Hub" data-theme="p3" onclick="openFeedback(event)">Feedback</button>
+        </div>
+      </article>
+
+      <!-- 4. Educational / LMS Platform -->
+      <article class="card p4 pad">
+        <h3 class="title">Educational / LMS Platform</h3>
+        <p class="tagline muted">Learning management, courses, assessments.</p>
+        <div class="actions">
+          <a class="btn ghost" href="coming-soon.html">Open</a>
+          <button class="btn primary" data-project="Educational / LMS Platform" data-theme="p4" onclick="openFeedback(event)">Feedback</button>
+        </div>
+      </article>
+    </section>
   </main>
 
-  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
+  <div class="footer">© 2025 Excellent Global Conceptional. All rights reserved.</div>
 
+  <!-- FEEDBACK MODAL -->
+  <div id="scrim" class="scrim" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+    <div class="modal" id="modal">
+      <div id="mh" class="mh p1">
+        <span class="closeX" onclick="closeFeedback()">×</span>
+        <h3 id="fbTitle">Send feedback — <span id="fbProject">Project</span></h3>
+      </div>
+      <div class="mc">
+        <form id="fbForm">
+          <input type="hidden" id="projectName" />
+          <label>Your name</label>
+          <input id="fbName" placeholder="Full name" autocomplete="name" />
+          <label>Your email</label>
+          <input id="fbEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+          <label>Message</label>
+          <textarea id="fbMsg" placeholder="Write your feedback…"></textarea>
+
+          <div class="row" style="margin-top:14px">
+            <button type="button" class="btn ghost" onclick="closeFeedback()">Cancel</button>
+            <button id="fbSend" type="submit" class="btn primary">Send</button>
+          </div>
+        </form>
+
+        <!-- Success state -->
+        <div id="successBox" class="successBox">
+          <div class="checkWrap"><div class="check">✅</div></div>
+          <h3 style="margin:0 0 6px">Message sent</h3>
+          <p class="muted" style="margin:0 0 12px">
+            Thank you! We’ve received your feedback and will review it shortly.
+          </p>
+          <button class="btn" onclick="closeFeedback()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+    // ===== Admin control: show Admin button for admin only =====
+    const ADMIN_EMAILS = ["quareebalabi22@gmail.com"];
+
+    // ===== Firebase config (yours) =====
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -59,25 +250,130 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
+
+    // Init
+    emailjs.init("h5LWzY8YUESb4sZbS");
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Protect page
-    onAuthStateChanged(auth, (u)=>{ if(!u){ window.location.href='index.html'; } });
+    // UI hooks
+    const adminBtn = document.getElementById("adminBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    // Admin button visibility
-    if(localStorage.getItem('isAdmin') === "1"){
-      document.getElementById('adminBtn').style.display = 'inline-block';
-    }
+    onAuthStateChanged(auth, (user) => {
+      // Admin button only visible to admin
+      const isAdmin = !!user && ADMIN_EMAILS.includes((user.email||"").toLowerCase());
+      adminBtn.style.display = isAdmin ? "inline-flex" : "none";
+    });
 
-    // Logout
-    document.getElementById('logoutBtn').onclick = async ()=>{ try{await signOut(auth);}catch{} window.location.href='index.html'; };
+    logoutBtn.onclick = async ()=>{ try{await signOut(auth);}catch{} window.location.href="index.html"; };
 
-    // Route all cards to coming-soon.html
-    document.getElementById('grid').addEventListener('click', (e)=>{
-      const card = e.target.closest('.card'); if(!card) return;
-      window.location.href = card.dataset.go || 'coming-soon.html';
+    // ===== Feedback modal logic =====
+    window.openFeedback = (e)=>{
+      const btn = e.currentTarget;
+      const name = btn.getAttribute("data-project");
+      const theme = btn.getAttribute("data-theme") || "p1";
+      document.getElementById("fbProject").textContent = name;
+      document.getElementById("projectName").value = name;
+
+      const mh = document.getElementById("mh");
+      mh.classList.remove("p1","p2","p3","p4");
+      mh.classList.add(theme);
+
+      // reset form
+      document.getElementById("fbForm").reset();
+      document.getElementById("successBox").style.display = "none";
+      document.getElementById("fbForm").style.display = "block";
+
+      document.getElementById("scrim").classList.add("show");
+    };
+
+    window.closeFeedback = ()=>{
+      document.getElementById("scrim").classList.remove("show");
+    };
+
+    // Submit feedback
+    const fbForm = document.getElementById("fbForm");
+    const fbSend = document.getElementById("fbSend");
+
+    fbForm.addEventListener("submit", async (ev)=>{
+      ev.preventDefault();
+      fbSend.disabled = true; fbSend.textContent = "Sending…";
+
+      const project = document.getElementById("projectName").value.trim();
+      const name = document.getElementById("fbName").value.trim();
+      const email = document.getElementById("fbEmail").value.trim();
+      const message = document.getElementById("fbMsg").value.trim();
+
+      if (!message) {
+        alert("Please write a short message.");
+        fbSend.disabled = false; fbSend.textContent = "Send";
+        return;
+      }
+
+      // Get IP/ISP/location (best-effort)
+      let ip="", isp="", city="", region="", country="";
+      try{
+        const r = await fetch("https://ipapi.co/json/");
+        if (r.ok){
+          const j = await r.json();
+          ip = j.ip || ""; isp = j.org || ""; city = j.city || "";
+          region = j.region || ""; country = j.country_name || "";
+        }
+      }catch{}
+
+      // Auth user (optional)
+      const user = auth.currentUser;
+      const uid = user?.uid || "";
+      const userEmail = user?.email || "";
+
+      try{
+        // Save to Firestore
+        await addDoc(collection(db,"feedback"),{
+          project, name, email, message,
+          uid, userEmail,
+          ip, isp, city, region, country,
+          createdAt: serverTimestamp(),
+          page: "project.html"
+        });
+
+        // EmailJS notify admin
+        try{
+          await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+            from_name: "Excellent_Develops — Feedback",
+            to_name: "Admin",
+            to_email: "quareebalabi22@gmail.com",
+            message: `
+New feedback received
+
+Project: ${project}
+Name: ${name || "(not provided)"}
+Email: ${email || "(not provided)"}
+
+Message:
+${message}
+
+IP: ${ip}
+ISP: ${isp}
+City: ${city}
+Region: ${region}
+Country: ${country}
+`
+          });
+        }catch{}
+
+        // Success state with dancing check
+        document.getElementById("fbForm").style.display = "none";
+        const sb = document.getElementById("successBox");
+        sb.style.display = "block";
+
+      }catch(err){
+        alert("Could not send feedback: " + (err?.message || err));
+      }finally{
+        fbSend.disabled = false; fbSend.textContent = "Send";
+      }
     });
   </script>
 </body>
-</html>
+  </html>
