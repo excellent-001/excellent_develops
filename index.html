@@ -1,57 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excellent_Develops Login</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Excellent_Develops • Login</title>
   <style>
-    body {
-      margin: 0; padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #4b0082, #800080);
-      height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      color: white;
-    }
-    .login-container {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 30px; border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      text-align: center; width: 90%; max-width: 350px;
-    }
-    .login-container img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 15px; object-fit: cover; }
-    .login-container input {
-      width: 100%; padding: 10px; margin: 8px 0; border: none; border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2); color: white; font-size: 14px;
-    }
-    .login-container button {
-      width: 100%; padding: 10px; background-color: #8a2be2; border: none; color: white;
-      border-radius: 8px; cursor: pointer; font-size: 15px;
-    }
-    .links {
-      display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; color: #ccc;
-    }
-    .links a { color: #ccc; text-decoration: none; }
+    :root{--g1:#4b0082;--g2:#800080;--accent:#8a2be2}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, sans-serif;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .card{width:min(360px,92vw);background:rgba(255,255,255,.08);border:1px solid #ffffff20;border-radius:16px;padding:24px;text-align:center;backdrop-filter:blur(6px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+    .logo{width:120px;height:120px;object-fit:cover;border-radius:50%;margin-bottom:10px}
+    h2{margin:6px 0 2px}
+    p.sub{margin:0 0 14px;color:#e8e8e8}
+    .row{margin:8px 0;position:relative}
+    input{width:100%;padding:12px;border:0;border-radius:10px;background:rgba(255,255,255,.22);color:#fff}
+    button.primary{width:100%;padding:12px;margin-top:8px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .links{display:flex;justify-content:space-between;margin-top:10px;font-size:12px}
+    .links a{color:#ddd;text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    footer{position:fixed;left:0;right:0;bottom:0;background:#fff;color:#000;text-align:center;font-size:13px;padding:8px 10px;border-top:1px solid #00000014}
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50}
+    .modal{width:min(420px,92vw);background:#fff;color:#111;border-radius:16px;padding:22px;text-align:center;box-shadow:0 12px 32px rgba(0,0,0,.35)}
+    .btn{padding:10px 12px;border-radius:10px;border:0;background:#f3f4f6;font-weight:700;cursor:pointer}
+    .muted{color:#cbd5e1}
   </style>
 </head>
 <body>
-
-  <div class="login-container">
-    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+  <div class="card">
+    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
     <h2>Sign In</h2>
-    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
-    <input type="password" id="loginPassword" placeholder="Enter your password">
-    <button onclick="login()">Sign In</button>
+    <p class="sub">Welcome back to Excellent_Develops</p>
+
+    <div class="row"><input id="loginEmail" type="email" placeholder="Email" autocomplete="email"/></div>
+    <div class="row"><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password"/></div>
+    <button class="primary" id="loginBtn">Sign In</button>
+
     <div class="links">
       <a href="forgot-password.html">Forgot Password?</a>
       <a href="create-account.html">Create new account</a>
     </div>
+    <p class="muted" style="margin-top:10px">Powered by Firebase • EmailJS enabled</p>
   </div>
 
+  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init({publicKey:"h5LWzY8YUESb4sZbS"});</script>
+
+  <!-- Success modal -->
+  <div class="backdrop" id="okBackdrop">
+    <div class="modal">
+      <h3 id="okTitle">Login successful ✅</h3>
+      <p>Redirecting in <span id="count">3</span>s…</p>
+      <button class="btn" id="okBtn">OK</button>
+    </div>
+  </div>
+
+  <!-- Firebase / Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, addDoc, collection, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const ADMIN_EMAILS = ["quareebalabi22@gmail.com"]; // add more later if needed
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -62,35 +74,100 @@
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    window.login = async () => {
-      const input = document.getElementById("loginEmailOrUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
+    const emailEl = document.getElementById('loginEmail');
+    const passEl  = document.getElementById('loginPassword');
+    const btn     = document.getElementById('loginBtn');
 
-      if (!input || !password) {
-        alert("Please enter both email/username and password.");
+    // Optional: if already signed in, route properly
+    onAuthStateChanged(auth, (u) => {
+      if(!u) return;
+      if(ADMIN_EMAILS.includes(u.email)) {
+        // admin can still go to welcome; we show Admin button there
+        window.location.href = "welcome.html";
+      } else {
+        window.location.href = "welcome.html";
+      }
+    });
+
+    const showSuccessModal = (redirect) => {
+      const bd = document.getElementById('okBackdrop');
+      const count = document.getElementById('count');
+      bd.style.display = 'flex';
+      let n=3; count.textContent = n;
+      const t = setInterval(()=>{ n--; count.textContent = n; if(n<=0){ clearInterval(t); window.location.href = redirect; } },1000);
+      document.getElementById('okBtn').onclick = ()=>{ clearInterval(t); window.location.href = redirect; };
+    };
+
+    // Simple rate limit thresholds
+    const MAX_FAILS_PER_IP = 5;   // before we alert + pause
+    const WINDOW_MINUTES    = 15; // lookback window
+
+    async function getGeo(){
+      try{
+        const r = await fetch("https://ipapi.co/json/");
+        return await r.json();
+      }catch{ return {}; }
+    }
+
+    async function tooManyRecentFails(ip){
+      try{
+        const since = Date.now() - WINDOW_MINUTES*60*1000;
+        const q1 = query(collection(db,"loginAttempts"), where("ip","==",ip));
+        const snap = await getDocs(q1);
+        let fails = 0;
+        snap.forEach(d=>{
+          const v = d.data();
+          const ts = v.createdAt?.toMillis ? v.createdAt.toMillis() : (v.createdAt? new Date(v.createdAt).getTime():0);
+          if(v.success===false && ts>=since) fails++;
+        });
+        return fails >= MAX_FAILS_PER_IP;
+      }catch{ return false; }
+    }
+
+    async function recordAttempt(data){
+      try{ await addDoc(collection(db,"loginAttempts"), { ...data, createdAt: serverTimestamp() }); }catch{}
+    }
+
+    btn.onclick = async () => {
+      const email = (emailEl.value||"").trim();
+      const pass  = passEl.value;
+
+      if(!email || !pass){ alert("Please enter email and password."); return; }
+
+      const geo = await getGeo();
+      const ip    = geo.ip || "UnknownIP";
+      const isp   = geo.org || "UnknownISP";
+      const city  = geo.city || "UnknownCity";
+
+      // block window after many fails
+      if (await tooManyRecentFails(ip)) {
+        alert("Too many failed attempts from your network. Please wait 15 minutes and try again.");
+        try{
+          await emailjs.send("service_cvvr3vn","template_6xgms6a",{
+            from_name:"Excellent_Develops Security",
+            to_name:"Admin",
+            to_email:"quareebalabi22@gmail.com",
+            message:`⚠️ Rate limit triggered\nIP: ${ip}\nISP: ${isp}\nCity: ${city}`
+          });
+        }catch{}
         return;
       }
 
-      let emailToLogin = input.includes("@") ? input : `${input}@example.com`;
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, emailToLogin, password);
-        const user = userCredential.user;
-
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-
-        if (userDoc.exists() && userDoc.data().role === "admin") {
-          window.location.href = "dashboard.html";
-        } else {
-          window.location.href = "welcome.html";
-        }
-      } catch (error) {
-        alert("❌ " + error.message);
+      try{
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        await recordAttempt({ ip, isp, city, email, success:true });
+        // store firstName for welcome
+        const first = cred.user.displayName ? cred.user.displayName.split(" ")[0] : "User";
+        localStorage.setItem("firstName", first);
+        localStorage.setItem("userEmail", email);
+        showSuccessModal("welcome.html");
+      }catch(e){
+        await recordAttempt({ ip, isp, city, email, success:false, error: e?.message||String(e) });
+        alert("Login failed: " + (e?.message||e));
       }
     };
   </script>
