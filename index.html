@@ -2,75 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Excellent_Develops • Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excellent_Develops Login</title>
   <style>
-    :root { --g1:#4b0082; --g2:#800080; --accent:#8a2be2; }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:Arial, sans-serif; color:#fff;
-      min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column;
-      background:linear-gradient(135deg,var(--g1),var(--g2));
-      padding:16px;
+    body {
+      margin: 0; padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #4b0082, #800080);
+      height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      color: white;
     }
-    .card{
-      width:min(360px,92vw);
-      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.22);
-      border-radius:16px; padding:24px; text-align:center; backdrop-filter:blur(6px);
-      box-shadow:0 10px 28px rgba(0,0,0,.35);
+    .login-container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px; border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      text-align: center; width: 90%; max-width: 350px;
     }
-    img.logo{width:110px;height:110px;border-radius:50%;object-fit:cover;margin-bottom:10px}
-    h2{margin:6px 0 10px}
-    .row{margin:10px 0}
-    input{
-      width:100%; padding:12px; border-radius:10px; border:0;
-      background:rgba(255,255,255,.2); color:#fff; font-size:14px; outline:none;
+    .login-container img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 15px; object-fit: cover; }
+    .login-container input {
+      width: 100%; padding: 10px; margin: 8px 0; border: none; border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2); color: white; font-size: 14px;
     }
-    button{
-      width:100%; padding:12px; border-radius:10px; border:0; cursor:pointer;
-      background:var(--accent); color:#fff; font-weight:700; margin-top:8px;
+    .login-container button {
+      width: 100%; padding: 10px; background-color: #8a2be2; border: none; color: white;
+      border-radius: 8px; cursor: pointer; font-size: 15px;
     }
-    .links{display:flex; justify-content:space-between; font-size:12px; margin-top:10px}
-    .links a{color:#e6e6e6; text-decoration:none}
-    .links a:hover{text-decoration:underline}
-    footer{
-      position:fixed; left:0; right:0; bottom:0; background:#fff; color:#000;
-      text-align:center; font-size:13px; padding:8px 10px; border-top:1px solid rgba(0,0,0,.08);
+    .links {
+      display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; color: #ccc;
     }
-    /* toast */
-    #toast { position:fixed; top:16px; right:16px; background:#111827; color:#fff; padding:10px 14px; border-radius:10px; display:none; }
+    .links a { color: #ccc; text-decoration: none; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <img class="logo" src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
-    <h2>Sign In</h2>
-    <div class="row">
-      <input type="text" id="loginEmailOrUsername" placeholder="Email or Username" autocomplete="username">
-    </div>
-    <div class="row">
-      <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
-    </div>
-    <button id="loginBtn">Sign In</button>
 
+  <div class="login-container">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+    <h2>Sign In</h2>
+    <input type="text" id="loginEmailOrUsername" placeholder="Email or Username">
+    <input type="password" id="loginPassword" placeholder="Enter your password">
+    <button onclick="login()">Sign In</button>
     <div class="links">
       <a href="forgot-password.html">Forgot Password?</a>
       <a href="create-account.html">Create new account</a>
     </div>
   </div>
 
-  <div id="toast">Login successful. Redirecting…</div>
-  <footer>© 2025 Excellent Global Conceptional. All rights reserved.</footer>
-
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ----- ADMIN WHITELIST -----
-    const ADMIN_EMAILS = ["quareebalabi22@gmail.com"]; // add more if needed
-
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -83,44 +65,32 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    const emailOrUser = document.getElementById('loginEmailOrUsername');
-    const passwordEl  = document.getElementById('loginPassword');
-    const loginBtn    = document.getElementById('loginBtn');
-    const toast       = document.getElementById('toast');
+    window.login = async () => {
+      const input = document.getElementById("loginEmailOrUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
 
-    function showToast() {
-      toast.style.display = 'block';
-      setTimeout(()=> toast.style.display='none', 3000);
-    }
+      if (!input || !password) {
+        alert("Please enter both email/username and password.");
+        return;
+      }
 
-    loginBtn.onclick = async () => {
-      const input = (emailOrUser.value || '').trim();
-      const password = passwordEl.value;
-
-      if (!input || !password) { alert('Please enter both email/username and password.'); return; }
-
-      // Support username by mapping to a domain if no "@"
-      const email = input.includes('@') ? input : `${input}@example.com`; // adjust if you use real usernames
+      let emailToLogin = input.includes("@") ? input : `${input}@example.com`;
 
       try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, emailToLogin, password);
+        const user = userCredential.user;
 
-        // Save first name for welcome.html
-        const first = cred.user.displayName ? cred.user.displayName.split(' ')[0] : (email.split('@')[0] || 'User');
-        localStorage.setItem('firstName', first);
+        const userDoc = await getDoc(doc(db, "users", user.uid));
 
-        // flag for welcome toast
-        sessionStorage.setItem('justLoggedIn', '1');
-
-        showToast();
-
-        const isAdmin = ADMIN_EMAILS.includes(cred.user.email || '');
-        setTimeout(() => {
-          window.location.href = isAdmin ? 'admin.html' : 'welcome.html';
-        }, 1000); // quick redirect; toast also fades out
-      } catch (e) {
-        alert('Login failed: ' + (e?.message || e));
+        if (userDoc.exists() && userDoc.data().role === "admin") {
+          window.location.href = "dashboard.html";
+        } else {
+          window.location.href = "welcome.html";
+        }
+      } catch (error) {
+        alert("❌ " + error.message);
       }
     };
   </script>
