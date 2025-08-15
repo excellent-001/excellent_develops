@@ -1,28 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Admin Dashboard — Excellent_Develops</title>
-<style>
-  :root{--bg1:#0b1220;--bg2:#0f172a;--card:#101726;--ink:#e5e7eb;--muted:#9ca3af;--accent:#3b82f6;}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-  header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:rgba(0,0,0,.25);border-bottom:1px solid #00000040}
-  main{padding:18px;max-width:1200px;margin:0 auto;width:100%}
-  .btn{border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer}
-  .btn.primary{background:var(--accent);border-color:transparent}
-  .chip{padding:4px 10px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff22;font-size:12px}
-  .notice{background:#1f2937;border:1px solid #2b3a55;border-radius:12px;padding:14px;margin:14px 0}
-</style>
 
-<!-- GUARD: runs before anything is shown -->
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;         /* light background that doesn't fight content */
+    --panel:#ffffff;      /* panels */
+    --ink:#0f172a;        /* primary text */
+    --muted:#6b7280;      /* secondary text */
+    --edge:#e5e7eb;       /* borders */
+    --accent:#3b82f6;     /* brand blue */
+    --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color: var(--ink);
+    background:
+      radial-gradient(40rem 20rem at -10% -10%, #dbeafe 0%, #f6f7fb 60%) no-repeat,
+      radial-gradient(50rem 25rem at 110% -20%, #fde68a 0%, #f6f7fb 55%) no-repeat,
+      var(--bg);
+  }
+
+  header{
+    position:sticky; top:0; z-index:20;
+    backdrop-filter:saturate(1.2) blur(8px);
+    background: rgba(255,255,255,.7);
+    border-bottom:1px solid var(--edge);
+    display:flex; align-items:center; gap:14px; justify-content:space-between;
+    padding:12px 16px;
+  }
+  header .brand { display:flex; align-items:center; gap:10px}
+  header .brand h1{font-size:16px; margin:0}
+  .chip{font-size:12px; padding:4px 8px; border-radius:999px; background:#eff6ff; color:#1d4ed8; border:1px solid #dbeafe}
+
+  .wrap{max-width:1200px; margin:16px auto; padding:0 12px; display:grid; grid-template-columns:260px 1fr; gap:16px}
+  @media (max-width: 960px){ .wrap{grid-template-columns:1fr} }
+
+  nav{
+    background: var(--panel); border:1px solid var(--edge); border-radius:14px; padding:10px; position:sticky; top:76px; align-self:start;
+  }
+  .navbtn{
+    width:100%; text-align:left; border:1px solid var(--edge); background:#f9fafb;
+    color:var(--ink); padding:10px 12px; border-radius:10px; margin:6px 0; cursor:pointer;
+  }
+  .navbtn.active{ background:var(--accent); color:#fff; border-color:transparent }
+  .btn{border:1px solid var(--edge); background:#f3f4f6; color:#111827; padding:9px 12px; border-radius:10px; cursor:pointer}
+  .btn.primary{ background:var(--accent); color:#fff; border-color:transparent }
+  .btn.danger{ background:#fee2e2; color:#b91c1c; border-color:#fecaca }
+  .btn.ghost{ background:transparent }
+
+  .card{background:var(--panel); border:1px solid var(--edge); border-radius:14px; padding:14px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .grid{display:grid; gap:12px}
+  .grid.kpi{grid-template-columns:repeat(3,1fr)}
+  @media (max-width: 800px){ .grid.kpi{grid-template-columns:1fr} }
+
+  .kpi{background:#f9fafb; border:1px dashed var(--edge); border-radius:12px; padding:14px}
+  .kpi h3{margin:0 0 6px; color:var(--muted); font-size:13px}
+  .kpi .val{font-size:22px; font-weight:700}
+
+  .filters input{min-width:180px}
+  input,select,textarea{
+    border-radius:10px; border:1px solid var(--edge); background:#fff; color:var(--ink); padding:10px 12px;
+  }
+  textarea{width:100%}
+
+  table{width:100%; border-collapse:separate; border-spacing:0; font-size:14px}
+  th,td{padding:10px 12px; border-bottom:1px solid var(--edge); vertical-align:top}
+  th{position:sticky; top:0; background:#fff; z-index:1}
+  .scroll{max-height:60vh; overflow:auto; border:1px solid var(--edge); border-radius:12px}
+
+  .muted{color:var(--muted)}
+  .right{margin-left:auto}
+  .hidden{display:none}
+  .pill{padding:2px 8px; border-radius:999px; font-size:12px; display:inline-block}
+  .pill.ok{background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0}
+  .pill.warn{background:#fffbeb; color:#92400e; border:1px solid #fde68a}
+  .pill.bad{background:#fef2f2; color:#991b1b; border:1px solid #fecaca}
+
+  .footer{padding:18px; text-align:center; color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="chip">Excellent_Develops</span>
+    <h1>Admin Dashboard</h1>
+  </div>
+  <div class="row">
+    <span id="adminEmail" class="muted"></span>
+    <button id="signOutBtn" class="btn">Sign out</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- LEFT NAV -->
+  <nav>
+    <button class="navbtn active" data-tab="overview">Overview</button>
+    <button class="navbtn" data-tab="feedback">Feedback</button>
+    <button class="navbtn" data-tab="visitors">Visitors</button>
+    <button class="navbtn" data-tab="users">Users</button>
+    <button class="navbtn" data-tab="settings">Settings</button>
+  </nav>
+
+  <!-- RIGHT CONTENT -->
+  <div class="grid" style="gap:16px">
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="card">
+      <h2 style="margin-top:2px">Overview</h2>
+      <div class="grid kpi">
+        <div class="kpi"><h3>Total Feedback</h3><div class="val" id="kpiFeedback">0</div></div>
+        <div class="kpi"><h3>Total Visitors</h3><div class="val" id="kpiVisitors">0</div></div>
+        <div class="kpi"><h3>Registered Users</h3><div class="val" id="kpiUsers">0</div></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr; gap:16px; margin-top:14px">
+        <div class="card" style="padding:10px">
+          <div class="row"><strong>Feedback per Project</strong><span class="muted right" id="c1info"></span></div>
+          <canvas id="chartProjects" height="200"></canvas>
+        </div>
+        <div class="card" style="padding:10px">
+          <div class="row"><strong>Visitors by City</strong><span class="muted right" id="c2info"></span></div>
+          <canvas id="chartCities" height="200"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="padding:10px; margin-top:14px">
+        <div class="row"><strong>Feedback Timeline</strong><span class="muted right" id="c3info"></span></div>
+        <canvas id="chartTimeline" height="180"></canvas>
+      </div>
+
+      <p class="muted" id="lastUpdated" style="margin-top:10px">—</p>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section id="tab-feedback" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Feedback</h2>
+        <button id="exportFeedback" class="btn right">Export CSV</button>
+      </div>
+      <div class="row filters" style="margin:10px 0">
+        <input id="fProject" placeholder="Filter by project…"/>
+        <input id="fText" placeholder="Search name/email/message…"/>
+        <input id="fIP" placeholder="Filter by IP…"/>
+        <button id="clearF" class="btn">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th><th>Name</th><th>Email</th><th>Message</th>
+              <th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyFeedback"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISITORS -->
+    <section id="tab-visitors" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Visitors</h2>
+        <button id="exportVisitors" class="btn right">Export CSV</button>
+      </div>
+      <div class="row filters" style="margin:10px 0">
+        <input id="vPage" placeholder="Filter by page…"/>
+        <input id="vIP" placeholder="Filter by IP…"/>
+        <input id="vISP" placeholder="Filter by ISP…"/>
+        <input id="vCity" placeholder="Filter by City…"/>
+        <button id="clearV" class="btn">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Page</th><th>User</th><th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th></tr>
+          </thead>
+          <tbody id="tbodyVisitors"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="tab-users" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Users</h2>
+        <button id="exportUsers" class="btn right">Export CSV</button>
+      </div>
+      <div class="row filters" style="margin:10px 0">
+        <input id="uEmail" placeholder="Filter by email…"/>
+        <input id="uIP" placeholder="Filter by IP…"/>
+        <input id="uISP" placeholder="Filter by ISP…"/>
+        <input id="uCity" placeholder="Filter by City…"/>
+        <button id="clearU" class="btn">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th></tr>
+          </thead>
+          <tbody id="tbodyUsers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="card hidden">
+      <h2 style="margin-top:0">Settings</h2>
+      <p class="muted">Saved in Firestore at <code>siteSettings/global</code>.</p>
+      <div class="row" style="align-items:flex-start">
+        <div style="flex:1;min-width:260px">
+          <label class="muted">Global Banner Text</label>
+          <textarea id="setBanner" rows="3" placeholder="Optional banner text shown on project pages"></textarea>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <label class="muted" style="display:block;margin-bottom:6px">Coming Soon (per project)</label>
+          <label><input type="checkbox" id="csExcellent"> Excellent Global Concept</label><br/>
+          <label><input type="checkbox" id="csPematech"> Pematech Company</label><br/>
+          <label><input type="checkbox" id="csSocial"> Social Intelligence Hub</label><br/>
+          <label><input type="checkbox" id="csLms"> LMS / Educational</label>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="saveSettings" class="btn primary">Save Settings</button>
+        <span id="saveMsg" class="muted"></span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="footer">© 2025 Excellent Global Conceptional. All rights reserved.</div>
+
+<!-- EmailJS optional (kept for future notifications) -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, deleteDoc,
+    collection, onSnapshot, query, orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+  /************** SECURITY GATES **************/
   const ADMIN_EMAILS = ["quareebalabi22@gmail.com"];
   const SECRET_CODE  = "554455";
+  const ADMIN_KEY    = "Blessing@001";
+
+  // Secret URL param check
+  const params = new URLSearchParams(location.search);
+  if (params.get("code") !== SECRET_CODE) {
+    // soft-block view
+    document.body.innerHTML = "<div style='padding:40px;font-family:system-ui'><h2>Access denied</h2><p>You need the correct code to open this page.</p></div>";
+    throw new Error("Missing/invalid code");
+  }
+
+  // Admin key prompt (session only)
+  const KEY_FLAG = "exd_admin_key_ok";
+  const okKey = sessionStorage.getItem(KEY_FLAG);
+  if (okKey !== "1") {
+    const entered = prompt("Admin key required:");
+    if (entered !== ADMIN_KEY) {
+      document.body.innerHTML = "<div style='padding:40px;font-family:system-ui'><h2>Access denied</h2><p>Invalid admin key.</p></div>";
+      throw new Error("Invalid admin key");
+    }
+    sessionStorage.setItem(KEY_FLAG, "1");
+  }
+
+  /************** FIREBASE **************/
   const firebaseConfig = {
     apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
     authDomain: "excellent-d056e.firebaseapp.com",
@@ -32,72 +287,204 @@
     appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
     measurementId: "G-G3RCTDSY27"
   };
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  const qs = new URLSearchParams(location.search);
-  const hasSecret = (qs.get("code")||"") === SECRET_CODE;
+  /************** UI ELEMENTS **************/
+  const adminEmailEl = document.getElementById("adminEmail");
+  const signOutBtn   = document.getElementById("signOutBtn");
+  const lastUpdated  = document.getElementById("lastUpdated");
 
-  // helper: hard redirect out
-  function bounce(){
-    try{ signOut(auth); }catch{}
-    location.replace("index.html");
-  }
-
-  // Check session token
-  function validGate(){
-    try{
-      const raw = sessionStorage.getItem("adminGate");
-      if(!raw) return false;
-      const obj = JSON.parse(raw);
-      if(!obj?.ok || !obj?.t) return false;
-      // expire after 2 hours
-      const TWO_HOURS = 2*60*60*1000;
-      if (Date.now() - obj.t > TWO_HOURS) return false;
-      return true;
-    }catch{return false;}
-  }
-
-  onAuthStateChanged(auth, (user)=>{
-    const email = (user?.email||"").toLowerCase();
-    const allowed = !!user && ADMIN_EMAILS.includes(email);
-    if (!allowed || !hasSecret || !validGate()){
-      bounce();
-      return;
-    }
-    // pass email to UI
-    const el = document.getElementById("adminEmail");
-    if (el) el.textContent = email;
-    document.documentElement.style.visibility = "visible";
+  // Tabs
+  const tabButtons = [...document.querySelectorAll(".navbtn")];
+  const tabs = {
+    overview: document.getElementById("tab-overview"),
+    feedback: document.getElementById("tab-feedback"),
+    visitors: document.getElementById("tab-visitors"),
+    users: document.getElementById("tab-users"),
+    settings: document.getElementById("tab-settings")
+  };
+  tabButtons.forEach(b=>{
+    b.onclick = ()=>{
+      tabButtons.forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      const t = b.dataset.tab;
+      Object.entries(tabs).forEach(([k,el])=> el.classList.toggle("hidden", k!==t));
+    };
   });
 
-  // Hide entire page until guard passes
-  document.documentElement.style.visibility = "hidden";
-</script>
-</head>
-<body>
-  <header>
-    <div>
-      <strong>Admin Dashboard</strong>
-      <span class="chip">Excellent_Develops</span>
-    </div>
-    <div>
-      <span id="adminEmail" class="chip"></span>
-      <button class="btn" onclick="location.href='index.html'">Sign out</button>
-    </div>
-  </header>
+  // KPIs
+  const kpiFeedback = document.getElementById("kpiFeedback");
+  const kpiVisitors = document.getElementById("kpiVisitors");
+  const kpiUsers    = document.getElementById("kpiUsers");
 
-  <main>
-    <div class="notice">
-      <strong>Secure Admin Gate is active.</strong><br/>
-      This page is only visible with: correct URL code, valid admin email, and an active admin gate token.
-    </div>
+  // Feedback filters/table
+  const fProject = document.getElementById("fProject");
+  const fText    = document.getElementById("fText");
+  const fIP      = document.getElementById("fIP");
+  const clearF   = document.getElementById("clearF");
+  const tbodyFeedback  = document.getElementById("tbodyFeedback");
+  const exportFeedback = document.getElementById("exportFeedback");
 
-    <!-- YOUR EXISTING ADMIN UI BELOW -->
-    <!-- If you already have a big admin page, keep it.
-         The guard above protects it. You can paste your whole admin HTML here. -->
-    <p>Load your full dashboard UI here (feedback, visitors, users, settings, etc.).</p>
-  </main>
-</body>
-  </html>
+  // Visitors filters/table
+  const vPage = document.getElementById("vPage");
+  const vIP   = document.getElementById("vIP");
+  const vISP  = document.getElementById("vISP");
+  const vCity = document.getElementById("vCity");
+  const clearV= document.getElementById("clearV");
+  const tbodyVisitors = document.getElementById("tbodyVisitors");
+  const exportVisitors= document.getElementById("exportVisitors");
+
+  // Users filters/table
+  const uEmail = document.getElementById("uEmail");
+  const uIP    = document.getElementById("uIP");
+  const uISP   = document.getElementById("uISP");
+  const uCity  = document.getElementById("uCity");
+  const clearU = document.getElementById("clearU");
+  const tbodyUsers = document.getElementById("tbodyUsers");
+  const exportUsers= document.getElementById("exportUsers");
+
+  // Settings
+  const setBanner   = document.getElementById("setBanner");
+  const csExcellent = document.getElementById("csExcellent");
+  const csPematech  = document.getElementById("csPematech");
+  const csSocial    = document.getElementById("csSocial");
+  const csLms       = document.getElementById("csLms");
+  const saveSettings= document.getElementById("saveSettings");
+  const saveMsg     = document.getElementById("saveMsg");
+
+  /************** HELPERS **************/
+  function lagosTime(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      return d ? d.toLocaleString("en-NG",{ timeZone:"Africa/Lagos" }) : "";
+    } catch { return ""; }
+  }
+  function esc(s){
+    return String(s ?? "")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+  function csvDownload(filename, rows){
+    const csv = rows.map(r => r.map(v => `"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /************** STATE **************/
+  let feedbackRows = [];
+  let visitorRows  = [];
+  let userRows     = [];
+
+  // Charts
+  let chartProjects, chartCities, chartTimeline;
+
+  function drawCharts(){
+    // Destroy if exists (for live updates)
+    [chartProjects, chartCities, chartTimeline].forEach(ch=> ch && ch.destroy());
+
+    // 1) Feedback per project
+    const projCounts = {};
+    for (const r of feedbackRows){
+      const p = (r.project||"Unknown").trim();
+      projCounts[p] = (projCounts[p]||0)+1;
+    }
+    const projLabels = Object.keys(projCounts);
+    const projData   = Object.values(projCounts);
+
+    chartProjects = new Chart(document.getElementById("chartProjects"), {
+      type: "bar",
+      data: { labels: projLabels, datasets: [{ label: "Feedback", data: projData }]},
+      options: { responsive:true, plugins:{legend:{display:false}} }
+    });
+    document.getElementById("c1info").textContent = projLabels.length ? "" : "No data yet";
+
+    // 2) Visitors by City
+    const cityCounts = {};
+    for (const v of visitorRows){
+      const c = (v.city||"Unknown").trim();
+      cityCounts[c] = (cityCounts[c]||0)+1;
+    }
+    const cityLabels = Object.keys(cityCounts).slice(0,8);
+    const cityData   = cityLabels.map(k=>cityCounts[k]);
+
+    chartCities = new Chart(document.getElementById("chartCities"), {
+      type: "doughnut",
+      data: { labels: cityLabels, datasets: [{ data: cityData }]},
+      options: { responsive:true, plugins:{legend:{position:"bottom"}} }
+    });
+    document.getElementById("c2info").textContent = cityLabels.length ? "" : "No data yet";
+
+    // 3) Feedback timeline (by day)
+    const dayCounts = {};
+    for (const r of feedbackRows){
+      const d = r.createdAt?.toDate ? r.createdAt.toDate() : new Date(r.createdAt||Date.now());
+      const key = d.toISOString().slice(0,10);
+      dayCounts[key] = (dayCounts[key]||0)+1;
+    }
+    const days = Object.keys(dayCounts).sort();
+    const vals = days.map(k=>dayCounts[k]);
+    chartTimeline = new Chart(document.getElementById("chartTimeline"), {
+      type: "line",
+      data: { labels: days, datasets: [{ label:"Feedback", data: vals, tension:.3, fill:false }]},
+      options: { responsive:true, plugins:{legend:{display:false}}, scales:{ x:{ ticks:{ maxRotation:0, autoSkip:true }}} }
+    });
+    document.getElementById("c3info").textContent = days.length ? "" : "No data yet";
+  }
+
+  function renderFeedback(){
+    const queryText = (fText.value||"").toLowerCase();
+    const projFilter= (fProject.value||"").toLowerCase();
+    const ipFilter  = (fIP.value||"").toLowerCase();
+
+    const rows = feedbackRows.filter(r=>{
+      const blob = `${r.name||""} ${r.email||""} ${r.message||""}`.toLowerCase();
+      if (queryText && !blob.includes(queryText)) return false;
+      if (projFilter && !(r.project||"").toLowerCase().includes(projFilter)) return false;
+      if (ipFilter && !(r.ip||"").toLowerCase().includes(ipFilter)) return false;
+      return true;
+    });
+
+    tbodyFeedback.innerHTML = "";
+    for (const r of rows){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(r.project||"")}</td>
+        <td>${esc(r.name||"")}</td>
+        <td>${esc(r.email||"")}</td>
+        <td>${esc(r.message||"")}</td>
+        <td>${esc(r.ip||"")}</td>
+        <td>${esc(r.isp||"")}</td>
+        <td>${esc(r.city||"")}</td>
+        <td class="muted">${esc(lagosTime(r.createdAt))}</td>
+        <td><button class="btn danger" data-id="${r.id}">Delete</button></td>
+      `;
+      tbodyFeedback.appendChild(tr);
+    }
+    kpiFeedback.textContent = feedbackRows.length;
+    [...tbodyFeedback.querySelectorAll("button[data-id]")].forEach(btn=>{
+      btn.onclick = async ()=>{
+        if (!confirm("Delete this feedback?")) return;
+        await deleteDoc(doc(db,"feedback", btn.dataset.id));
+      };
+    });
+  }
+
+  function renderVisitors(){
+    const rows = visitorRows.filter(v=>{
+      const p=(vPage.value||"").toLowerCase();
+      const ip=(vIP.value||"").toLowerCase();
+      const isp=(vISP.value||"").toLowerCase();
+      const c=(vCity.value||"").toLowerCase();
+      if (p && !(v.page||"").toLowerCase().includes(p)) return false;
+      if (ip && !(v.ip||"").toLowerCase().includes(ip)) return false;
+      if (isp && !(v.isp||"").toLowerCase().includes(isp)) return false;
+      if (c && !(v.city||"").toLowerCase().includes(c)) return false;
+      return true;
+    });
+    tbodyVisitors.inne
