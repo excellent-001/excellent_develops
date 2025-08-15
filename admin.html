@@ -3,161 +3,175 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Excellent_Develops Admin Panel</title>
+<title>Excellent Developers - Admin Panel</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    display: flex;
-    background: #f8f8f8;
-  }
-  nav {
-    background: #4b0082;
-    color: white;
-    width: 250px;
-    padding-top: 20px;
-    height: 100vh;
-    position: fixed;
-  }
-  nav h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  nav a {
-    display: block;
-    color: white;
-    padding: 12px;
-    text-decoration: none;
-  }
-  nav a:hover {
-    background: #5e2b91;
-  }
-  main {
-    margin-left: 250px;
-    padding: 20px;
-    width: calc(100% - 250px);
-  }
-  .card {
-    background: white;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  button {
-    background: #4b0082;
-    color: white;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #5e2b91;
-  }
-  textarea, input {
-    width: 100%;
-    padding: 8px;
-    margin: 6px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
+    body { background-color: #121212; color: white; }
+    .sidebar { background: #1f1f1f; height: 100vh; padding: 20px; }
+    .sidebar a { color: white; display: block; padding: 10px; text-decoration: none; }
+    .sidebar a:hover { background: #333; }
+    .content { padding: 20px; }
 </style>
 </head>
 <body>
 
-<nav>
-  <h2>Admin Panel</h2>
-  <a href="#dashboard">📊 Dashboard</a>
-  <a href="#settings">⚙ Settings</a>
-  <a href="#logs">📜 Logs</a>
-  <a href="#security">🔒 Security</a>
-  <a href="#" onclick="logout()">🚪 Logout</a>
-</nav>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <h4>Admin Menu</h4>
+            <a href="#overview" onclick="showSection('overview')">📊 Overview</a>
+            <a href="#traffic" onclick="showSection('traffic')">🌍 Traffic Monitor</a>
+            <a href="#feedback" onclick="showSection('feedback')">📩 Feedback Manager</a>
+            <a href="#projects" onclick="showSection('projects')">📁 Project Stats</a>
+            <a href="#settings" onclick="showSection('settings')">⚙️ Settings</a>
+            <a href="#security" onclick="showSection('security')">🛡️ Security Logs</a>
+            <a href="#" onclick="logout()">🚪 Logout</a>
+        </div>
 
-<main>
-  <section id="dashboard" class="card">
-    <h3>📊 Dashboard Overview</h3>
-    <p>Total Users: <span id="totalUsers">Loading...</span></p>
-    <p>Active Sessions: <span id="activeSessions">Loading...</span></p>
-  </section>
+        <!-- Content -->
+        <div class="col-md-10 content">
+            <!-- Overview -->
+            <div id="overview" class="section">
+                <h2>Overview</h2>
+                <p>Total Visitors: <span id="totalVisitors">0</span></p>
+                <p>Total Feedback: <span id="totalFeedback">0</span></p>
+                <canvas id="visitorsChart"></canvas>
+            </div>
 
-  <section id="settings" class="card">
-    <h3>⚙ Site Settings</h3>
-    <button onclick="toggleMaintenance(true)">Enable Maintenance Mode</button>
-    <button onclick="toggleMaintenance(false)">Disable Maintenance Mode</button>
-    <hr>
-    <h4>📢 Send Announcement</h4>
-    <textarea id="announcementMessage" placeholder="Write your announcement..."></textarea>
-    <button onclick="sendAnnouncement()">Send</button>
-  </section>
+            <!-- Traffic Monitor -->
+            <div id="traffic" class="section" style="display:none;">
+                <h2>Traffic Monitor</h2>
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>IP</th>
+                            <th>Location</th>
+                            <th>ISP</th>
+                            <th>Device</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trafficTable"></tbody>
+                </table>
+            </div>
 
-  <section id="logs" class="card">
-    <h3>📜 Login Attempts</h3>
-    <div id="logList">Loading logs...</div>
-  </section>
+            <!-- Feedback -->
+            <div id="feedback" class="section" style="display:none;">
+                <h2>Feedback Manager</h2>
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Project</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTable"></tbody>
+                </table>
+            </div>
 
-  <section id="security" class="card">
-    <h3>🔒 Security Tools</h3>
-    <button onclick="checkIP()">Check My IP & ISP</button>
-    <div id="ipInfo"></div>
-  </section>
-</main>
+            <!-- Projects -->
+            <div id="projects" class="section" style="display:none;">
+                <h2>Project Stats</h2>
+                <canvas id="projectChart"></canvas>
+            </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            <!-- Settings -->
+            <div id="settings" class="section" style="display:none;">
+                <h2>Settings</h2>
+                <p>Edit site configuration here.</p>
+            </div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
+            <!-- Security Logs -->
+            <div id="security" class="section" style="display:none;">
+                <h2>Security Logs</h2>
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="securityLogs"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "YOUR_FIREBASE_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-  const adminEmail = "youremail@example.com"; // change to your real admin email
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user || user.email !== adminEmail) {
-      window.location.href = "welcome.html";
+    function showSection(id) {
+        document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+        document.getElementById(id).style.display = "block";
     }
-  });
 
-  window.logout = async () => {
-    await signOut(auth);
-    window.location.href = "index.html";
-  };
-
-  window.toggleMaintenance = (status) => {
-    alert(status ? "Maintenance Mode Enabled" : "Maintenance Mode Disabled");
-  };
-
-  window.sendAnnouncement = () => {
-    const msg = document.getElementById("announcementMessage").value;
-    if (!msg.trim()) return alert("Message is empty!");
-    alert("Announcement sent: " + msg);
-  };
-
-  window.checkIP = async () => {
-    try {
-      const res = await fetch("https://ipapi.co/json/");
-      const data = await res.json();
-      document.getElementById("ipInfo").innerHTML =
-        `<p>IP: ${data.ip}</p>
-         <p>ISP: ${data.org}</p>
-         <p>City: ${data.city}</p>
-         <p>Country: ${data.country_name}</p>`;
-    } catch (e) {
-      alert("Failed to fetch IP info");
+    function logout() {
+        auth.signOut().then(() => location.reload());
     }
-  };
+
+    // Fetch feedback from Firebase
+    function loadFeedback() {
+        db.collection("feedback").onSnapshot(snapshot => {
+            document.getElementById("feedbackTable").innerHTML = "";
+            document.getElementById("totalFeedback").innerText = snapshot.size;
+            snapshot.forEach(doc => {
+                let data = doc.data();
+                document.getElementById("feedbackTable").innerHTML += `
+                    <tr>
+                        <td>${data.name}</td>
+                        <td>${data.email}</td>
+                        <td>${data.message}</td>
+                        <td>${data.project}</td>
+                        <td>${new Date(data.timestamp).toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+        });
+    }
+
+    // Fetch traffic logs
+    function loadTraffic() {
+        db.collection("traffic").orderBy("time", "desc").limit(50).onSnapshot(snapshot => {
+            document.getElementById("trafficTable").innerHTML = "";
+            document.getElementById("totalVisitors").innerText = snapshot.size;
+            snapshot.forEach(doc => {
+                let data = doc.data();
+                document.getElementById("trafficTable").innerHTML += `
+                    <tr>
+                        <td>${data.ip}</td>
+                        <td>${data.location}</td>
+                        <td>${data.isp}</td>
+                        <td>${data.device}</td>
+                        <td>${new Date(data.time).toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+        });
+    }
+
+    loadFeedback();
+    loadTraffic();
 </script>
 
 </body>
-</html>
+  </html>
