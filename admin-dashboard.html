@@ -1,545 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard — Excellent_Develops</title>
-  <style>
-    :root{
-      --bg1:#0f172a; --bg2:#111827; --card:#1f2937; --ink:#e5e7eb; --muted:#9ca3af;
-      --accent:#3b82f6; --bad:#ef4444; --warn:#f59e0b; --ok:#10b981;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--ink);
-      min-height:100vh;display:flex;flex-direction:column}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between;
-      padding:16px 20px;border-bottom:1px solid #00000040;background:rgba(0,0,0,.2);backdrop-filter:blur(6px)}
-    header h1{font-size:18px;margin:0}
-    .chip{padding:4px 10px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff22;font-size:12px}
-    main{padding:18px;max-width:1200px;margin:0 auto;width:100%;display:grid;gap:16px}
-    .card{background:var(--card);border:1px solid #ffffff12;border-radius:14px;box-shadow:0 10px 30px #00000040}
-    .pad{padding:16px}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    input,button,select,textarea{border-radius:10px;border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:10px 12px}
-    textarea{width:100%;min-height:90px}
-    button{cursor:pointer}
-    button.primary{background:var(--accent);border-color:#0000}
-    button.ghost{background:#ffffff10}
-    button.bad{background:var(--bad);border-color:#0000}
-    button.ok{background:var(--ok);border-color:#0000}
-    table{width:100%;border-collapse:separate;border-spacing:0}
-    th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #ffffff14;font-size:14px;vertical-align:middle}
-    th{position:sticky;top:0;background:#111827;z-index:1}
-    .scroll{max-height:60vh;overflow:auto;border-radius:12px}
-    .pill{padding:2px 8px;border-radius:999px;font-size:12px;display:inline-block}
-    .pill.ok{background:#10b98122;color:var(--ok);border:1px solid #10b98155}
-    .pill.warn{background:#f59e0b22;color:var(--warn);border:1px solid #f59e0b55}
-    .pill.bad{background:#ef444422;color:var(--bad);border:1px solid #ef444455}
-    .muted{color:var(--muted)}
-    .right{margin-left:auto}
-    .hidden{display:none}
-    .login{max-width:380px;margin:10vh auto}
-    nav.tabs{display:flex;gap:8px}
-    nav.tabs button{padding:10px 12px}
-    nav.tabs button.active{background:#ffffff22}
-    .footer{padding:16px 20px;color:var(--muted);font-size:12px;text-align:center}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Excellent_Develops</title>
+<style>
+  :root{
+    --ink:#e5e7eb; --muted:#9ca3af; --bg1:#0b1220; --bg2:#0f172a;
+    --card:#101726; --edge:#1f2937; --accent:#3b82f6; --ok:#10b981; --bad:#ef4444; --warn:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--ink);background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;display:flex;flex-direction:column}
+  header{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #00000040;background:rgba(0,0,0,.25);backdrop-filter:blur(6px)}
+  header h1{margin:0;font-size:18px}
+  .chip{padding:4px 10px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff22;font-size:12px}
+  .btn{border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer}
+  .btn.primary{background:var(--accent);border-color:transparent}
+  .btn.danger{background:#ef444433;border-color:#ef444455}
+  .btn.ghost{background:#ffffff10}
+  main{display:grid;grid-template-columns:240px 1fr; gap:16px; padding:18px; max-width:1400px; margin:0 auto; width:100%}
+  nav{background:var(--card);border:1px solid #ffffff12;border-radius:14px;padding:10px}
+  nav button{width:100%; text-align:left; margin:6px 0}
+  nav .active{background:var(--accent);border-color:transparent}
+  section.card{background:var(--card);border:1px solid #ffffff12;border-radius:14px;padding:16px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .kpi{background:#0b1324;border:1px solid #ffffff1a;border-radius:16px;padding:16px}
+  .kpi h3{margin:0 0 6px 0;font-size:13px;color:var(--muted);font-weight:600}
+  .kpi .val{font-size:22px}
+  table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:10px 12px;border-bottom:1px solid #ffffff14;text-align:left;font-size:14px;vertical-align:middle}
+  th{position:sticky;top:0;background:#111827;z-index:1}
+  .scroll{max-height:65vh;overflow:auto;border-radius:12px;border:1px solid #ffffff10}
+  input,select,textarea{border-radius:10px;border:1px solid #ffffff22;background:#0b1324;color:var(--ink);padding:10px 12px;width:100%}
+  .muted{color:var(--muted)}
+  .right{margin-left:auto}
+  .hidden{display:none}
+  .pill{padding:2px 8px;border-radius:999px;font-size:12px;display:inline-block}
+  .pill.ok{background:#10b98122;color:var(--ok);border:1px solid #10b98155}
+  .pill.bad{background:#ef444422;color:var(--bad);border:1px solid #ef444455}
+  .pill.warn{background:#f59e0b22;color:var(--warn);border:1px solid #f59e0b55}
+  .footer{padding:18px 20px;color:var(--muted);font-size:12px;text-align:center}
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>Admin Dashboard <span class="chip">Excellent_Develops</span></h1>
-    <div class="row">
-      <span id="adminEmail" class="muted"></span>
-      <button id="signOutBtn" class="ghost">Sign out</button>
-    </div>
-  </header>
+<header>
+  <h1>Admin Control Center <span class="chip">Excellent_Develops</span></h1>
+  <div class="row">
+    <span id="adminEmail" class="muted"></span>
+    <button id="signOutBtn" class="btn ghost">Sign out</button>
+  </div>
+</header>
 
-  <main>
-    <!-- ADMIN LOGIN -->
-    <section id="loginCard" class="card pad login">
-      <h2 style="margin:0 0 10px;">Admin Login</h2>
-      <p class="muted" style="margin:0 0 14px;">Only approved emails can access this page.</p>
-      <div class="row" style="flex-direction:column;align-items:stretch;gap:10px">
-        <input id="loginEmail" type="email" placeholder="Admin email" autocomplete="email"/>
-        <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password"/>
-        <button id="loginBtn" class="primary">Sign in</button>
+<main>
+  <!-- LEFT NAV -->
+  <nav>
+    <button class="btn active" data-tab="overview">Overview</button>
+    <button class="btn" data-tab="feedback">Feedback</button>
+    <button class="btn" data-tab="visitors">Visitors</button>
+    <button class="btn" data-tab="users">Users</button>
+    <button class="btn" data-tab="settings">Settings</button>
+  </nav>
+
+  <!-- RIGHT CONTENT -->
+  <div>
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="card">
+      <h2 style="margin-top:0">Overview</h2>
+      <div class="grid">
+        <div class="kpi"><h3>Total Feedback</h3><div class="val" id="kpiFeedback">0</div></div>
+        <div class="kpi"><h3>Total Visitors</h3><div class="val" id="kpiVisitors">0</div></div>
+        <div class="kpi"><h3>Registered Users</h3><div class="val" id="kpiUsers">0</div></div>
       </div>
-      <p id="loginErr" class="muted" style="margin-top:10px;"></p>
+      <p class="muted" id="lastUpdated" style="margin-top:12px">—</p>
     </section>
 
-    <!-- DASHBOARD -->
-    <section id="dash" class="hidden">
-      <nav class="tabs">
-        <button class="ghost active" data-tab="usersTab">Users</button>
-        <button class="ghost" data-tab="attemptsTab">Login Attempts</button>
-        <button class="ghost" data-tab="blockTab">Blocklist</button>
-      </nav>
-
-      <!-- FILTERS / STATS -->
-      <div class="card pad">
-        <div class="row">
-          <strong>Filters:</strong>
-          <input id="qEmail" placeholder="Search email…"/>
-          <input id="qIP" placeholder="Filter by IP…"/>
-          <input id="qISP" placeholder="Filter by ISP…"/>
-          <input id="qCity" placeholder="Filter by City…"/>
-          <button id="clearFilters" class="ghost">Clear</button>
-          <span class="right muted" id="lastUpdated">—</span>
-        </div>
-      </div>
-
+    <!-- FEEDBACK -->
+    <section id="tab-feedback" class="card hidden">
       <div class="row">
-        <div class="card pad" style="flex:1">
-          <div class="row">
-            <div><strong>Total Users:</strong> <span id="countTotal">0</span></div>
-            <div><strong>Unique IPs:</strong> <span id="countIPs">0</span></div>
-            <div><strong>Unique ISP+City:</strong> <span id="countIspCity">0</span></div>
-            <div><strong>Violations (IP ≥ 2 or ISP+City ≥ 2):</strong> <span id="countViolations">0</span></div>
-            <button id="exportCSV" class="right ghost">Export CSV</button>
+        <h2 style="margin:0">Feedback</h2>
+        <button id="exportFeedback" class="btn right">Export CSV</button>
+      </div>
+      <div class="row" style="margin:10px 0">
+        <input id="fProject" placeholder="Filter by project…"/>
+        <input id="fEmail" placeholder="Filter by email…"/>
+        <input id="fIP" placeholder="Filter by IP…"/>
+        <button id="clearF" class="btn ghost">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th><th>Name</th><th>Email</th><th>Message</th>
+              <th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyFeedback"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISITORS -->
+    <section id="tab-visitors" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Visitors</h2>
+        <button id="exportVisitors" class="btn right">Export CSV</button>
+      </div>
+      <div class="row" style="margin:10px 0">
+        <input id="vPage" placeholder="Filter by page…"/>
+        <input id="vIP" placeholder="Filter by IP…"/>
+        <input id="vISP" placeholder="Filter by ISP…"/>
+        <input id="vCity" placeholder="Filter by City…"/>
+        <button id="clearV" class="btn ghost">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Page</th><th>User</th><th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th></tr>
+          </thead>
+          <tbody id="tbodyVisitors"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="tab-users" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Users</h2>
+        <button id="exportUsers" class="btn right">Export CSV</button>
+      </div>
+      <div class="row" style="margin:10px 0">
+        <input id="uEmail" placeholder="Filter by email…"/>
+        <input id="uIP" placeholder="Filter by IP…"/>
+        <input id="uISP" placeholder="Filter by ISP…"/>
+        <input id="uCity" placeholder="Filter by City…"/>
+        <button id="clearU" class="btn ghost">Clear</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th></tr>
+          </thead>
+          <tbody id="tbodyUsers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="card hidden">
+      <h2 style="margin-top:0">Settings</h2>
+      <p class="muted">These values are saved in Firestore at <code>siteSettings/global</code>.</p>
+      <div class="row" style="align-items:flex-start">
+        <div style="flex:1;min-width:260px">
+          <label class="muted">Global Banner Text</label>
+          <textarea id="setBanner" rows="3" placeholder="Optional banner text shown on project pages"></textarea>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <label class="muted">Coming Soon (per project)</label>
+          <div class="row" style="flex-direction:column;gap:8px;align-items:flex-start">
+            <label><input type="checkbox" id="csExcellent"> Excellent Global Concept</label>
+            <label><input type="checkbox" id="csPematech"> Pematech Company</label>
+            <label><input type="checkbox" id="csSocial"> Social Intelligence Hub</label>
+            <label><input type="checkbox" id="csLms"> LMS / Educational</label>
           </div>
         </div>
       </div>
-
-      <!-- USERS TAB -->
-      <section id="usersTab" class="card">
-        <div class="scroll">
-          <table id="usersTable">
-            <thead>
-              <tr>
-                <th>Name</th><th>Email</th><th>IP</th><th>ISP</th><th>City</th>
-                <th>Created (Lagos)</th><th>IP Cnt</th><th>ISP+City Cnt</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="tbodyUsers"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ATTEMPTS TAB -->
-      <section id="attemptsTab" class="card hidden">
-        <div class="scroll">
-          <table id="attemptsTable">
-            <thead>
-              <tr>
-                <th>Email</th><th>IP</th><th>ISP</th><th>City</th>
-                <th>Status</th><th>Reason</th><th>Time (Lagos)</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="tbodyAttempts"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- BLOCKLIST TAB -->
-      <section id="blockTab" class="card hidden pad">
-        <h3 style="margin-top:0">Blocked Users / IPs</h3>
-        <div class="row" style="align-items:flex-start">
-          <div class="card pad" style="flex:2">
-            <div class="scroll">
-              <table id="blockTable">
-                <thead>
-                  <tr>
-                    <th>IP</th><th>ISP+City</th><th>Email</th><th>Reason</th><th>Blocked At</th><th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyBlock"></tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card pad" style="flex:1;min-width:280px">
-            <h4 style="margin:0 0 8px">Add to Blocklist</h4>
-            <input id="blkIP" placeholder="IP (optional)"/>
-            <input id="blkIspCity" placeholder="ISP_City (optional)"/>
-            <input id="blkEmail" placeholder="Email (optional)"/>
-            <textarea id="blkReason" placeholder="Reason (required)"></textarea>
-            <div class="row">
-              <button id="addBlockBtn" class="bad">Block</button>
-              <button id="clearBlockInputs" class="ghost">Clear</button>
-            </div>
-            <p class="muted" style="margin-top:10px">
-              You can block by IP, by ISP+City (e.g. “MTN Nigeria_Lagos”), or email.  
-              Provide at least one identifier and a reason.
-            </p>
-          </div>
-        </div>
-      </section>
+      <div class="row" style="margin-top:12px">
+        <button id="saveSettings" class="btn primary">Save Settings</button>
+        <span id="saveMsg" class="muted"></span>
+      </div>
     </section>
-  </main>
+  </div>
+</main>
 
-  <div class="footer">© 2025 Excellent, Global, Conceptional. All rights reserved.</div>
+<div class="footer">© 2025 Excellent Global Conceptional. All rights reserved.</div>
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script> emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" }); </script>
+<!-- EmailJS (optional hooks inside JS are commented) -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import {
-      getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp,
-      doc, deleteDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc,
+    collection, onSnapshot, query, orderBy, limit, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ====== ADMIN ALLOW LIST ======
-    const ADMIN_EMAILS = [
-      "quareebalabi22@gmail.com" // add more if needed
-    ];
+  // ============ CONFIG ============
+  const ADMIN_EMAILS = ["quareebalabi22@gmail.com"]; // you can add more emails later
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
 
-    // ====== FIREBASE CONFIG (yours) ======
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
+  // EmailJS (enable if you want notifications from admin actions)
+  // emailjs.init("h5LWzY8YUESb4sZbS");
+  const MAIL_SERVICE = "service_cvvr3vn";
+  const MAIL_TEMPLATE = "template_6xgms6a";
+  const ADMIN_NOTIFY = "quareebalabi22@gmail.com";
+
+  // ============ INIT ============
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ============ ELEMENTS ============
+  const adminEmailEl = document.getElementById("adminEmail");
+  const signOutBtn = document.getElementById("signOutBtn");
+  const lastUpdated = document.getElementById("lastUpdated");
+
+  // Tabs
+  const tabButtons = [...document.querySelectorAll("nav .btn")];
+  const tabs = {
+    overview: document.getElementById("tab-overview"),
+    feedback: document.getElementById("tab-feedback"),
+    visitors: document.getElementById("tab-visitors"),
+    users: document.getElementById("tab-users"),
+    settings: document.getElementById("tab-settings")
+  };
+  tabButtons.forEach(b=>{
+    b.onclick = ()=> {
+      tabButtons.forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      const t = b.dataset.tab;
+      Object.entries(tabs).forEach(([k,el])=> el.classList.toggle("hidden", k!==t));
     };
+  });
 
-    // ====== INIT ======
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  // KPIs
+  const kpiFeedback = document.getElementById("kpiFeedback");
+  const kpiVisitors = document.getElementById("kpiVisitors");
+  const kpiUsers = document.getElementById("kpiUsers");
 
-    // UI refs
-    const loginCard = document.getElementById("loginCard");
-    const dash = document.getElementById("dash");
-    const adminEmailEl = document.getElementById("adminEmail");
-    const signOutBtn = document.getElementById("signOutBtn");
-    const loginBtn = document.getElementById("loginBtn");
-    const loginEmail = document.getElementById("loginEmail");
-    const loginPass = document.getElementById("loginPass");
-    const loginErr = document.getElementById("loginErr");
+  // Feedback filters/table
+  const fProject = document.getElementById("fProject");
+  const fEmail = document.getElementById("fEmail");
+  const fIP = document.getElementById("fIP");
+  const clearF = document.getElementById("clearF");
+  const tbodyFeedback = document.getElementById("tbodyFeedback");
+  const exportFeedback = document.getElementById("exportFeedback");
 
-    const lastUpdated = document.getElementById("lastUpdated");
-    const qEmail = document.getElementById("qEmail");
-    const qIP = document.getElementById("qIP");
-    const qISP = document.getElementById("qISP");
-    const qCity = document.getElementById("qCity");
-    const clearFilters = document.getElementById("clearFilters");
-    const exportCSV = document.getElementById("exportCSV");
+  // Visitors filters/table
+  const vPage = document.getElementById("vPage");
+  const vIP = document.getElementById("vIP");
+  const vISP = document.getElementById("vISP");
+  const vCity = document.getElementById("vCity");
+  const clearV = document.getElementById("clearV");
+  const tbodyVisitors = document.getElementById("tbodyVisitors");
+  const exportVisitors = document.getElementById("exportVisitors");
 
-    const usersTab = document.getElementById("usersTab");
-    const attemptsTab = document.getElementById("attemptsTab");
-    const blockTab = document.getElementById("blockTab");
+  // Users filters/table
+  const uEmail = document.getElementById("uEmail");
+  const uIP = document.getElementById("uIP");
+  const uISP = document.getElementById("uISP");
+  const uCity = document.getElementById("uCity");
+  const clearU = document.getElementById("clearU");
+  const tbodyUsers = document.getElementById("tbodyUsers");
+  const exportUsers = document.getElementById("exportUsers");
 
-    const tbodyUsers = document.getElementById("tbodyUsers");
-    const tbodyAttempts = document.getElementById("tbodyAttempts");
-    const tbodyBlock = document.getElementById("tbodyBlock");
+  // Settings
+  const setBanner = document.getElementById("setBanner");
+  const csExcellent = document.getElementById("csExcellent");
+  const csPematech = document.getElementById("csPematech");
+  const csSocial = document.getElementById("csSocial");
+  const csLms = document.getElementById("csLms");
+  const saveSettings = document.getElementById("saveSettings");
+  const saveMsg = document.getElementById("saveMsg");
 
-    const blkIP = document.getElementById("blkIP");
-    const blkIspCity = document.getElementById("blkIspCity");
-    const blkEmail = document.getElementById("blkEmail");
-    const blkReason = document.getElementById("blkReason");
-    const addBlockBtn = document.getElementById("addBlockBtn");
-    const clearBlockInputs = document.getElementById("clearBlockInputs");
+  // ============ ADMIN GUARD ============
+  onAuthStateChanged(auth, async (user)=>{
+    const email = (user?.email||"").toLowerCase();
+    const allowed = !!user && ADMIN_EMAILS.includes(email);
+    if (!allowed) {
+      // not allowed → bounce to welcome
+      window.location.href = "welcome.html";
+      return;
+    }
+    adminEmailEl.textContent = email;
+    boot();
+  });
 
-    // Tab switching
-    document.querySelectorAll('nav.tabs button').forEach(btn=>{
-      btn.onclick=()=>{
-        document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        [usersTab, attemptsTab, blockTab].forEach(s=>s.classList.add('hidden'));
-        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+  signOutBtn.onclick = async ()=>{ try{await signOut(auth);}catch{} window.location.href="index.html"; };
+
+  // ============ DATA STREAMS ============
+  let feedbackRows = [];
+  let visitorRows = [];
+  let userRows = [];
+
+  function lagosTime(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      return d ? d.toLocaleString("en-NG",{ timeZone:"Africa/Lagos" }) : "";
+    } catch { return ""; }
+  }
+
+  function esc(s){
+    return String(s ?? "")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
+  function passF(r){
+    const p=(fProject.value||"").toLowerCase();
+    const e=(fEmail.value||"").toLowerCase();
+    const ip=(fIP.value||"").toLowerCase();
+    if (p && !(r.project||"").toLowerCase().includes(p)) return false;
+    if (e && !(r.email||"").toLowerCase().includes(e)) return false;
+    if (ip && !(r.ip||"").toLowerCase().includes(ip)) return false;
+    return true;
+  }
+
+  function passV(r){
+    const p=(vPage.value||"").toLowerCase();
+    const ip=(vIP.value||"").toLowerCase();
+    const isp=(vISP.value||"").toLowerCase();
+    const c=(vCity.value||"").toLowerCase();
+    if (p && !(r.page||"").toLowerCase().includes(p)) return false;
+    if (ip && !(r.ip||"").toLowerCase().includes(ip)) return false;
+    if (isp && !(r.isp||"").toLowerCase().includes(isp)) return false;
+    if (c && !(r.city||"").toLowerCase().includes(c)) return false;
+    return true;
+  }
+
+  function passU(r){
+    const e=(uEmail.value||"").toLowerCase();
+    const ip=(uIP.value||"").toLowerCase();
+    const isp=(uISP.value||"").toLowerCase();
+    const c=(uCity.value||"").toLowerCase();
+    if (e && !(r.email||"").toLowerCase().includes(e)) return false;
+    if (ip && !(r.ip||"").toLowerCase().includes(ip)) return false;
+    if (isp && !(r.isp||"").toLowerCase().includes(isp)) return false;
+    if (c && !(r.city||"").toLowerCase().includes(c)) return false;
+    return true;
+  }
+
+  function renderFeedback(){
+    const rows = feedbackRows.filter(passF);
+    tbodyFeedback.innerHTML = "";
+    for (const r of rows){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(r.project||"")}</td>
+        <td>${esc(r.name||"")}</td>
+        <td>${esc(r.email||"")}</td>
+        <td>${esc(r.message||"")}</td>
+        <td>${esc(r.ip||"")}</td>
+        <td>${esc(r.isp||"")}</td>
+        <td>${esc(r.city||"")}</td>
+        <td class="muted">${esc(lagosTime(r.createdAt))}</td>
+        <td><button class="btn danger" data-id="${r.id}">Delete</button></td>
+      `;
+      tbodyFeedback.appendChild(tr);
+    }
+    kpiFeedback.textContent = feedbackRows.length;
+    [...tbodyFeedback.querySelectorAll("button[data-id]")].forEach(btn=>{
+      btn.onclick = async ()=>{
+        if (!confirm("Delete this feedback?")) return;
+        await deleteDoc(doc(db,"feedback", btn.dataset.id));
+        // Optional email notice
+        // emailjs.send(MAIL_SERVICE, MAIL_TEMPLATE, {
+        //   from_name: "Admin Action",
+        //   to_name: "Admin",
+        //   to_email: ADMIN_NOTIFY,
+        //   message: `A feedback document was deleted by ${adminEmailEl.textContent}`
+        // });
       };
     });
+  }
 
-    // ====== AUTH GUARD ======
-    onAuthStateChanged(auth, (user) => {
-      if (user && ADMIN_EMAILS.includes(user.email)) {
-        adminEmailEl.textContent = user.email;
-        loginCard.classList.add("hidden");
-        dash.classList.remove("hidden");
-        bootStreams();
-      } else {
-        if (user) signOut(auth);
-        adminEmailEl.textContent = "";
-        dash.classList.add("hidden");
-        loginCard.classList.remove("hidden");
-        stopStreams();
-      }
-    });
+  function renderVisitors(){
+    const rows = visitorRows.filter(passV);
+    tbodyVisitors.innerHTML = "";
+    for (const r of rows){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(r.page||"")}</td>
+        <td>${esc(r.userEmail||"")}</td>
+        <td>${esc(r.ip||"")}</td>
+        <td>${esc(r.isp||"")}</td>
+        <td>${esc(r.city||"")}</td>
+        <td class="muted">${esc(lagosTime(r.createdAt))}</td>
+      `;
+      tbodyVisitors.appendChild(tr);
+    }
+    kpiVisitors.textContent = visitorRows.length;
+  }
 
-    loginBtn.onclick = async () => {
-      loginErr.textContent = "";
-      try {
-        await signInWithEmailAndPassword(auth, (loginEmail.value||"").trim(), loginPass.value);
-      } catch (e) {
-        loginErr.textContent = "Login failed: " + (e?.message || e);
-      }
+  function renderUsers(){
+    const rows = userRows.filter(passU);
+    tbodyUsers.innerHTML = "";
+    for (const r of rows){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(r.name||"")}</td>
+        <td>${esc(r.email||"")}</td>
+        <td>${esc(r.ip||"")}</td>
+        <td>${esc(r.isp||"")}</td>
+        <td>${esc(r.city||"")}</td>
+        <td class="muted">${esc(lagosTime(r.createdAt))}</td>
+      `;
+      tbodyUsers.appendChild(tr);
+    }
+    kpiUsers.textContent = userRows.length;
+  }
+
+  function csvDownload(filename, rows){
+    const csv = rows.map(r => r.map(v => `"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  exportFeedback.onclick = ()=>{
+    const rows = [["Project","Name","Email","Message","IP","ISP","City","Created(Lagos)"]];
+    for (const r of feedbackRows.filter(passF)){
+      rows.push([r.project||"",r.name||"",r.email||"",r.message||"",r.ip||"",r.isp||"",r.city||"",lagosTime(r.createdAt)]);
+    }
+    csvDownload("feedback.csv", rows);
+  };
+
+  exportVisitors.onclick = ()=>{
+    const rows = [["Page","User","IP","ISP","City","Created(Lagos)"]];
+    for (const r of visitorRows.filter(passV)){
+      rows.push([r.page||"",r.userEmail||"",r.ip||"",r.isp||"",r.city||"",lagosTime(r.createdAt)]);
+    }
+    csvDownload("visitors.csv", rows);
+  };
+
+  exportUsers.onclick = ()=>{
+    const rows = [["Name","Email","IP","ISP","City","Created(Lagos)"]];
+    for (const r of userRows.filter(passU)){
+      rows.push([r.name||"",r.email||"",r.ip||"",r.isp||"",r.city||"",lagosTime(r.createdAt)]);
+    }
+    csvDownload("users.csv", rows);
+  };
+
+  [fProject,fEmail,fIP].forEach(i=>i.addEventListener("input",renderFeedback));
+  clearF.onclick = ()=>{ fProject.value=fEmail.value=fIP.value=""; renderFeedback(); };
+
+  [vPage,vIP,vISP,vCity].forEach(i=>i.addEventListener("input",renderVisitors));
+  clearV.onclick = ()=>{ vPage.value=vIP.value=vISP.value=vCity.value=""; renderVisitors(); };
+
+  [uEmail,uIP,uISP,uCity].forEach(i=>i.addEventListener("input",renderUsers));
+  clearU.onclick = ()=>{ uEmail.value=uIP.value=uISP.value=uCity.value=""; renderUsers(); };
+
+  // Settings load/save
+  async function loadSettings(){
+    const snap = await getDoc(doc(db,"siteSettings","global"));
+    const data = snap.exists() ? snap.data() : {};
+    setBanner.value = data.bannerText || "";
+    csExcellent.checked = !!data.csExcellent;
+    csPematech.checked = !!data.csPematech;
+    csSocial.checked   = !!data.csSocial;
+    csLms.checked      = !!data.csLms;
+  }
+  saveSettings.onclick = async ()=>{
+    const payload = {
+      bannerText: setBanner.value.trim(),
+      csExcellent: csExcellent.checked,
+      csPematech: csPematech.checked,
+      csSocial: csSocial.checked,
+      csLms: csLms.checked,
+      updatedAt: new Date()
     };
+    await setDoc(doc(db,"siteSettings","global"), payload, { merge:true });
+    saveMsg.textContent = "Saved ✓";
+    setTimeout(()=>saveMsg.textContent="", 1500);
+    // Optional notify:
+    // emailjs.send(MAIL_SERVICE, MAIL_TEMPLATE, {
+    //   from_name: "Admin Settings",
+    //   to_name: "Admin",
+    //   to_email: ADMIN_NOTIFY,
+    //   message: "Site settings were updated by " + adminEmailEl.textContent
+    // });
+  };
 
-    signOutBtn.onclick = async () => {
-      await signOut(auth);
-    };
-
-    // ====== STREAMS ======
-    let unsubUsers=null, unsubAttempts=null, unsubBlocks=null;
-    let allUsers=[], ipCounts=new Map(), ispCityCounts=new Map();
-    let allAttempts=[], allBlocks=[];
-
-    function bootStreams(){
-      // Users
-      unsubUsers = onSnapshot(query(collection(db,"users"), orderBy("createdAt","desc")), snap=>{
-        allUsers = snap.docs.map(d=>({id:d.id, ...d.data()}));
-        recomputeCounts();
-        renderUsers();
-        updateStats();
-      });
-
-      // Login attempts
-      unsubAttempts = onSnapshot(query(collection(db,"login_attempts"), orderBy("ts","desc")), snap=>{
-        allAttempts = snap.docs.map(d=>({id:d.id, ...d.data()}));
-        renderAttempts();
-        updateStats();
-      });
-
-      // Blocklist
-      unsubBlocks = onSnapshot(query(collection(db,"blockedUsers"), orderBy("createdAt","desc")), snap=>{
-        allBlocks = snap.docs.map(d=>({id:d.id, ...d.data()}));
-        renderBlocks();
-      });
-    }
-
-    function stopStreams(){
-      if (unsubUsers) {unsubUsers(); unsubUsers=null;}
-      if (unsubAttempts) {unsubAttempts(); unsubAttempts=null;}
-      if (unsubBlocks) {unsubBlocks(); unsubBlocks=null;}
-      allUsers=[]; allAttempts=[]; allBlocks=[];
-    }
-
-    // ====== RENDER HELPERS ======
-    function lagosTime(ts){
-      try{
-        if(!ts) return "";
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
-        return d.toLocaleString("en-NG",{ timeZone:"Africa/Lagos" });
-      }catch{ return ""; }
-    }
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-    }
-    function passFiltersByObj(obj){
-      const fEmail = (qEmail.value||"").trim().toLowerCase();
-      const fIP    = (qIP.value||"").trim().toLowerCase();
-      const fISP   = (qISP.value||"").trim().toLowerCase();
-      const fCity  = (qCity.value||"").trim().toLowerCase();
-      const e=(obj.email||"").toLowerCase(), ip=(obj.ip||"").toLowerCase(), isp=(obj.isp||"").toLowerCase(), city=(obj.city||"").toLowerCase();
-      if (fEmail && !e.includes(fEmail)) return false;
-      if (fIP && !ip.includes(fIP)) return false;
-      if (fISP && !isp.includes(fISP)) return false;
-      if (fCity && !city.includes(fCity)) return false;
-      return true;
-    }
-
-    // Users
-    function recomputeCounts(){
-      ipCounts = new Map(); ispCityCounts = new Map();
-      for (const u of allUsers){
-        const ip=(u.ip||"").trim();
-        const ispc=(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim();
-        if (ip) ipCounts.set(ip,(ipCounts.get(ip)||0)+1);
-        if (ispc) ispCityCounts.set(ispc,(ispCityCounts.get(ispc)||0)+1);
-      }
-    }
-
-    function renderUsers(){
-      const filtered = allUsers.filter(passFiltersByObj);
-      tbodyUsers.innerHTML="";
-      for (const u of filtered){
-        const ip=(u.ip||"").trim(), isp=(u.isp||"").trim(), city=(u.city||"").trim();
-        const ispcKey=(u.ispCity || (isp+"_"+city)).trim();
-        const ipCount = ip ? (ipCounts.get(ip)||0) : 0;
-        const ispcCount = ispcKey ? (ispCityCounts.get(ispcKey)||0) : 0;
-        const ipPill = ipCount>=2 ? "bad" : ipCount===1 ? "ok" : "warn";
-        const ispcPill = ispcCount>=2 ? "bad" : ispcCount===1 ? "ok" : "warn";
-
-        const tr=document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(u.name||"")}</td>
-          <td>${escapeHtml(u.email||"")}</td>
-          <td>${escapeHtml(ip)}</td>
-          <td>${escapeHtml(isp)}</td>
-          <td>${escapeHtml(city)}</td>
-          <td class="muted">${escapeHtml(lagosTime(u.createdAt))}</td>
-          <td><span class="pill ${ipPill}">${ipCount}</span></td>
-          <td><span class="pill ${ispcPill}">${ispcCount}</span></td>
-          <td class="row">
-            <button class="bad" data-act="block-ip" data-ip="${escapeHtml(ip)}" title="Block IP">Block IP</button>
-            <button class="ghost" data-act="warn-email" data-email="${escapeHtml(u.email||"")}" title="Warn via Email">Warn</button>
-          </td>
-        `;
-        tbodyUsers.appendChild(tr);
-      }
-      bindUserRowActions();
-    }
-
-    function bindUserRowActions(){
-      tbodyUsers.querySelectorAll("button[data-act='block-ip']").forEach(btn=>{
-        btn.onclick = ()=> addToBlocklist({ ip: btn.dataset.ip, reason: "Manual block from Users table" });
-      });
-      tbodyUsers.querySelectorAll("button[data-act='warn-email']").forEach(btn=>{
-        btn.onclick = async ()=>{
-          const to = btn.dataset.email;
-          const msg = prompt("Warning message to send via EmailJS:", "Suspicious activity detected on your account. Please reply if this wasn’t you.");
-          if (!to || !msg) return;
-          try{
-            await emailjs.send("service_cvvr3vn","template_6xgms6a",{
-              to_email: to,
-              from_name: "Excellent_Develops Security",
-              message: msg
-            });
-            alert("Warning email sent.");
-          }catch(e){ alert("Email failed: "+(e?.message||e)); }
-        };
-      });
-    }
-
-    // Attempts
-    function renderAttempts(){
-      const filtered = allAttempts.filter(passFiltersByObj);
-      tbodyAttempts.innerHTML = "";
-      for (const a of filtered){
-        const status = a.success ? "Success" : "Failed";
-        const pill = a.success ? "ok" : "bad";
-        const tr=document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(a.email||"")}</td>
-          <td>${escapeHtml(a.ip||"")}</td>
-          <td>${escapeHtml(a.isp||"")}</td>
-          <td>${escapeHtml(a.city||"")}</td>
-          <td><span class="pill ${pill}">${status}</span></td>
-          <td class="muted">${escapeHtml(a.reason||"")}</td>
-          <td class="muted">${escapeHtml(lagosTime(a.ts))}</td>
-          <td class="row">
-            <button class="bad" data-act="block-ip" data-ip="${escapeHtml(a.ip||"")}">Block IP</button>
-            <button class="ghost" data-act="warn-email" data-email="${escapeHtml(a.email||"")}">Warn</button>
-          </td>
-        `;
-        tbodyAttempts.appendChild(tr);
-      }
-      tbodyAttempts.querySelectorAll("button[data-act='block-ip']").forEach(b=>{
-        b.onclick = ()=> addToBlocklist({ ip: b.dataset.ip, reason: "Manual block from Attempts table" });
-      });
-      tbodyAttempts.querySelectorAll("button[data-act='warn-email']").forEach(b=>{
-        b.onclick = async ()=>{
-          const to=b.dataset.email;
-          if(!to) return alert("No email recorded for this attempt.");
-          const msg = prompt("Warning message to send via EmailJS:", "Multiple failed logins detected from your address. If this wasn’t you, please reset your password.");
-          if(!msg) return;
-          try{
-            await emailjs.send("service_cvvr3vn","template_6xgms6a",{
-              to_email: to,
-              from_name: "Excellent_Develops Security",
-              message: msg
-            });
-            alert("Warning email sent.");
-          }catch(e){ alert("Email failed: "+(e?.message||e)); }
-        };
-      });
-    }
-
-    // Blocklist
-    function renderBlocks(){
-      tbodyBlock.innerHTML = "";
-      for (const b of allBlocks){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(b.ip||"")}</td>
-          <td>${escapeHtml(b.ispCity||"")}</td>
-          <td>${escapeHtml(b.email||"")}</td>
-          <td class="muted">${escapeHtml(b.reason||"")}</td>
-          <td class="muted">${escapeHtml(lagosTime(b.createdAt))}</td>
-          <td><button class="ok" data-unblock="${b.id}">Unblock</button></td>
-        `;
-        tbodyBlock.appendChild(tr);
-      }
-      tbodyBlock.querySelectorAll("button[data-unblock]").forEach(btn=>{
-        btn.onclick = async ()=>{
-          if (!confirm("Remove this block?")) return;
-          try{
-            await deleteDoc(doc(db,"blockedUsers", btn.dataset.unblock));
-          }catch(e){ alert("Unblock failed: "+(e?.message||e)); }
-        };
-      });
-    }
-
-    // Add to blocklist
-    async function addToBlocklist({ip="", ispCity="", email="", reason=""}){
-      const r = reason || prompt("Reason for block:", "Suspicious activity / exceeded limits");
-      if (!ip && !ispCity && !email) return alert("Provide at least IP, ISP_City or Email to block.");
-      if (!r) return;
-      try{
-        await addDoc(collection(db,"blockedUsers"), {
-          ip: ip || null,
-          ispCity: ispCity || null,
-          email: email || null,
-          reason: r,
-          createdAt: serverTimestamp()
-        });
-        alert("Added to blocklist.");
-      }catch(e){ alert("Block failed: "+(e?.message||e)); }
-    }
-
-    addBlockBtn.onclick = ()=> addToBlocklist({
-      ip: (blkIP.value||"").trim(),
-      ispCity: (blkIspCity.value||"").trim(),
-      email: (blkEmail.value||"").trim(),
-      reason: (blkReason.value||"").trim()
-    });
-    clearBlockInputs.onclick = ()=>{ blkIP.value=""; blkIspCity.value=""; blkEmail.value=""; blkReason.value=""; };
-
-    // Stats / filters
-    function updateStats(){
-      const filtered = allUsers.filter(passFiltersByObj);
-      const ips = new Set(filtered.map(u=>(u.ip||"").trim()).filter(Boolean));
-      const ispc = new Set(filtered.map(u=>(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim()).filter(Boolean));
-      document.getElementById("countTotal").textContent = filtered.length;
-      document.getElementById("countIPs").textContent = ips.size;
-      document.getElementById("countIspCity").textContent = ispc.size;
-
-      let violations=0;
-      for (const u of filtered){
-        const ip=(u.ip||"").trim();
-        const ispcKey=(u.ispCity || ((u.isp||"")+"_"+(u.city||""))).trim();
-        const ipCount = ip ? (ipCounts.get(ip)||0) : 0;
-        const ispcCount = ispcKey ? (ispCityCounts.get(ispcKey)||0) : 0;
-        if (ipCount>=2 || ispcCount>=2) violations++;
-      }
-      document.getElementById("countViolations").textContent = violations;
-      lastUpdated.textContent = "Last updated: " + new Date().toLocaleString("en-NG",{timeZone:"Africa/Lagos"});
-    }
-
-    [qEmail,qIP,qISP,qCity].forEach(i=>i.addEventListener("input",()=>{
-      renderUsers(); renderAttempts(); updateStats();
-    }));
-    clearFilters.onclick = ()=>{ qEmail.value=qIP.value=qISP.value=qCity.value=""; renderUsers(); renderAttempts(); updateStats(); };
-
-    // CSV export of filtered Users
-    exportCSV.onclick = ()=>{
-      const rows = [["Name","Email","IP","ISP","City","Created(Lagos)","IP Count","ISP+City Count"]];
-      const filtered = allUsers.filter(passFiltersByObj);
-      for (const u of filtered){
-        const ip=(u.ip||"").trim(), isp=(u.isp||"").trim(), city=(u.city||"").trim();
-        const ispcKey=(u.ispCity || (isp+"_"+city)).trim();
-        rows.push([
-          u.name||"", u.email||"", ip, isp, city, lagosTime(u.createdAt),
-          ip ? (ipCounts.get(ip)||0) : 0,
-          ispcKey ? (ispCityCounts.get(ispcKey)||0 : 0)
-        ]);
-      }
-      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
-      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href=url; a.download="users_export.csv"; a.click();
-      URL.revokeObjectURL(url);
-    };
-  </script>
-</body>
-</html>
+  function boot(){
+    // live streams (latest 500 each for safety)
+    onSnapshot(query(collection(db,"feedback"), orderBy("createdAt","desc"), limit(500)), (snap)=>{
+      feedback
