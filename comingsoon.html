@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+<style>
+    body { font-family: Arial, sans-serif; background: #121212; color: white; text-align: center; margin: 0; padding: 0; }
+    header { padding: 50px 20px; }
+    h1 { font-size: 2.5rem; }
+    p { font-size: 1.2rem; opacity: 0.9; }
+    button { background: #ff4757; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 20px; }
+    button:hover { background: #e84118; }
+    footer { position: fixed; bottom: 0; left: 0; right: 0; background: #1f1f1f; padding: 15px; font-size: 0.9rem; }
+    footer a { color: #ff4757; text-decoration: none; margin: 0 10px; }
+    .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 999; animation: fadeIn 0.3s ease-in-out; }
+    .popup { background: #1f1f1f; color: white; padding: 20px; border-radius: 10px; max-width: 400px; width: 90%; margin: auto; margin-top: 10%; text-align: center; animation: fadeInUp 0.4s ease-in-out; }
+    .popup.error { animation: shake 0.4s ease-in-out; background: #2d1f1f; }
+    .popup.success { background: #1f2d1f; }
+    input, textarea { width: 90%; padding: 10px; margin: 8px 0; border: none; border-radius: 6px; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+</style>
+</head>
+<body>
+
+<header>
+    <h1 id="project-title">Coming Soon</h1>
+    <p id="project-message">We are working so hard to bring you something amazing.</p>
+    <button onclick="openFeedback()">Leave Your Feedback</button>
+</header>
+
+<!-- Feedback Form Overlay -->
+<div id="feedback-overlay" class="overlay">
+    <div class="popup">
+        <h2>Leave Feedback</h2>
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="feedback" placeholder="Your Feedback" rows="4" required></textarea>
+        <br>
+        <button onclick="submitFeedback()">Submit</button>
+    </div>
+</div>
+
+<!-- Result Overlay -->
+<div id="result-overlay" class="overlay">
+    <div id="result-popup" class="popup">
+        <h2 id="result-icon"></h2>
+        <p id="result-message"></p>
+        <button onclick="logout()">Logout</button>
+        <p id="countdown"></p>
+    </div>
+</div>
+
+<footer>
+    <p>
+        <a href="https://www.facebook.com/EminiExcellent" target="_blank">Facebook</a> |
+        <a href="https://www.instagram.com/iam_dexcellent?igsh=ajZtdGRvcnRnNDIw" target="_blank">Instagram</a> |
+        <a href="https://x.com/TheOlodo_Nation" target="_blank">X</a> |
+        <a href="https://www.linkedin.com/in/quareeb-jagun-448262310" target="_blank">LinkedIn</a> |
+        📞 +2349046463436
+    </p>
+</footer>
+
+<script>
+    // ✅ FIREBASE CONFIG (your details)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+      authDomain: "excellent-d056e.firebaseapp.com",
+      projectId: "excellent-d056e",
+      storageBucket: "excellent-d056e.firebasestorage.app",
+      messagingSenderId: "629984941607",
+      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+      measurementId: "G-G3RCTDSY27"
+    };
+
+    // ✅ Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Project-specific titles & messages
+    const projectData = {
+        pematech: {
+            title: "PEMATECH – Coming Soon",
+            message: "We are working hard to bring you cutting-edge technology solutions."
+        },
+        lms: {
+            title: "Education LMS – Coming Soon",
+            message: "Empowering learning through innovative digital solutions."
+        },
+        socialhub: {
+            title: "Social Intelligence Hub – Coming Soon",
+            message: "Connecting people and ideas like never before."
+        }
+    };
+
+    // ✅ Detect project from URL (?project=...)
+    const params = new URLSearchParams(window.location.search);
+    const projectKey = params.get("project");
+    if (projectData[projectKey]) {
+        document.getElementById("project-title").innerText = projectData[projectKey].title;
+        document.getElementById("project-message").innerText = projectData[projectKey].message;
+    }
+
+    function openFeedback() {
+        document.getElementById("feedback-overlay").style.display = "block";
+    }
+
+    async function submitFeedback() {
+        let name = document.getElementById("name").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let feedback = document.getElementById("feedback").value.trim();
+
+        if (!name || !email || !feedback) {
+            showResult(false, name);
+            return;
+        }
+
+        try {
+            await db.collection("feedbacks").add({
+                name: name,
+                email: email,
+                feedback: feedback,
+                project: projectKey || "general",
+                timestamp: new Date()
+            });
+            showResult(true, name);
+        } catch (error) {
+            console.error("Error saving feedback: ", error);
+            showResult(false, name);
+        }
+    }
+
+    function showResult(success, name) {
+        document.getElementById("feedback-overlay").style.display = "none";
+        let popup = document.getElementById("result-popup");
+        let icon = document.getElementById("result-icon");
+        let message = document.getElementById("result-message");
+
+        if (success) {
+            popup.className = "popup success";
+            icon.innerText = "✅";
+            message.innerHTML = `Success!<br>Thank you <b>${name || "User"}</b>, your feedback has been submitted.<br>We appreciate you ❤️`;
+        } else {
+            popup.className = "popup error";
+            icon.innerText = "❌";
+            message.innerHTML = `Sorry ${name || "User"}, something went wrong.`;
+        }
+
+        document.getElementById("result-overlay").style.display = "block";
+        startCountdown();
+    }
+
+    function startCountdown() {
+        let timeLeft = 5;
+        let countdownElem = document.getElementById("countdown");
+        countdownElem.innerText = `Logging out in ${timeLeft} seconds...`;
+
+        let timer = setInterval(() => {
+            timeLeft--;
+            countdownElem.innerText = `Logging out in ${timeLeft} seconds...`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                logout();
+            }
+        }, 1000);
+    }
+
+    function logout() {
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>
