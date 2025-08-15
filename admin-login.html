@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+            width: 300px;
+            display: none;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border: none;
+            border-radius: 6px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4cafef;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #3a9cd9;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="error-message"></div>
+
+    <div class="login-container" id="login-box">
+        <h2>Admin Login</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="adminkey" placeholder="Admin Key" required>
+        <input type="password" id="password" placeholder="Firebase Password" required>
+        <button onclick="adminLogin()">Login</button>
+        <div class="error" id="login-error"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Secret URL code check
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("code") === "554455") {
+            document.getElementById("login-box").style.display = "block";
+        } else {
+            document.getElementById("error-message").innerHTML = "<h2>404 Not Found</h2>";
+        }
+
+        function adminLogin() {
+            const email = document.getElementById("email").value.trim();
+            const adminKey = document.getElementById("adminkey").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const loginError = document.getElementById("login-error");
+
+            loginError.innerText = "";
+
+            // Email check
+            if (email !== "quareebalabi22@gmail.com") {
+                loginError.innerText = "Unauthorized email!";
+                return;
+            }
+
+            // Admin key check
+            if (adminKey !== "Blessing@001") {
+                loginError.innerText = "Invalid admin key!";
+                return;
+            }
+
+            // Firebase login
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    window.location.href = "admin-dashboard.html";
+                })
+                .catch(err => {
+                    loginError.innerText = err.message;
+                });
+        }
+    </script>
+
+</body>
+</html>
