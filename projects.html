@@ -1,112 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Our Projects - Excellent Developers</title>
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects - Excellent Developers</title>
+<style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-      text-align: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        margin: 0;
+        padding: 0;
     }
-
     header {
-      padding: 2rem 1rem;
-      font-size: 1.8rem;
-      max-width: 800px;
-      margin: auto;
+        text-align: center;
+        padding: 30px 20px;
     }
-
+    header h1 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+    }
     .projects-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
     }
-
-    .card {
-      background: rgba(255,255,255,0.08);
-      padding: 1.5rem;
-      border-radius: 15px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      text-align: left;
+    .project-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
-
-    .card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    .project-card h2 {
+        margin: 0;
+        font-size: 1.4em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
-
-    .card h3 {
-      margin-top: 0;
-      font-size: 1.4rem;
+    .project-card p {
+        font-size: 1em;
+        line-height: 1.4em;
+        margin: 10px 0 20px;
     }
-
-    .card p {
-      font-size: 0.95rem;
-      opacity: 0.9;
+    .project-card button {
+        background-color: #ff7043;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        align-self: center; /* Centers the button horizontally */
+        transition: background-color 0.3s;
     }
-
-    .view-btn {
-      margin-top: 1rem;
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
-      background: #ff7e5f;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s ease, transform 0.2s ease;
+    .project-card button:hover {
+        background-color: #ff5722;
     }
-
-    .view-btn:hover {
-      background: #feb47b;
-      transform: translateY(-3px);
-    }
-  </style>
+</style>
 </head>
 <body>
-  <header>
-    🚀 These are the flagship projects of <strong>Excellent Developers</strong>.  
-    Click any to explore its future, drop your ideas, and be part of the journey!
-  </header>
 
-  <div class="projects-container">
-    <div class="card" onclick="openProject('excellent')">
-      <h3>🌍 Excellent Global Concept</h3>
-      <p>Innovative solutions bridging business, technology, and global impact — redefining excellence worldwide.</p>
-      <a class="view-btn">Click to View…</a>
+<header>
+    <h1>🚀 These are the flagship projects of <strong>Excellent Developers</strong>. Click any to explore its future, drop your ideas, and be part of the journey!</h1>
+</header>
+
+<div class="projects-container">
+
+    <div class="project-card">
+        <h2>🌐 Excellent Global Concept</h2>
+        <p>Innovative solutions bridging business, technology, and global impact — redefining excellence worldwide.</p>
+        <button onclick="location.href='feedback.html?project=global'">Click to View…</button>
     </div>
 
-    <div class="card" onclick="openProject('pematech')">
-      <h3>⚙️ Pematech Company</h3>
-      <p>Cutting-edge technology & engineering powering the future with precision, speed, and reliability.</p>
-      <a class="view-btn">Click to View…</a>
+    <div class="project-card">
+        <h2>⚙️ Pematech Company</h2>
+        <p>Cutting-edge technology & engineering powering the future with precision, speed, and reliability.</p>
+        <button onclick="location.href='feedback.html?project=pematech'">Click to View…</button>
     </div>
 
-    <div class="card" onclick="openProject('social')">
-      <h3>💬 Social Intelligence Hub</h3>
-      <p>Building smarter communities by merging AI insights with real human connections.</p>
-      <a class="view-btn">Click to View…</a>
+    <div class="project-card">
+        <h2>💬 Social Intelligence Hub</h2>
+        <p>Building smarter communities by merging AI insights with real human connections.</p>
+        <button onclick="location.href='feedback.html?project=social'">Click to View…</button>
     </div>
 
-    <div class="card" onclick="openProject('lms')">
-      <h3>📚 Educational / LMS Platform</h3>
-      <p>Empowering learners globally with interactive, engaging, and accessible education technology.</p>
-      <a class="view-btn">Click to View…</a>
+    <div class="project-card">
+        <h2>📚 Educational / LMS Platform</h2>
+        <p>Empowering learners globally with interactive, engaging, and accessible education technology.</p>
+        <button onclick="location.href='feedback.html?project=lms'">Click to View…</button>
     </div>
-  </div>
 
-  <script>
-    function openProject(project) {
-      window.location.href = `feedback.html?project=${project}`;
-    }
-  </script>
+</div>
+
 </body>
-      </html>
+  </html>
