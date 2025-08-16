@@ -13,13 +13,14 @@
   *{box-sizing:border-box}
   body{
     margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-    color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center;
+    color:var(--ink); min-height:100vh; display:flex; flex-direction:column;
     background: radial-gradient(1200px 600px at 15% 10%, #1d2750 0%, transparent 60%),
                 radial-gradient(900px 900px at 85% 90%, #2a1754 0%, transparent 60%),
                 linear-gradient(135deg,var(--bg1),var(--bg2));
   }
   .wrap{
-    width:100%; max-width:980px; padding:20px;
+    flex:1;
+    width:100%; max-width:980px; padding:20px; margin:auto;
     display:grid; grid-template-columns: 1fr; gap:18px;
   }
   .brand{
@@ -37,7 +38,8 @@
   .card{
     background:linear-gradient(180deg, #0e1628, #0b1324);
     border:1px solid #ffffff14; border-radius:16px; box-shadow:0 10px 30px #0008;
-    padding:16px;
+    padding:24px; /* taller inside */
+    min-height:260px; /* ⬅️ added more height */
   }
   .card h2{margin:0 0 10px 0; font-size:18px}
   .row{display:flex; gap:10px; flex-wrap:wrap}
@@ -61,9 +63,12 @@
   .hidden{display:none}
   .divider{height:1px; background:#ffffff18; margin:10px 0}
   .hint{font-size:12px; color:var(--muted)}
-  /* Admin ribbon appears only when secret present */
   .ribbon{
     text-align:center; font-size:12px; color:#cbd5e1; margin-top:-4px;
+  }
+  footer{
+    text-align:center; font-size:12px; color:var(--muted);
+    padding:16px 10px; border-top:1px solid #ffffff14;
   }
 </style>
 </head>
@@ -111,7 +116,7 @@
         <p class="ribbon">Secure link active</p>
       </section>
 
-      <!-- ADMIN SIGN-IN (only mounts if secret present) -->
+      <!-- ADMIN SIGN-IN -->
       <section class="card hidden" id="adminCard">
         <h2>Admin Sign-in</h2>
         <p class="hint" id="adminGuardNote">Guard: secret code + Firestore allow-list</p>
@@ -138,6 +143,10 @@
     </div>
   </div>
 
+  <footer>
+    © 2025 Excellent Global Conceptional — All rights reserved
+  </footer>
+
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -148,8 +157,7 @@
       getFirestore, doc, getDoc
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ================= CONFIG =================
-    const SECRET_CODE = "554455"; // your secret URL code
+    const SECRET_CODE = "554455"; 
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
@@ -165,7 +173,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ================= UI HOOKS =================
     const userEmailEl = document.getElementById("email");
     const userPassEl = document.getElementById("pass");
     const userLoginBtn = document.getElementById("userLoginBtn");
@@ -180,12 +187,10 @@
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminMsg = document.getElementById("adminMsg");
 
-    // ================= SECRET PARAM =================
     const params = new URLSearchParams(location.search);
     const hasSecret = params.get("code") === SECRET_CODE;
 
     if (hasSecret) {
-      // show a small “admin access available” card
       adminTeaser.classList.remove("hidden");
     }
 
@@ -197,11 +202,9 @@
 
     hideAdminBtn?.addEventListener("click", ()=>{
       adminCard.classList.add("hidden");
-      // keep teaser visible while secret link is active
       adminTeaser.classList.remove("hidden");
     });
 
-    // ================= USER LOGIN =================
     userLoginBtn.addEventListener("click", async ()=>{
       userMsg.textContent = "";
       const email = userEmailEl.value.trim();
@@ -213,14 +216,12 @@
       try{
         await signInWithEmailAndPassword(auth, email, pass);
         userMsg.textContent = "Success. Redirecting…";
-        // Normal users go to welcome page
         window.location.href = "welcome.html";
       } catch(e){
         userMsg.textContent = "Error: " + (e?.message || e);
       }
     });
 
-    // ================= ADMIN LOGIN (FIRESTORE ALLOW-LIST) =================
     adminLoginBtn.addEventListener("click", async ()=>{
       adminMsg.textContent = "";
       if (!hasSecret) {
@@ -234,19 +235,13 @@
         return;
       }
       try{
-        // 1) Sign in with Firebase
         await signInWithEmailAndPassword(auth, email, pass);
-
-        // 2) Check Firestore allow-list: admins/{email}
         const snap = await getDoc(doc(db, "admins", email));
         if (!snap.exists()) {
-          // not allowed → sign out + error
           try{ await signOut(auth); }catch{}
           adminMsg.textContent = "This account is not an admin.";
           return;
         }
-
-        // 3) OK → go to admin dashboard
         adminMsg.textContent = "Admin verified. Redirecting…";
         window.location.href = "admin-dashboard.html";
       } catch(e){
@@ -254,8 +249,6 @@
       }
     });
 
-    // Optional: if someone is already signed in and lands here with the secret code,
-    // we could auto-check if they’re admin and jump them to dashboard.
     onAuthStateChanged(auth, async (user)=>{
       if (!user || !hasSecret) return;
       try{
