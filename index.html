@@ -1,264 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Excellent_Develops — Sign in</title>
-<style>
-  :root{
-    --bg1:#0b1220; --bg2:#0f172a; --ink:#e5e7eb; --muted:#9ca3af;
-    --card:#121b2d; --edge:#1f2937; --accent:#3b82f6; --accent-2:#7c3aed;
-    --bad:#ef4444; --ok:#10b981;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const SECRET_CODE = "554455"; 
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const userEmailEl = document.getElementById("email");
+  const userPassEl = document.getElementById("pass");
+  const userLoginBtn = document.getElementById("userLoginBtn");
+  const userMsg = document.getElementById("userMsg");
+
+  const adminTeaser = document.getElementById("adminTeaser");
+  const adminCard = document.getElementById("adminCard");
+  const showAdminBtn = document.getElementById("showAdminBtn");
+  const hideAdminBtn = document.getElementById("hideAdminBtn");
+  const adminEmailEl = document.getElementById("adminEmail");
+  const adminPassEl = document.getElementById("adminPass");
+  const adminLoginBtn = document.getElementById("adminLoginBtn");
+  const adminMsg = document.getElementById("adminMsg");
+
+  const params = new URLSearchParams(location.search);
+  const hasSecret = params.get("code") === SECRET_CODE;
+
+  if (hasSecret) {
+    adminTeaser.classList.remove("hidden");
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-    color:var(--ink); min-height:100vh; display:flex; flex-direction:column;
-    background: radial-gradient(1200px 600px at 15% 10%, #1d2750 0%, transparent 60%),
-                radial-gradient(900px 900px at 85% 90%, #2a1754 0%, transparent 60%),
-                linear-gradient(135deg,var(--bg1),var(--bg2));
-  }
-  .wrap{
-    flex:1;
-    width:100%; max-width:980px; padding:20px; margin:auto;
-    display:grid; grid-template-columns: 1fr; gap:18px;
-  }
-  .brand{
-    text-align:center; margin-bottom:4px;
-  }
-  .brand img{
-    width:86px; height:86px; border-radius:50%; object-fit:cover;
-    box-shadow:0 10px 30px #0008; border:1px solid #ffffff1a;
-  }
-  .brand h1{font-size:20px; margin:10px 0 0}
-  .muted{color:var(--muted)}
-  .grid{
-    display:grid; grid-template-columns: 1fr; gap:16px;
-  }
-  .card{
-    background:linear-gradient(180deg, #0e1628, #0b1324);
-    border:1px solid #ffffff14; border-radius:16px; box-shadow:0 10px 30px #0008;
-    padding:24px; /* taller inside */
-    min-height:260px; /* ⬅️ added more height */
-  }
-  .card h2{margin:0 0 10px 0; font-size:18px}
-  .row{display:flex; gap:10px; flex-wrap:wrap}
-  .col{display:flex; flex-direction:column; gap:10px}
-  label{font-size:13px; color:var(--muted)}
-  input{
-    width:100%; padding:11px 12px; border-radius:10px; border:1px solid #ffffff22;
-    background:#0b1324; color:var(--ink); font-size:14px;
-  }
-  .btn{
-    padding:11px 14px; border-radius:10px; border:1px solid #ffffff22;
-    background:#0b1324; color:var(--ink); cursor:pointer;
-  }
-  .btn.primary{background:var(--accent); border-color:transparent}
-  .btn.ghost{background:#ffffff10}
-  .btn.warn{background:#f59e0b33; border-color:#f59e0b66}
-  .right{margin-left:auto}
-  .links{display:flex; gap:12px; flex-wrap:wrap}
-  .links a{color:var(--muted); text-decoration:none; font-size:13px}
-  .ok{color:var(--ok)} .bad{color:var(--bad)}
-  .hidden{display:none}
-  .divider{height:1px; background:#ffffff18; margin:10px 0}
-  .hint{font-size:12px; color:var(--muted)}
-  .ribbon{
-    text-align:center; font-size:12px; color:#cbd5e1; margin-top:-4px;
-  }
-  footer{
-    text-align:center; font-size:12px; color:var(--muted);
-    padding:16px 10px; border-top:1px solid #ffffff14;
-  }
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="brand">
-      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops"/>
-      <h1>Welcome back to Excellent_Develops</h1>
-      <p class="muted">Sign in to continue.</p>
-    </div>
 
-    <div class="grid">
-      <!-- USER SIGN-IN -->
-      <section class="card" id="userCard">
-        <h2>User Sign-in</h2>
-        <div class="col">
-          <div>
-            <label>Email</label>
-            <input id="email" type="email" placeholder="you@example.com" />
-          </div>
-          <div>
-            <label>Password</label>
-            <input id="pass" type="password" placeholder="••••••••" />
-          </div>
-          <div class="row">
-            <button id="userLoginBtn" class="btn primary">Sign in</button>
-            <span id="userMsg" class="hint"></span>
-            <div class="right links">
-              <a href="create-account.html">Create account</a>
-              <a href="forgot-password.html">Forgot password?</a>
-            </div>
-          </div>
-        </div>
-      </section>
+  showAdminBtn?.addEventListener("click", ()=>{
+    adminCard.classList.remove("hidden");
+    adminTeaser.classList.add("hidden");
+    adminEmailEl.focus();
+  });
 
-      <!-- ADMIN ENTRY BUTTON (shows only when secret in URL) -->
-      <section class="card hidden" id="adminTeaser">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <div>
-            <h2 style="margin:0 0 6px 0">Admin access</h2>
-            <p class="muted" style="margin:0">Administrator sign-in is available.</p>
-          </div>
-          <button id="showAdminBtn" class="btn">Login as Admin</button>
-        </div>
-        <p class="ribbon">Secure link active</p>
-      </section>
+  hideAdminBtn?.addEventListener("click", ()=>{
+    adminCard.classList.add("hidden");
+    adminTeaser.classList.remove("hidden");
+  });
 
-      <!-- ADMIN SIGN-IN -->
-      <section class="card hidden" id="adminCard">
-        <h2>Admin Sign-in</h2>
-        <p class="hint" id="adminGuardNote">Guard: secret code + Firestore allow-list</p>
-        <div class="col">
-          <div>
-            <label>Admin Email</label>
-            <input id="adminEmail" type="email" placeholder="admin@domain.com"/>
-          </div>
-          <div>
-            <label>Password</label>
-            <input id="adminPass" type="password" placeholder="••••••••"/>
-          </div>
-          <div class="row">
-            <button id="adminLoginBtn" class="btn primary">Sign in as Admin</button>
-            <span id="adminMsg" class="hint"></span>
-            <button id="hideAdminBtn" class="btn ghost right">Hide</button>
-          </div>
-          <div class="divider"></div>
-          <p class="hint">
-            Only emails listed in Firestore <code>admins</code> can access the dashboard.
-          </p>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <footer>
-    © 2025 Excellent Global Conceptional — All rights reserved
-  </footer>
-
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import {
-      getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import {
-      getFirestore, doc, getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    const SECRET_CODE = "554455"; 
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const userEmailEl = document.getElementById("email");
-    const userPassEl = document.getElementById("pass");
-    const userLoginBtn = document.getElementById("userLoginBtn");
-    const userMsg = document.getElementById("userMsg");
-
-    const adminTeaser = document.getElementById("adminTeaser");
-    const adminCard = document.getElementById("adminCard");
-    const showAdminBtn = document.getElementById("showAdminBtn");
-    const hideAdminBtn = document.getElementById("hideAdminBtn");
-    const adminEmailEl = document.getElementById("adminEmail");
-    const adminPassEl = document.getElementById("adminPass");
-    const adminLoginBtn = document.getElementById("adminLoginBtn");
-    const adminMsg = document.getElementById("adminMsg");
-
-    const params = new URLSearchParams(location.search);
-    const hasSecret = params.get("code") === SECRET_CODE;
-
-    if (hasSecret) {
-      adminTeaser.classList.remove("hidden");
+  // ✅ USER LOGIN
+  userLoginBtn.addEventListener("click", async ()=>{
+    userMsg.textContent = "";
+    const email = userEmailEl.value.trim();
+    const pass = userPassEl.value;
+    if (!email || !pass) {
+      userMsg.textContent = "Enter email and password.";
+      return;
     }
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
 
-    showAdminBtn?.addEventListener("click", ()=>{
-      adminCard.classList.remove("hidden");
-      adminTeaser.classList.add("hidden");
-      adminEmailEl.focus();
-    });
-
-    hideAdminBtn?.addEventListener("click", ()=>{
-      adminCard.classList.add("hidden");
-      adminTeaser.classList.remove("hidden");
-    });
-
-    userLoginBtn.addEventListener("click", async ()=>{
-      userMsg.textContent = "";
-      const email = userEmailEl.value.trim();
-      const pass = userPassEl.value;
-      if (!email || !pass) {
-        userMsg.textContent = "Enter email and password.";
-        return;
-      }
-      try{
-        await signInWithEmailAndPassword(auth, email, pass);
+      // check if this user is admin
+      const snap = await getDoc(doc(db,"admins", email.toLowerCase()));
+      if (snap.exists()) {
+        // give choice if admin
+        window.location.href = "redirect-choice.html";
+      } else {
         userMsg.textContent = "Success. Redirecting…";
         window.location.href = "welcome.html";
-      } catch(e){
-        userMsg.textContent = "Error: " + (e?.message || e);
       }
-    });
 
-    adminLoginBtn.addEventListener("click", async ()=>{
-      adminMsg.textContent = "";
-      if (!hasSecret) {
-        adminMsg.textContent = "Missing admin link. Ask owner for secure link.";
+    } catch(e){
+      userMsg.textContent = "Error: " + (e?.message || e);
+    }
+  });
+
+  // ✅ ADMIN LOGIN
+  adminLoginBtn.addEventListener("click", async ()=>{
+    adminMsg.textContent = "";
+    if (!hasSecret) {
+      adminMsg.textContent = "Missing admin link. Ask owner for secure link.";
+      return;
+    }
+    const email = adminEmailEl.value.trim().toLowerCase();
+    const pass = adminPassEl.value;
+    if (!email || !pass) {
+      adminMsg.textContent = "Enter admin email and password.";
+      return;
+    }
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      const snap = await getDoc(doc(db, "admins", email));
+      if (!snap.exists()) {
+        try{ await signOut(auth); }catch{}
+        adminMsg.textContent = "This account is not an admin.";
         return;
       }
-      const email = adminEmailEl.value.trim().toLowerCase();
-      const pass = adminPassEl.value;
-      if (!email || !pass) {
-        adminMsg.textContent = "Enter admin email and password.";
-        return;
-      }
-      try{
-        await signInWithEmailAndPassword(auth, email, pass);
-        const snap = await getDoc(doc(db, "admins", email));
-        if (!snap.exists()) {
-          try{ await signOut(auth); }catch{}
-          adminMsg.textContent = "This account is not an admin.";
-          return;
-        }
-        adminMsg.textContent = "Admin verified. Redirecting…";
-        window.location.href = "admin-dashboard.html";
-      } catch(e){
-        adminMsg.textContent = "Error: " + (e?.message || e);
-      }
-    });
+      adminMsg.textContent = "Admin verified. Redirecting…";
+      window.location.href = "redirect-choice.html"; // ✅ new choice page
+    } catch(e){
+      adminMsg.textContent = "Error: " + (e?.message || e);
+    }
+  });
 
-    onAuthStateChanged(auth, async (user)=>{
-      if (!user || !hasSecret) return;
-      try{
-        const email = (user.email || "").toLowerCase();
-        const snap = await getDoc(doc(db,"admins", email));
-        if (snap.exists()) {
-          window.location.href = "admin-dashboard.html";
-        }
-      }catch{}
-    });
-  </script>
-</body>
-</html>
+</script>
