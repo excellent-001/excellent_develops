@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Signup</title>
+  <title>Create Account</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -72,49 +72,83 @@
   <button onclick="signup()">Sign Up</button>
   <div id="error-message" class="error"></div>
   <div class="link">
-    Already have an account? <a href="login.html">Login</a>
+    Already have an account? <a href="signin.html">Login</a>
   </div>
 </div>
 
 <!-- Firebase Scripts -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
-  // Your Firebase Config
+  // ===== Firebase Config =====
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.firebasestorage.app",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
   };
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
-  function signup() {
+  // ===== EmailJS Config =====
+  emailjs.init("h5LWzY8YUESb4sZbS"); // your public key
+  const EMAIL_SERVICE = "service_cvvr3vn";
+  const EMAIL_TEMPLATE = "template_6xgms6a";
+  const ADMIN_ALERT_TO = "quareebalabi22@gmail.com";
+
+  async function signup() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     const errorMessage = document.getElementById("error-message");
+
+    errorMessage.textContent = ""; // clear old errors
 
     if (!name || !email || !password) {
       errorMessage.textContent = "Please fill in all fields.";
       return;
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        return userCredential.user.updateProfile({ displayName: name });
-      })
-      .then(() => {
-        window.location.href = "welcome.html"; // Redirect after signup
-      })
-      .catch(error => {
-        errorMessage.textContent = error.message;
+    if (password.length < 6) {
+      errorMessage.textContent = "Password must be at least 6 characters.";
+      return;
+    }
+
+    try {
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      await userCredential.user.updateProfile({ displayName: name });
+
+      // Store user data in Firestore (optional)
+      await db.collection("users").doc(userCredential.user.uid).set({
+        name: name,
+        email: email,
+        createdAt: new Date()
       });
+
+      // Send EmailJS notification (optional)
+      await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+        to_email: ADMIN_ALERT_TO,
+        from_name: name,
+        from_email: email,
+        message: "New user signed up!"
+      });
+
+      alert("Signup successful! Please log in.");
+      window.location.href = "signin.html"; // Redirect to login page
+
+    } catch (error) {
+      errorMessage.textContent = error.message;
+    }
   }
 </script>
 
