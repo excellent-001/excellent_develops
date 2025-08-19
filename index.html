@@ -12,10 +12,7 @@
     display: flex;
     height: 100vh;
   }
-  .container {
-    display: flex;
-    flex: 1;
-  }
+  .container { display: flex; flex:1; }
   .left {
     width: 40%;
     display: flex;
@@ -30,10 +27,7 @@
     box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
     border-radius: 12px;
   }
-  .form-box h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
+  .form-box h2 { margin-bottom: 20px; text-align: center; }
   .form-box input {
     width: 100%;
     padding: 12px;
@@ -50,9 +44,7 @@
     border-radius: 8px;
     cursor: pointer;
   }
-  .form-box button:hover {
-    background: #2575fc;
-  }
+  .form-box button:hover { background: #2575fc; }
   .form-links {
     margin-top: 10px;
     text-align: center;
@@ -74,10 +66,7 @@
     padding: 30px;
     position: relative;
   }
-  .right img {
-    width: 80px;
-    margin-bottom: 20px;
-  }
+  .right img { width: 80px; margin-bottom: 20px; }
   footer {
     position: fixed;
     bottom: 0;
@@ -100,115 +89,97 @@
 </head>
 <body>
 
-  <div class="container">
-    <!-- Left: Login form -->
-    <div class="left">
-      <div class="form-box">
-        <h2>Login</h2>
-        <form id="loginForm">
-          <input type="email" id="email" placeholder="Enter your email" required>
-          <input type="password" id="password" placeholder="Enter your password" required>
-          <button type="submit">Login</button>
-        </form>
-        <div class="form-links">
-          <a href="signin.html">Create Account</a> | 
-          <a href="#">Forgot Password?</a>
-        </div>
+<div class="container">
+  <!-- Left: Login form -->
+  <div class="left">
+    <div class="form-box">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <button type="submit">Login</button>
+      </form>
+      <div class="form-links">
+        <a href="signin.html">Register</a> | 
+        <a href="reset.html">Forgot Password?</a>
       </div>
-    </div>
-
-    <!-- Right: Welcome panel -->
-    <div class="right">
-      <span class="close-btn" onclick="window.location.href='index.html'">✖</span>
-      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
-      <h1>Welcome to Excellent Developers</h1>
-      <p>Access your account or, if you’re an admin, enter the secret code to manage the site dashboard.</p>
     </div>
   </div>
 
-  <footer>
-    © 2025 Excellent Developers. All Rights Reserved.
-  </footer>
+  <!-- Right: Welcome panel -->
+  <div class="right">
+    <span class="close-btn" onclick="window.location.href='index.html'">✖</span>
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
+    <h1>Welcome to Excellent Developers</h1>
+    <p>Access your account or, if you’re an admin, enter the secret code to manage the site dashboard.</p>
+  </div>
+</div>
 
-  <!-- Firebase + EmailJS SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+<footer>© 2025 Excellent Developers. All Rights Reserved.</footer>
 
-    // ===== Firebase Config =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.appspot.com",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+  authDomain: "excellent-d056e.firebaseapp.com",
+  projectId: "excellent-d056e",
+  storageBucket: "excellent-d056e.appspot.com",
+  messagingSenderId: "629984941607",
+  appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+  measurementId: "G-G3RCTDSY27"
+};
 
-    // ===== EmailJS Config =====
-    emailjs.init("h5LWzY8YUESb4sZbS");
-    const EMAIL_SERVICE = "service_r556h12";
-    const EMAIL_TEMPLATE = "template_6xgms6a";
-    const ADMIN_EMAIL = "quareebalabi22@gmail.com";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    // ===== Login Handling =====
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+emailjs.init("h5LWzY8YUESb4sZbS");
+const EMAIL_SERVICE = "service_r556h12";
+const EMAIL_TEMPLATE = "template_6xgms6a";
+const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
 
-        // Check verification
-        const verificationSnap = await getDoc(doc(db, "verifications", user.uid));
-        if (!verificationSnap.exists() || !verificationSnap.data().verified) {
-          alert("Please verify your account first. Check your email for the 6-digit code.");
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userName = userDoc.exists() ? userDoc.data().fullname : "User";
+
+    // Admin two-way login
+    if(email.toLowerCase() === ADMIN_EMAIL){
+      const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
+      if(choice){
+        let code = prompt("Enter Admin Secret Code:");
+        if(code === "excellentAdmin2025"){
+          window.location.href = "admin-dashboard.html";
           return;
-        }
-
-        // Fetch user's name
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userName = userDoc.exists() ? userDoc.data().fullname : "User";
-
-        // Admin check
-        if (email.toLowerCase() === ADMIN_EMAIL) {
-          const isAdmin = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
-          if (isAdmin) {
-            const adminCode = prompt("Enter Admin Secret Code:");
-            if (adminCode === "excellentAdmin2025") {
-              window.location.href = "admin-dashboard.html";
-              return;
-            } else {
-              alert("Invalid admin code. Logging in as normal user.");
-            }
-          }
-        }
-
-        // Send personalized welcome email
-        await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-          from_email: ADMIN_EMAIL,
-          from_name: "Excellent_Develops",
-          to_email: email,
-          to_name: userName,
-          message: `Hi ${userName},\n\nWelcome back to Excellent_Develops! You have successfully logged in.\n\nEnjoy your session!`
-        });
-
-        // Redirect
-        window.location.href = "welcome.html";
-
-      } catch (error) {
-        alert("Login failed: " + error.message);
+        } else alert("Invalid secret code. Cannot access admin dashboard.");
       }
+    }
+
+    // Normal login welcome email
+    await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+      from_email: ADMIN_EMAIL,
+      from_name: "Excellent_Develops",
+      to_email: email,
+      to_name: userName,
+      message: `Hi ${userName},\n\nYou successfully logged in to Excellent Developers!`
     });
-  </script>
+
+    window.location.href = "welcome.html";
+
+  } catch (error) { alert("Login failed: "+error.message); }
+});
+</script>
 </body>
-  </html>
+</html>
