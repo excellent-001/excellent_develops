@@ -43,6 +43,7 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
   }
   .form-box button:hover { background: #2575fc; }
   .form-links {
@@ -85,8 +86,26 @@
     cursor: pointer;
     color: #fff;
   }
-
-  /* Toast Styles */
+  /* Spinner */
+  #loadingSpinner {
+    display: none;
+    text-align: center;
+    margin: 10px 0;
+  }
+  #loadingSpinner div {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #6a11cb;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  /* Toasts */
   .toast-container {
     position: fixed;
     top: 20px;
@@ -99,18 +118,16 @@
     padding: 14px 20px;
     margin-bottom: 10px;
     border-radius: 8px;
-    min-width: 220px;
+    min-width: 240px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     opacity: 0;
     transform: translateX(100%);
-    transition: all 0.5s ease;
+    transition: all 0.4s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  .toast.show { opacity: 1; transform: translateX(0); }
   .toast.success { background: #28a745; }
   .toast.error { background: #dc3545; }
   .toast button {
@@ -120,6 +137,7 @@
     font-size: 16px;
     cursor: pointer;
     margin-left: 12px;
+    line-height: 1;
   }
 </style>
 </head>
@@ -133,8 +151,10 @@
       <form id="loginForm">
         <input type="email" id="email" placeholder="Enter your email" required>
         <input type="password" id="password" placeholder="Enter your password" required>
-        <button type="submit">Login</button>
+        <button type="submit" id="loginBtn">Login</button>
       </form>
+      <!-- Spinner -->
+      <div id="loadingSpinner"><div></div></div>
       <div class="form-links">
         <a href="signin.html">Register</a> | 
         <a href="reset.html">Forgot Password?</a>
@@ -153,16 +173,15 @@
 
 <footer>© 2025 Excellent Developers. All Rights Reserved.</footer>
 
-<!-- Toast Container -->
+<!-- Toasts -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Firebase + EmailJS -->
+<!-- Firebase ONLY (step 1) -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
+// --- Firebase config (unchanged) ---
 const firebaseConfig = {
   apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
   authDomain: "excellent-d056e.firebaseapp.com",
@@ -175,68 +194,82 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-emailjs.init("h5LWzY8YUESb4sZbS");
-const EMAIL_SERVICE = "service_r556h12";
-const EMAIL_TEMPLATE = "template_6xgms6a";
+// --- Admin config (kept) ---
 const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
-// Toast function with close button
-function showToast(message, type="success") {
+// Toast helper (dismissible)
+function showToast(message, type = "success", duration = 4000) {
   const container = document.getElementById("toastContainer");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
-  toast.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()">✖</button>`;
+  toast.innerHTML = `<span>${message}</span><button aria-label="Dismiss" title="Dismiss">&times;</button>`;
+  const closeBtn = toast.querySelector("button");
+  closeBtn.addEventListener("click", () => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  });
   container.appendChild(toast);
-  setTimeout(() => toast.classList.add("show"), 100);
+  // animate in
+  requestAnimationFrame(() => toast.classList.add("show"));
+  // auto hide
   setTimeout(() => {
-    if(toast.parentElement){
+    if (toast.parentElement) {
       toast.classList.remove("show");
-      setTimeout(() => toast.remove(), 500);
+      setTimeout(() => toast.remove(), 300);
     }
-  }, 4000);
+  }, duration);
 }
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
+const form = document.getElementById("loginForm");
+const spinner = document.getElementById("loadingSpinner");
+const loginBtn = document.getElementById("loginBtn");
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
+  // UI: show spinner + disable button
+  spinner.style.display = "block";
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging in...";
+
+  console.log("[Login] Submitting…", { emailMasked: email.replace(/(.{2}).+(@.*)/, "$1***$2") });
+
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    // 1) Firebase Auth only
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    console.log("[Login] Firebase success:", user.uid);
 
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    const userName = userDoc.exists() ? userDoc.data().fullname : "User";
-
-    if(email.toLowerCase() === ADMIN_EMAIL){
+    // 2) Admin two-way (kept)
+    if (email.toLowerCase() === ADMIN_EMAIL) {
       const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
-      if(choice){
-        let code = prompt("Enter Admin Secret Code:");
-        if(code === "excellentAdmin2025"){
+      if (choice) {
+        const code = prompt("Enter Admin Secret Code:");
+        if (code === "excellentAdmin2025") {
           showToast("Admin login successful ✅", "success");
-          setTimeout(() => window.location.href = "admin-dashboard.html", 2000);
-          return;
+          setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
+          return; // stop here (no re-enable needed due to redirect)
         } else {
-          showToast("Invalid secret code. Logging in as user.", "error");
+          showToast("Invalid admin code. Logging in as user.", "error");
         }
       }
     }
 
-    await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-      from_email: ADMIN_EMAIL,
-      from_name: "Excellent_Develops",
-      to_email: email,
-      to_name: userName,
-      message: `Hi ${userName},\n\nYou successfully logged in to Excellent Developers!`
-    });
-
+    // 3) Normal redirect
     showToast("Login successful ✅", "success");
-    setTimeout(() => window.location.href = "welcome.html", 2000);
+    setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
+    return;
 
-  } catch (error) {
-    showToast("Login failed: " + error.message, "error");
+  } catch (err) {
+    console.error("[Login] Error:", err);
+    showToast("Login failed: " + (err?.message || "Unknown error"), "error");
+  } finally {
+    // Restore UI if we didn't redirect yet
+    spinner.style.display = "none";
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
   }
 });
 </script>
