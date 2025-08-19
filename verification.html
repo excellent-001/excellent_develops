@@ -1,147 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Email Verification – Excellent_Develops</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
-      background: linear-gradient(135deg, #0b1220, #0f172a);
-      color: #e5e7eb;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeSlide 0.8s ease;
-    }
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .card {
-      background: rgba(255,255,255,0.05);
-      padding: 32px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
-    }
-    .card img {
-      width: 72px;
-      margin-bottom: 12px;
-    }
-    .card h1 {
-      margin: 8px 0 24px;
-      font-size: 1.5em;
-      color: #ff7043;
-    }
-    .card input {
-      width: 100%;
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      font-size: 1em;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: #e5e7eb;
-      text-align: center;
-      letter-spacing: 4px;
-    }
-    .card input::placeholder {
-      color: #9ca3af;
-    }
-    .card button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1em;
-      border: none;
-      border-radius: 8px;
-      background: #ff7043;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .card button:hover {
-      background: #e65924;
-    }
-    .error {
-      margin-top: 12px;
-      color: #ff4d4d;
-      font-size: 0.9em;
-    }
-    .success {
-      margin-top: 12px;
-      color: #4ade80;
-      font-size: 0.9em;
-    }
-    footer {
-      text-align: center;
-      padding: 14px 0;
-      font-size: 0.85em;
-      color: #9ca3af;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Verify Account – Excellent_Develops</title>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops Logo" />
-      <h1>Email Verification</h1>
-      <p>Please enter the 6-digit code sent to your email</p>
-      <form id="verifyForm">
-        <input type="text" id="codeInput" maxlength="6" placeholder="______" required />
-        <button type="submit">Verify</button>
-      </form>
-      <div id="message"></div>
-    </div>
-  </div>
-  <footer>
-    © 2025 Excellent Global Conceptional. All rights reserved.
-  </footer>
+  <h1>Verify Your Account</h1>
+  <form id="verifyForm">
+    <input type="text" id="code" placeholder="Enter 6-digit code" required />
+    <button type="submit">Verify</button>
+  </form>
 
-  <script>
-    document.getElementById("verifyForm").addEventListener("submit", (e) => {
+  <script type="module">
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const db = getFirestore();
+    const auth = getAuth();
+
+    document.getElementById("verifyForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+      const inputCode = document.getElementById("code").value;
+      const user = auth.currentUser;
 
-      const enteredCode = document.getElementById("codeInput").value.trim();
-      const storedCode = localStorage.getItem("verificationCode");
-      const expiry = localStorage.getItem("verificationExpiry");
-      const msg = document.getElementById("message");
+      if (!user) return alert("No user logged in. Please login again.");
 
-      if (!storedCode || !expiry) {
-        msg.textContent = "No verification code found. Please sign up again.";
-        msg.className = "error";
-        return;
-      }
+      const docRef = doc(db, "verifications", user.uid);
+      const docSnap = await getDoc(docRef);
 
-      if (Date.now() > parseInt(expiry)) {
-        msg.textContent = "Verification code expired. Please sign up again.";
-        msg.className = "error";
-        return;
-      }
+      if (!docSnap.exists()) return alert("Verification not found.");
 
-      if (enteredCode === storedCode) {
-        msg.textContent = "✅ Verification successful! Redirecting...";
-        msg.className = "success";
+      const data = docSnap.data();
 
-        // Clear storage
-        localStorage.removeItem("verificationCode");
-        localStorage.removeItem("verificationExpiry");
+      if (Date.now() > data.expiresAt) return alert("Code expired. Please request a new one.");
 
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 1500);
+      if (parseInt(inputCode) === data.code) {
+        await updateDoc(docRef, { verified: true });
+        alert("Your account is verified! You can now login.");
+        window.location.href = "index.html";
       } else {
-        msg.textContent = "❌ Incorrect code. Please try again.";
-        msg.className = "error";
+        alert("Incorrect code. Try again.");
       }
     });
   </script>
