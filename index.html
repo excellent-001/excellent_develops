@@ -117,7 +117,7 @@
 
 <footer>© 2025 Excellent Developers. All Rights Reserved.</footer>
 
-<!-- Firebase SDK -->
+<!-- Firebase + EmailJS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
@@ -152,6 +152,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // Fetch user's name
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userName = userDoc.exists() ? userDoc.data().fullname : "User";
 
@@ -163,11 +164,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         if(code === "excellentAdmin2025"){
           window.location.href = "admin-dashboard.html";
           return;
-        } else alert("Invalid secret code. Cannot access admin dashboard.");
+        } else {
+          alert("Invalid secret code. Logging in as regular user instead.");
+        }
       }
     }
 
-    // Normal login welcome email
+    // Normal login (user or admin without code)
     await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
       from_email: ADMIN_EMAIL,
       from_name: "Excellent_Develops",
@@ -176,10 +179,14 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       message: `Hi ${userName},\n\nYou successfully logged in to Excellent Developers!`
     });
 
+    // Redirect to welcome page
     window.location.href = "welcome.html";
 
-  } catch (error) { alert("Login failed: "+error.message); }
+  } catch (error) {
+    alert("Login failed: " + error.message);
+  }
 });
 </script>
+
 </body>
-  </html>
+          </html>
