@@ -18,7 +18,6 @@
   input{width:100%; padding:12px; border-radius:10px; border:0; background:rgba(255,255,255,.2); color:#fff}
   button{width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer; background:var(--blue); color:#fff; font-weight:700; margin-top:8px}
   a{color:#ddd; font-size:13px; text-decoration:none} a:hover{text-decoration:underline}
-  /* modal */
   .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:50}
   .modal{width:min(420px,92vw); background:#fff; color:#111; border-radius:16px; padding:22px; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,.35)}
   .actions{display:flex; gap:10px; justify-content:center; margin-top:12px}
@@ -35,7 +34,6 @@
     <p style="margin-top:10px"><a href="index.html">← Back to login</a></p>
   </div>
 
-  <!-- OTP step -->
   <div class="card" id="step2" style="display:none">
     <h2>Enter Code</h2>
     <p>We sent a 6-digit code to your email</p>
@@ -44,7 +42,6 @@
     <p style="margin-top:10px"><a href="#" id="resendBtn">Resend Code</a></p>
   </div>
 
-  <!-- Modal -->
   <div class="backdrop" id="okBackdrop">
     <div class="modal">
       <h3 id="okTitle">Done ✅</h3>
@@ -53,115 +50,91 @@
     </div>
   </div>
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script> emailjs.init({ publicKey: "h5LWzY8YUESb4sZbS" }); </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, sendPasswordResetEmail, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, sendPasswordResetEmail, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+  authDomain: "excellent-d056e.firebaseapp.com",
+  projectId: "excellent-d056e",
+  storageBucket: "excellent-d056e.appspot.com",
+  messagingSenderId: "629984941607",
+  appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+  measurementId: "G-G3RCTDSY27"
+};
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-      authDomain: "excellent-d056e.firebaseapp.com",
-      projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
-      messagingSenderId: "629984941607",
-      appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-      measurementId: "G-G3RCTDSY27"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    let generatedOtp = "";
-    let userEmail = "";
-    let resendCount = 0;
+emailjs.init("h5LWzY8YUESb4sZbS");
 
-    // log attempt
-    async function logResetAttempt(email, status) {
-      try {
-        await addDoc(collection(db, "password_reset_logs"), {
-          email,
-          status,
-          timestamp: serverTimestamp()
-        });
-      } catch(e){ console.error("Log error:", e); }
-    }
+let generatedOtp = "";
+let userEmail = "";
+let resendCount = 0;
 
-    // modal helper
-    const showModal = (title, url) => {
-      const bd=document.getElementById('okBackdrop'); const t=document.getElementById('okTitle'); const c=document.getElementById('count');
-      t.textContent=title; bd.style.display='flex'; let n=3; c.textContent=n;
-      const timer=setInterval(()=>{n--; c.textContent=n; if(n<=0){clearInterval(timer); window.location.href=url;}},1000);
-      document.getElementById('okBtn').onclick=()=>{clearInterval(timer); window.location.href=url;};
-    };
+async function logResetAttempt(email,status){
+  try{ await addDoc(collection(db,"password_reset_logs"),{email,status,timestamp:serverTimestamp()}); }
+  catch(e){ console.error(e); }
+}
 
-    // send OTP via EmailJS
-    async function sendOtp(email) {
-      generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      try{
-        await emailjs.send("service_cvvr3vn","template_6xgms6a",{
-          from_name:"Excellent Developers",
-          to_name: email,
-          to_email: email,
-          message:`🔐 Your password reset code is: ${generatedOtp}`
-        });
-      }catch(err){ alert("Failed to send code ❌"); console.error(err); }
-    }
+const showModal = (title,url)=>{
+  const bd=document.getElementById('okBackdrop'); const t=document.getElementById('okTitle'); const c=document.getElementById('count');
+  t.textContent=title; bd.style.display='flex'; let n=3; c.textContent=n;
+  const timer=setInterval(()=>{n--; c.textContent=n; if(n<=0){clearInterval(timer); window.location.href=url;}},1000);
+  document.getElementById('okBtn').onclick=()=>{clearInterval(timer); window.location.href=url;};
+};
 
-    // Step1: request reset
-    document.getElementById('resetBtn').onclick = async ()=>{
-      const email = (document.getElementById('email').value||'').trim();
-      if(!email){ alert("Please enter your email."); return; }
+async function sendOtp(email){
+  generatedOtp=Math.floor(100000 + Math.random()*900000).toString();
+  try{
+    await emailjs.send("service_r556h12","template_6xgms6a",{
+      from_name:"Excellent Developers",
+      to_name: email,
+      to_email: email,
+      message:`🔐 Your password reset code is: ${generatedOtp}`
+    });
+  }catch(err){ alert("Failed to send code ❌"); console.error(err); }
+}
 
-      try {
-        // check if registered
-        const providers = await fetchSignInMethodsForEmail(auth, email);
-        if (providers.length === 0) {
-          alert("❌ This email is not recognized. Please create an account.");
-          await logResetAttempt(email, "not_found");
-          return;
-        }
+document.getElementById('resetBtn').onclick = async ()=>{
+  const email = (document.getElementById('email').value||'').trim();
+  if(!email){ alert("Please enter your email."); return; }
 
-        userEmail=email;
-        resendCount=0;
-        await sendOtp(email);
-        await logResetAttempt(email,"otp_sent");
-        document.getElementById('step1').style.display="none";
-        document.getElementById('step2').style.display="block";
+  try{
+    const providers = await fetchSignInMethodsForEmail(auth,email);
+    if(providers.length===0){ alert("❌ Email not found."); await logResetAttempt(email,"not_found"); return; }
 
-      } catch(e){ alert("Error: "+e.message); }
-    };
+    userEmail=email; resendCount=0;
+    await sendOtp(email);
+    await logResetAttempt(email,"otp_sent");
+    document.getElementById('step1').style.display="none";
+    document.getElementById('step2').style.display="block";
+  }catch(e){ alert("Error: "+e.message); }
+};
 
-    // Step2: verify OTP
-    document.getElementById('verifyBtn').onclick = async ()=>{
-      const otp = (document.getElementById('otp').value||'').trim();
-      if(otp !== generatedOtp){
-        alert("❌ Invalid code");
-        await logResetAttempt(userEmail,"invalid_code");
-        return;
-      }
+document.getElementById('verifyBtn').onclick = async ()=>{
+  const otp=(document.getElementById('otp').value||'').trim();
+  if(otp!==generatedOtp){ alert("❌ Invalid code"); await logResetAttempt(userEmail,"invalid_code"); return; }
 
-      try{
-        await sendPasswordResetEmail(auth,userEmail);
-        await logResetAttempt(userEmail,"reset_sent");
-        showModal("Reset email sent ✅","index.html");
-      }catch(e){
-        alert("Error: "+e.message);
-      }
-    };
+  try{
+    await sendPasswordResetEmail(auth,userEmail);
+    await logResetAttempt(userEmail,"reset_sent");
+    showModal("Reset email sent ✅","index.html");
+  }catch(e){ alert("Error: "+e.message); }
+};
 
-    // resend code
-    document.getElementById('resendBtn').onclick = async (e)=>{
-      e.preventDefault();
-      if(resendCount>=3){ alert("You have reached the resend limit ❌"); return; }
-      resendCount++;
-      await sendOtp(userEmail);
-      await logResetAttempt(userEmail,"otp_resent");
-      alert("✅ Code resent to "+userEmail);
-    };
-  </script>
+document.getElementById('resendBtn').onclick = async (e)=>{
+  e.preventDefault();
+  if(resendCount>=3){ alert("You have reached the resend limit ❌"); return; }
+  resendCount++;
+  await sendOtp(userEmail);
+  await logResetAttempt(userEmail,"otp_resent");
+  alert("✅ Code resent to "+userEmail);
+};
+</script>
 </body>
-</html>
+  </html>
