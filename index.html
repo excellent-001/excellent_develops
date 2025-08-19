@@ -1,102 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Excellent Developers</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-    }
-    .container {
-      display: flex;
-      flex: 1;
-    }
-    .left {
-      width: 40%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-    .form-box {
-      width: 80%;
-      max-width: 350px;
-      padding: 20px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      border-radius: 12px;
-    }
-    .form-box h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .form-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    .form-box button {
-      width: 100%;
-      padding: 12px;
-      background: #6a11cb;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .form-box button:hover {
-      background: #2575fc;
-    }
-    .form-links {
-      margin-top: 10px;
-      text-align: center;
-    }
-    .form-links a {
-      color: #6a11cb;
-      text-decoration: none;
-      margin: 0 5px;
-    }
-    .right {
-      width: 60%;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 30px;
-      position: relative;
-    }
-    .right img {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      font-size: 14px;
-    }
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 18px;
-      cursor: pointer;
-      color: #fff;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login - Excellent Developers</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+  }
+  .container {
+    display: flex;
+    flex: 1;
+  }
+  .left {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+  .form-box {
+    width: 80%;
+    max-width: 350px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+  }
+  .form-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .form-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  .form-box button {
+    width: 100%;
+    padding: 12px;
+    background: #6a11cb;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .form-box button:hover {
+    background: #2575fc;
+  }
+  .form-links {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .form-links a {
+    color: #6a11cb;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  .right {
+    width: 60%;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    position: relative;
+  }
+  .right img {
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #111;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #fff;
+  }
+</style>
 </head>
 <body>
 
@@ -130,38 +130,33 @@
     © 2025 Excellent Developers. All Rights Reserved.
   </footer>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
+  <!-- Firebase + EmailJS SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
 
     // ===== Firebase Config =====
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
       projectId: "excellent-d056e",
-      storageBucket: "excellent-d056e.firebasestorage.app",
+      storageBucket: "excellent-d056e.appspot.com",
       messagingSenderId: "629984941607",
       appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
       measurementId: "G-G3RCTDSY27"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
     // ===== EmailJS Config =====
     emailjs.init("h5LWzY8YUESb4sZbS");
-    const EMAIL_SERVICE = "service_cvvr3vn";
+    const EMAIL_SERVICE = "service_r556h12";
     const EMAIL_TEMPLATE = "template_6xgms6a";
-    const ADMIN_ALERT_TO = "quareebalabi22@gmail.com";
+    const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
     // ===== Login Handling =====
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
@@ -173,39 +168,47 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Admin check
-        if (email.toLowerCase() === "quareebalabi22@gmail.com") {
-          // Ask choice: Admin or User
-          let choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
-
-          if (choice) {
-            // Admin path → ask secret code
-            let code = prompt("Enter Admin Secret Code:");
-            if (code === "excellentAdmin2025") {
-              window.location.href = "admin-dashboard.html";
-            } else {
-              alert("Invalid secret code. You cannot access admin dashboard.");
-            }
-          } else {
-            // User path → normal welcome
-            emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-              to_email: email,
-              message: "You successfully logged in to Excellent Developers!"
-            });
-            window.location.href = "welcome.html";
-          }
-        } else {
-          // Normal user → send login email + go to welcome
-          emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-            to_email: email,
-            message: "You successfully logged in to Excellent Developers!"
-          });
-          window.location.href = "welcome.html";
+        // Check verification
+        const verificationSnap = await getDoc(doc(db, "verifications", user.uid));
+        if (!verificationSnap.exists() || !verificationSnap.data().verified) {
+          alert("Please verify your account first. Check your email for the 6-digit code.");
+          return;
         }
+
+        // Fetch user's name
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userName = userDoc.exists() ? userDoc.data().fullname : "User";
+
+        // Admin check
+        if (email.toLowerCase() === ADMIN_EMAIL) {
+          const isAdmin = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
+          if (isAdmin) {
+            const adminCode = prompt("Enter Admin Secret Code:");
+            if (adminCode === "excellentAdmin2025") {
+              window.location.href = "admin-dashboard.html";
+              return;
+            } else {
+              alert("Invalid admin code. Logging in as normal user.");
+            }
+          }
+        }
+
+        // Send personalized welcome email
+        await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+          from_email: ADMIN_EMAIL,
+          from_name: "Excellent_Develops",
+          to_email: email,
+          to_name: userName,
+          message: `Hi ${userName},\n\nWelcome back to Excellent_Develops! You have successfully logged in.\n\nEnjoy your session!`
+        });
+
+        // Redirect
+        window.location.href = "welcome.html";
+
       } catch (error) {
         alert("Login failed: " + error.message);
       }
     });
   </script>
 </body>
-</html>
+  </html>
