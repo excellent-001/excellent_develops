@@ -175,11 +175,24 @@
 
         // Admin check
         if (email.toLowerCase() === "quareebalabi22@gmail.com") {
-          let code = prompt("Enter Admin Secret Code:");
-          if (code === "excellentAdmin2025") {
-            window.location.href = "admin-dashboard.html";
+          // Ask choice: Admin or User
+          let choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
+
+          if (choice) {
+            // Admin path → ask secret code
+            let code = prompt("Enter Admin Secret Code:");
+            if (code === "excellentAdmin2025") {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              alert("Invalid secret code. You cannot access admin dashboard.");
+            }
           } else {
-            alert("Invalid secret code. You cannot access admin dashboard.");
+            // User path → normal welcome
+            emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+              to_email: email,
+              message: "You successfully logged in to Excellent Developers!"
+            });
+            window.location.href = "welcome.html";
           }
         } else {
           // Normal user → send login email + go to welcome
