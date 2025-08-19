@@ -101,10 +101,9 @@
   const db = firebase.firestore();
 
   // ===== EmailJS Config =====
-  emailjs.init("h5LWzY8YUESb4sZbS"); // your public key
+  emailjs.init("h5LWzY8YUESb4sZbS"); 
   const EMAIL_SERVICE = "service_cvvr3vn";
   const EMAIL_TEMPLATE = "template_6xgms6a";
-  const ADMIN_ALERT_TO = "quareebalabi22@gmail.com";
 
   async function signup() {
     const name = document.getElementById("name").value.trim();
@@ -112,7 +111,7 @@
     const password = document.getElementById("password").value.trim();
     const errorMessage = document.getElementById("error-message");
 
-    errorMessage.textContent = ""; // clear old errors
+    errorMessage.textContent = ""; 
 
     if (!name || !email || !password) {
       errorMessage.textContent = "Please fill in all fields.";
@@ -128,29 +127,24 @@
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       await userCredential.user.updateProfile({ displayName: name });
 
-      // Store user data in Firestore (optional)
+      // Save user to Firestore
       await db.collection("users").doc(userCredential.user.uid).set({
         name: name,
         email: email,
         createdAt: new Date()
       });
 
-      // Send EmailJS notification (optional)
+      // Generate 6-digit verification code
+      const code = Math.floor(100000 + Math.random() * 900000);
+      const expiry = Date.now() + 5 * 60 * 1000; // 5 minutes
+
+      // Save code + expiry in localStorage
+      localStorage.setItem("verificationCode", code);
+      localStorage.setItem("verificationExpiry", expiry);
+      localStorage.setItem("verificationEmail", email);
+
+      // Send EmailJS message to the user
       await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-        to_email: ADMIN_ALERT_TO,
-        from_name: name,
-        from_email: email,
-        message: "New user signed up!"
-      });
-
-      alert("Signup successful! Please log in.");
-      window.location.href = "signin.html"; // Redirect to login page
-
-    } catch (error) {
-      errorMessage.textContent = error.message;
-    }
-  }
-</script>
-
-</body>
-</html>
+        to_email: email,
+        from_name: "Excellent Developers",
+        message: `Hello ${name},\n\nWe are so excited to have you and welcome you to Excellent Developers!\
