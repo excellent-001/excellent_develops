@@ -6,236 +6,162 @@
   <title>Login - Excellent Developers</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      background: #f5f6fa;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6c5ce7, #00cec9);
       display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header, footer {
-      background: #6c5ce7;
-      color: white;
-      padding: 10px 20px;
-      text-align: center;
-    }
-    header img {
-      height: 50px;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     .container {
-      flex: 1;
+      background: #fff;
       display: flex;
-      min-height: calc(100vh - 120px);
+      flex-direction: row;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+    }
+    /* Close button */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #555;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      color: #e74c3c;
     }
     .left {
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: white;
-      padding: 20px;
+      padding: 40px;
+      position: relative;
     }
     .right {
       flex: 1;
       background: linear-gradient(135deg, #6c5ce7, #00cec9);
-      color: white;
+      color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
+      text-align: center;
       padding: 40px;
     }
-    .login-box {
-      width: 100%;
-      max-width: 350px;
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    .right img {
+      width: 100px;
+      margin-bottom: 15px;
     }
-    .login-box h2 {
-      text-align: center;
+    h2 {
       margin-bottom: 20px;
+      font-size: 22px;
     }
-    .login-box input {
+    input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 8px 0;
-      border: 1px solid #dcdde1;
-      border-radius: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
-    .login-box button {
+    button {
       width: 100%;
-      padding: 10px;
-      background: #6c5ce7;
-      color: white;
+      padding: 12px;
+      margin-top: 10px;
       border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      border-radius: 6px;
+      background: #6c5ce7;
+      color: #fff;
       font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
-    .login-box button:hover {
+    button:hover {
       background: #4834d4;
     }
-    .admin-btn {
-      background: #ff4757 !important;
-      margin-top: 8px;
-    }
-    .msg {
+    .links {
+      margin-top: 15px;
       text-align: center;
-      margin-top: 10px;
       font-size: 14px;
-      color: red;
+    }
+    .links a {
+      color: #6c5ce7;
+      text-decoration: none;
+      margin: 0 5px;
+      font-weight: bold;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
-</header>
+  <div class="container">
+    <!-- Close button -->
+    <span class="close-btn" onclick="window.location.href='index.html'">&times;</span>
 
-<div class="container">
-  <!-- Left (Login Forms) -->
-  <div class="left">
-    <div class="login-box">
-      <h2>User Login</h2>
-      <input type="email" id="user-email" placeholder="Enter your email">
-      <input type="password" id="user-password" placeholder="Enter your password">
-      <button id="userLoginBtn">Login as User</button>
-      <p class="msg" id="userMsg"></p>
-
-      <!-- Hidden Admin Login -->
-      <div id="admin-section" style="display:none;">
-        <h2 style="margin-top:20px;">Admin Login</h2>
-        <input type="email" id="admin-email" placeholder="Admin email">
-        <input type="password" id="admin-password" placeholder="Admin password">
-        <button class="admin-btn" id="adminLoginBtn">Login as Admin</button>
-        <p class="msg" id="adminMsg"></p>
+    <!-- Left side -->
+    <div class="left">
+      <h2>User/Admin Login</h2>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <button type="submit">Login</button>
+      </form>
+      <div class="links">
+        <a href="signin.html">Create Account</a> | 
+        <a href="forgot-password.html">Forgot Password?</a>
       </div>
+    </div>
+
+    <!-- Right side -->
+    <div class="right">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Logo">
+      <h2>Welcome to Excellent Developers</h2>
+      <p>Access your account or, if you’re an admin with the secret code, manage the full site dashboard.</p>
     </div>
   </div>
 
-  <!-- Right (Branding / Info) -->
-  <div class="right">
-    <h1>Welcome to Excellent Developers</h1>
-    <p>Access your account or, if you’re an admin with the secret code, manage the full site dashboard.</p>
-  </div>
-</div>
+  <!-- Fixed footer -->
+  <footer>
+    © 2025 Excellent Global Conceptional. All rights reserved.
+  </footer>
 
-<footer>
-  <p>© 2025 Excellent Developers. All Rights Reserved.</p>
-</footer>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-<!-- Firebase -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import {
-    getAuth, signInWithEmailAndPassword, signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import {
-    getFirestore, doc, getDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-  // EmailJS
-  import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
-  emailjs.init("h5LWzY8YUESb4sZbS");
-
-  // ✅ Secret code
-  const SECRET_CODE = "554455"; 
-
-  // ✅ Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Elements
-  const userEmailEl = document.getElementById("user-email");
-  const userPassEl = document.getElementById("user-password");
-  const userLoginBtn = document.getElementById("userLoginBtn");
-  const userMsg = document.getElementById("userMsg");
-
-  const adminSection = document.getElementById("admin-section");
-  const adminEmailEl = document.getElementById("admin-email");
-  const adminPassEl = document.getElementById("admin-password");
-  const adminLoginBtn = document.getElementById("adminLoginBtn");
-  const adminMsg = document.getElementById("adminMsg");
-
-  // ✅ Secret code check
-  const params = new URLSearchParams(location.search);
-  if (params.get("code") === SECRET_CODE) {
-    adminSection.style.display = "block";
-  }
-
-  // ✅ USER LOGIN
-  userLoginBtn.addEventListener("click", async () => {
-    userMsg.textContent = "";
-    const email = userEmailEl.value.trim();
-    const pass = userPassEl.value;
-    if (!email || !pass) {
-      userMsg.textContent = "Enter email and password.";
-      return;
-    }
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      // send notification
-      await emailjs.send("service_cvvr3vn","template_6xgms6a",{
-        user_email: email,
-        login_type: "User Login"
-      });
-      // check if admin
-      const snap = await getDoc(doc(db,"admins", email.toLowerCase()));
-      if (snap.exists()) {
-        window.location.href = "redirect-choice.html";
+      // Example logic for distinguishing admin vs user
+      if(email === "admin@example.com"){ 
+        let secret = prompt("Enter Admin Secret Code:");
+        if(secret === "yourSecretCode"){
+          window.location.href = "admin-dashboard.html";
+        } else {
+          alert("Invalid secret code!");
+        }
       } else {
+        // Normal user redirect
         window.location.href = "welcome.html";
       }
-    } catch (e) {
-      userMsg.textContent = "Error: " + (e?.message || e);
-    }
-  });
-
-  // ✅ ADMIN LOGIN
-  adminLoginBtn.addEventListener("click", async () => {
-    adminMsg.textContent = "";
-    if (params.get("code") !== SECRET_CODE) {
-      adminMsg.textContent = "Missing admin link.";
-      return;
-    }
-    const email = adminEmailEl.value.trim().toLowerCase();
-    const pass = adminPassEl.value;
-    if (!email || !pass) {
-      adminMsg.textContent = "Enter admin email and password.";
-      return;
-    }
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      const snap = await getDoc(doc(db,"admins", email));
-      if (!snap.exists()) {
-        try{ await signOut(auth);}catch{}
-        adminMsg.textContent = "This account is not an admin.";
-        return;
-      }
-      // send notification
-      await emailjs.send("service_cvvr3vn","template_6xgms6a",{
-        user_email: email,
-        login_type: "Admin Login"
-      });
-      window.location.href = "redirect-choice.html";
-    } catch (e) {
-      adminMsg.textContent = "Error: " + (e?.message || e);
-    }
-  });
-</script>
+    });
+  </script>
 
 </body>
 </html>
