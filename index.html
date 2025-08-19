@@ -166,23 +166,23 @@
     // ===== Login Handling =====
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // If admin account
-        if (email === "quareebalabi22@gmail.com") {
+        // Admin check
+        if (email.toLowerCase() === "quareebalabi22@gmail.com") {
           let code = prompt("Enter Admin Secret Code:");
           if (code === "excellentAdmin2025") {
             window.location.href = "admin-dashboard.html";
           } else {
-            alert("Invalid secret code.");
+            alert("Invalid secret code. You cannot access admin dashboard.");
           }
         } else {
-          // Normal user → send email and go to welcome
+          // Normal user → send login email + go to welcome
           emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
             to_email: email,
             message: "You successfully logged in to Excellent Developers!"
