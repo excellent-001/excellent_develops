@@ -1,150 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create Account</title>
+  <title>Create Account – Excellent_Develops</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
+      background: linear-gradient(135deg, #0b1220, #0f172a);
+      color: #e5e7eb;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    .signup-container {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    .container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeSlide 0.8s ease;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      padding: 32px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      max-width: 360px;
       width: 100%;
-      max-width: 350px;
-    }
-    h2 {
       text-align: center;
-      margin-bottom: 20px;
     }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+    .card img {
+      width: 72px;
+      margin-bottom: 12px;
     }
-    button {
+    .card h1 {
+      margin: 8px 0 24px;
+      font-size: 1.5em;
+      color: #ff7043;
+    }
+    .card input {
       width: 100%;
-      padding: 10px;
-      background: #4CAF50;
-      color: white;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      font-size: 1em;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: #e5e7eb;
+    }
+    .card input::placeholder {
+      color: #9ca3af;
+    }
+    .card button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background: #ff7043;
+      color: #fff;
       cursor: pointer;
-      font-size: 16px;
+      transition: background 0.3s;
     }
-    button:hover {
-      background: #45a049;
+    .card button:hover {
+      background: #e65924;
     }
-    .error {
-      color: red;
-      font-size: 14px;
-      margin-top: 8px;
+    .links {
+      margin-top: 16px;
+      font-size: 0.9em;
+      color: #9ca3af;
     }
-    .link {
-      text-align: center;
-      margin-top: 12px;
-      font-size: 14px;
-    }
-    .link a {
-      color: #4CAF50;
+    .links a {
+      color: #9ca3af;
       text-decoration: none;
+      margin: 0 8px;
+    }
+    .links a:hover {
+      color: #ff7043;
+    }
+    footer {
+      text-align: center;
+      padding: 14px 0;
+      font-size: 0.85em;
+      color: #9ca3af;
     }
   </style>
 </head>
 <body>
-
-<div class="signup-container">
-  <h2>Create Account</h2>
-  <input type="text" id="name" placeholder="Full Name" required>
-  <input type="email" id="email" placeholder="Email Address" required>
-  <input type="password" id="password" placeholder="Password" required>
-  <button onclick="signup()">Sign Up</button>
-  <div id="error-message" class="error"></div>
-  <div class="link">
-    Already have an account? <a href="signin.html">Login</a>
+  <div class="container">
+    <div class="card">
+      <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops Logo" />
+      <h1>Create Account</h1>
+      <form id="registerForm">
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email Address" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+      <div class="links">
+        <a href="login.html">Already have an account? Login</a>
+      </div>
+    </div>
   </div>
-</div>
+  <footer>
+    © 2025 Excellent Global Conceptional. All rights reserved.
+  </footer>
 
-<!-- Firebase Scripts -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
-<script>
-  // ===== Firebase Config =====
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  // ===== EmailJS Config =====
-  emailjs.init("h5LWzY8YUESb4sZbS"); 
-  const EMAIL_SERVICE = "service_cvvr3vn";
-  const EMAIL_TEMPLATE = "template_6xgms6a";
-
-  async function signup() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const errorMessage = document.getElementById("error-message");
-
-    errorMessage.textContent = ""; 
-
-    if (!name || !email || !password) {
-      errorMessage.textContent = "Please fill in all fields.";
-      return;
-    }
-
-    if (password.length < 6) {
-      errorMessage.textContent = "Password must be at least 6 characters.";
-      return;
-    }
-
-    try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-      await userCredential.user.updateProfile({ displayName: name });
-
-      // Save user to Firestore
-      await db.collection("users").doc(userCredential.user.uid).set({
-        name: name,
-        email: email,
-        createdAt: new Date()
-      });
-
-      // Generate 6-digit verification code
-      const code = Math.floor(100000 + Math.random() * 900000);
-      const expiry = Date.now() + 5 * 60 * 1000; // 5 minutes
-
-      // Save code + expiry in localStorage
-      localStorage.setItem("verificationCode", code);
-      localStorage.setItem("verificationExpiry", expiry);
-      localStorage.setItem("verificationEmail", email);
-
-      // Send EmailJS message to the user
-      await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-        to_email: email,
-        from_name: "Excellent Developers",
-        message: `Hello ${name},\n\nWe are so excited to have you and welcome you to Excellent Developers!\
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert("Account created! (Connect Firebase here later)");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
