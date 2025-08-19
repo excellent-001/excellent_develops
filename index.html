@@ -86,24 +86,40 @@
     color: #fff;
   }
 
-  /* Spinner */
-  #loadingSpinner {
-    display: none;
-    text-align: center;
-    margin: 10px 0;
+  /* Toast Styles */
+  .toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
   }
-  #loadingSpinner div {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #6a11cb;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin: auto;
-    animation: spin 1s linear infinite;
+  .toast {
+    background: #333;
+    color: #fff;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    min-width: 220px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s ease;
   }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .toast.success { background: #28a745; }
+  .toast.error { background: #dc3545; }
+  .toast button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 12px;
   }
 </style>
 </head>
@@ -119,8 +135,6 @@
         <input type="password" id="password" placeholder="Enter your password" required>
         <button type="submit">Login</button>
       </form>
-      <!-- Spinner -->
-      <div id="loadingSpinner"><div></div></div>
       <div class="form-links">
         <a href="signin.html">Register</a> | 
         <a href="reset.html">Forgot Password?</a>
@@ -138,6 +152,9 @@
 </div>
 
 <footer>© 2025 Excellent Developers. All Rights Reserved.</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
 
 <!-- Firebase + EmailJS -->
 <script type="module">
@@ -165,12 +182,24 @@ const EMAIL_SERVICE = "service_r556h12";
 const EMAIL_TEMPLATE = "template_6xgms6a";
 const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
+// Toast function with close button
+function showToast(message, type="success") {
+  const container = document.getElementById("toastContainer");
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()">✖</button>`;
+  container.appendChild(toast);
+  setTimeout(() => toast.classList.add("show"), 100);
+  setTimeout(() => {
+    if(toast.parentElement){
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 500);
+    }
+  }, 4000);
+}
+
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const spinner = document.getElementById("loadingSpinner");
-  spinner.style.display = "block";
-
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
@@ -178,49 +207,36 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    let userName = "User";
-    try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if(userDoc.exists()) {
-        userName = userDoc.data().fullname || "User";
-      }
-    } catch(fireErr) {
-      console.error("Firestore error:", fireErr);
-    }
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userName = userDoc.exists() ? userDoc.data().fullname : "User";
 
-    // Admin two-way login
     if(email.toLowerCase() === ADMIN_EMAIL){
       const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
       if(choice){
-        const code = prompt("Enter Admin Secret Code:");
+        let code = prompt("Enter Admin Secret Code:");
         if(code === "excellentAdmin2025"){
-          window.location.href = "admin-dashboard.html";
+          showToast("Admin login successful ✅", "success");
+          setTimeout(() => window.location.href = "admin-dashboard.html", 2000);
           return;
         } else {
-          alert("Invalid secret code. Logging in as regular user instead.");
+          showToast("Invalid secret code. Logging in as user.", "error");
         }
       }
     }
 
-    // EmailJS notification
-    try {
-      await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-        from_email: ADMIN_EMAIL,
-        from_name: "Excellent_Develops",
-        to_email: email,
-        to_name: userName,
-        message: `Hi ${userName},\n\nYou successfully logged in to Excellent Developers!`
-      });
-    } catch(emailErr) {
-      console.error("EmailJS error:", emailErr);
-    }
+    await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+      from_email: ADMIN_EMAIL,
+      from_name: "Excellent_Develops",
+      to_email: email,
+      to_name: userName,
+      message: `Hi ${userName},\n\nYou successfully logged in to Excellent Developers!`
+    });
 
-    window.location.href = "welcome.html";
+    showToast("Login successful ✅", "success");
+    setTimeout(() => window.location.href = "welcome.html", 2000);
 
   } catch (error) {
-    alert("Login failed: " + error.message);
-  } finally {
-    spinner.style.display = "none";
+    showToast("Login failed: " + error.message, "error");
   }
 });
 </script>
