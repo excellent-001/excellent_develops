@@ -8,14 +8,17 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <style>
   :root{
-    --bg:#f6f7fb;         /* light background that doesn't fight content */
-    --panel:#ffffff;      /* panels */
-    --ink:#0f172a;        /* primary text */
-    --muted:#6b7280;      /* secondary text */
-    --edge:#e5e7eb;       /* borders */
-    --accent:#3b82f6;     /* brand blue */
+    --bg:#f6f7fb;
+    --panel:#ffffff;
+    --ink:#0f172a;
+    --muted:#6b7280;
+    --edge:#e5e7eb;
+    --accent:#3b82f6;
     --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
   }
   *{box-sizing:border-box}
@@ -41,7 +44,7 @@
   header .brand h1{font-size:16px; margin:0}
   .chip{font-size:12px; padding:4px 8px; border-radius:999px; background:#eff6ff; color:#1d4ed8; border:1px solid #dbeafe}
 
-  .wrap{max-width:1200px; margin:16px auto; padding:0 12px; display:grid; grid-template-columns:260px 1fr; gap:16px}
+  .wrap{max-width:1280px; margin:16px auto; padding:0 12px; display:grid; grid-template-columns:260px 1fr; gap:16px}
   @media (max-width: 960px){ .wrap{grid-template-columns:1fr} }
 
   nav{
@@ -49,8 +52,9 @@
   }
   .navbtn{
     width:100%; text-align:left; border:1px solid var(--edge); background:#f9fafb;
-    color:var(--ink); padding:10px 12px; border-radius:10px; margin:6px 0; cursor:pointer;
+    color:var(--ink); padding:10px 12px; border-radius:10px; margin:6px 0; cursor:pointer; display:flex; justify-content:space-between; align-items:center
   }
+  .navbtn .count{font-size:12px; color:var(--muted)}
   .navbtn.active{ background:var(--accent); color:#fff; border-color:transparent }
   .btn{border:1px solid var(--edge); background:#f3f4f6; color:#111827; padding:9px 12px; border-radius:10px; cursor:pointer}
   .btn.primary{ background:var(--accent); color:#fff; border-color:transparent }
@@ -69,7 +73,7 @@
 
   .filters input{min-width:180px}
   input,select,textarea{
-    border-radius:10px; border:1px solid var(--edge); background:#fff; color:var(--ink); padding:10px 12px;
+    border-radius:10px; border:1px solid var(--edge); background:#fff; color:#0f172a; padding:10px 12px;
   }
   textarea{width:100%}
 
@@ -87,6 +91,11 @@
   .pill.bad{background:#fef2f2; color:#991b1b; border:1px solid #fecaca}
 
   .footer{padding:18px; text-align:center; color:var(--muted)}
+
+  /* Modal */
+  .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(15,23,42,.4); z-index:50}
+  .modal.open{display:grid}
+  .modal .panel{background:#fff; border-radius:14px; border:1px solid var(--edge); padding:16px; width:min(680px,92vw)}
 </style>
 </head>
 <body>
@@ -106,9 +115,10 @@
   <!-- LEFT NAV -->
   <nav>
     <button class="navbtn active" data-tab="overview">Overview</button>
-    <button class="navbtn" data-tab="feedback">Feedback</button>
-    <button class="navbtn" data-tab="visitors">Visitors</button>
-    <button class="navbtn" data-tab="users">Users</button>
+    <button class="navbtn" data-tab="feedback">Feedback <span class="count" id="navCountFeedback"></span></button>
+    <button class="navbtn" data-tab="visitors">Visitors <span class="count" id="navCountVisitors"></span></button>
+    <button class="navbtn" data-tab="users">Users <span class="count" id="navCountUsers"></span></button>
+    <button class="navbtn" data-tab="replies">Replies</button>
     <button class="navbtn" data-tab="settings">Settings</button>
   </nav>
 
@@ -116,8 +126,15 @@
   <div class="grid" style="gap:16px">
     <!-- OVERVIEW -->
     <section id="tab-overview" class="card">
-      <h2 style="margin-top:2px">Overview</h2>
-      <div class="grid kpi">
+      <div class="row" style="align-items:flex-start">
+        <div>
+          <h2 style="margin:0 0 8px">Overview</h2>
+          <p class="muted" style="margin:0">Quick stats + trends</p>
+        </div>
+        <span class="muted right" id="lastUpdated">—</span>
+      </div>
+
+      <div class="grid kpi" style="margin-top:12px">
         <div class="kpi"><h3>Total Feedback</h3><div class="val" id="kpiFeedback">0</div></div>
         <div class="kpi"><h3>Total Visitors</h3><div class="val" id="kpiVisitors">0</div></div>
         <div class="kpi"><h3>Registered Users</h3><div class="val" id="kpiUsers">0</div></div>
@@ -138,15 +155,16 @@
         <div class="row"><strong>Feedback Timeline</strong><span class="muted right" id="c3info"></span></div>
         <canvas id="chartTimeline" height="180"></canvas>
       </div>
-
-      <p class="muted" id="lastUpdated" style="margin-top:10px">—</p>
     </section>
 
     <!-- FEEDBACK -->
     <section id="tab-feedback" class="card hidden">
       <div class="row">
         <h2 style="margin:0">Feedback</h2>
-        <button id="exportFeedback" class="btn right">Export CSV</button>
+        <div class="right row">
+          <button id="bulkReply" class="btn">Reply selected</button>
+          <button id="exportFeedback" class="btn">Export CSV</button>
+        </div>
       </div>
       <div class="row filters" style="margin:10px 0">
         <input id="fProject" placeholder="Filter by project…"/>
@@ -158,6 +176,7 @@
         <table>
           <thead>
             <tr>
+              <th><input type="checkbox" id="fbSelectAll"/></th>
               <th>Project</th><th>Name</th><th>Email</th><th>Message</th>
               <th>IP</th><th>ISP</th><th>City</th><th>Created (Lagos)</th><th>Action</th>
             </tr>
@@ -213,6 +232,23 @@
       </div>
     </section>
 
+    <!-- REPLIES -->
+    <section id="tab-replies" class="card hidden">
+      <div class="row">
+        <h2 style="margin:0">Replies</h2>
+        <span class="muted">All email replies sent from this dashboard</span>
+        <button id="exportReplies" class="btn right">Export CSV</button>
+      </div>
+      <div class="scroll" style="margin-top:10px">
+        <table>
+          <thead>
+            <tr><th>To</th><th>Mode</th><th>Subject</th><th>Message</th><th>Linked Feedback</th><th>Status</th><th>Sent (Lagos)</th></tr>
+          </thead>
+        <tbody id="tbodyReplies"></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- SETTINGS -->
     <section id="tab-settings" class="card hidden">
       <h2 style="margin-top:0">Settings</h2>
@@ -238,10 +274,40 @@
   </div>
 </div>
 
-<div class="footer">© 2025 Excellent Global Conceptional. All rights reserved.</div>
+<!-- Reply Modal -->
+<div id="replyModal" class="modal">
+  <div class="panel">
+    <div class="row">
+      <h3 style="margin:0">Send Reply</h3>
+      <button id="replyClose" class="btn right">Close</button>
+    </div>
+    <p class="muted" id="replyMeta" style="margin:6px 0 12px"></p>
+    <div class="row">
+      <label><input type="radio" name="replyMode" value="user" /> Email user</label>
+      <label><input type="radio" name="replyMode" value="admin" checked /> Email me (admin) only</label>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
+      <div>
+        <label class="muted">To</label>
+        <input id="replyTo" placeholder="recipient email" />
+      </div>
+      <div>
+        <label class="muted">Subject</label>
+        <input id="replySubject" placeholder="Subject"/>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <label class="muted">Message</label>
+      <textarea id="replyBody" rows="6" placeholder="Type your reply…"></textarea>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button id="replySend" class="btn primary">Send</button>
+      <span id="replyStatus" class="muted"></span>
+    </div>
+  </div>
+</div>
 
-<!-- EmailJS optional (kept for future notifications) -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<div class="footer">© 2025 Excellent Global Conceptional. All rights reserved.</div>
 
 <!-- Firebase -->
 <script type="module">
@@ -249,7 +315,7 @@
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, deleteDoc,
-    collection, onSnapshot, query, orderBy
+    collection, onSnapshot, query, orderBy, addDoc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   /************** SECURITY GATES **************/
@@ -260,7 +326,6 @@
   // Secret URL param check
   const params = new URLSearchParams(location.search);
   if (params.get("code") !== SECRET_CODE) {
-    // soft-block view
     document.body.innerHTML = "<div style='padding:40px;font-family:system-ui'><h2>Access denied</h2><p>You need the correct code to open this page.</p></div>";
     throw new Error("Missing/invalid code");
   }
@@ -278,6 +343,7 @@
   }
 
   /************** FIREBASE **************/
+  // ===== Firebase Config =====
   const firebaseConfig = {
     apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
     authDomain: "excellent-d056e.firebaseapp.com",
@@ -291,18 +357,29 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  /************** EmailJS **************/
+  // Your provided credentials:
+  // Service ID: service_cvvr3vn
+  // Template ID: template_6xgms6a
+  // Public Key: h5LWzY8YUESb4sZ
+  emailjs.init("h5LWzY8YUESb4sZ");
+  const EMAIL_SERVICE = "service_cvvr3vn";
+  const EMAIL_TEMPLATE = "template_6xgms6a";
+  const ADMIN_ALERT_TO = "quareebalabi22@gmail.com";
+
   /************** UI ELEMENTS **************/
   const adminEmailEl = document.getElementById("adminEmail");
   const signOutBtn   = document.getElementById("signOutBtn");
   const lastUpdated  = document.getElementById("lastUpdated");
 
-  // Tabs
+  // Nav + Tabs
   const tabButtons = [...document.querySelectorAll(".navbtn")];
   const tabs = {
     overview: document.getElementById("tab-overview"),
     feedback: document.getElementById("tab-feedback"),
     visitors: document.getElementById("tab-visitors"),
     users: document.getElementById("tab-users"),
+    replies: document.getElementById("tab-replies"),
     settings: document.getElementById("tab-settings")
   };
   tabButtons.forEach(b=>{
@@ -318,6 +395,9 @@
   const kpiFeedback = document.getElementById("kpiFeedback");
   const kpiVisitors = document.getElementById("kpiVisitors");
   const kpiUsers    = document.getElementById("kpiUsers");
+  const navCountFeedback = document.getElementById("navCountFeedback");
+  const navCountVisitors = document.getElementById("navCountVisitors");
+  const navCountUsers    = document.getElementById("navCountUsers");
 
   // Feedback filters/table
   const fProject = document.getElementById("fProject");
@@ -326,6 +406,8 @@
   const clearF   = document.getElementById("clearF");
   const tbodyFeedback  = document.getElementById("tbodyFeedback");
   const exportFeedback = document.getElementById("exportFeedback");
+  const fbSelectAll    = document.getElementById("fbSelectAll");
+  const bulkReply      = document.getElementById("bulkReply");
 
   // Visitors filters/table
   const vPage = document.getElementById("vPage");
@@ -345,6 +427,10 @@
   const tbodyUsers = document.getElementById("tbodyUsers");
   const exportUsers= document.getElementById("exportUsers");
 
+  // Replies table
+  const tbodyReplies = document.getElementById("tbodyReplies");
+  const exportReplies= document.getElementById("exportReplies");
+
   // Settings
   const setBanner   = document.getElementById("setBanner");
   const csExcellent = document.getElementById("csExcellent");
@@ -353,6 +439,17 @@
   const csLms       = document.getElementById("csLms");
   const saveSettings= document.getElementById("saveSettings");
   const saveMsg     = document.getElementById("saveMsg");
+
+  // Reply Modal
+  const replyModal   = document.getElementById("replyModal");
+  const replyClose   = document.getElementById("replyClose");
+  const replyMeta    = document.getElementById("replyMeta");
+  const replyTo      = document.getElementById("replyTo");
+  const replySubject = document.getElementById("replySubject");
+  const replyBody    = document.getElementById("replyBody");
+  const replySend    = document.getElementById("replySend");
+  const replyStatus  = document.getElementById("replyStatus");
+  const replyModeRadios = ()=> [...document.querySelectorAll('input[name="replyMode"]')];
 
   /************** HELPERS **************/
   function lagosTime(ts){
@@ -376,115 +473,7 @@
     URL.revokeObjectURL(url);
   }
 
-  /************** STATE **************/
-  let feedbackRows = [];
-  let visitorRows  = [];
-  let userRows     = [];
-
-  // Charts
-  let chartProjects, chartCities, chartTimeline;
-
-  function drawCharts(){
-    // Destroy if exists (for live updates)
-    [chartProjects, chartCities, chartTimeline].forEach(ch=> ch && ch.destroy());
-
-    // 1) Feedback per project
-    const projCounts = {};
-    for (const r of feedbackRows){
-      const p = (r.project||"Unknown").trim();
-      projCounts[p] = (projCounts[p]||0)+1;
-    }
-    const projLabels = Object.keys(projCounts);
-    const projData   = Object.values(projCounts);
-
-    chartProjects = new Chart(document.getElementById("chartProjects"), {
-      type: "bar",
-      data: { labels: projLabels, datasets: [{ label: "Feedback", data: projData }]},
-      options: { responsive:true, plugins:{legend:{display:false}} }
-    });
-    document.getElementById("c1info").textContent = projLabels.length ? "" : "No data yet";
-
-    // 2) Visitors by City
-    const cityCounts = {};
-    for (const v of visitorRows){
-      const c = (v.city||"Unknown").trim();
-      cityCounts[c] = (cityCounts[c]||0)+1;
-    }
-    const cityLabels = Object.keys(cityCounts).slice(0,8);
-    const cityData   = cityLabels.map(k=>cityCounts[k]);
-
-    chartCities = new Chart(document.getElementById("chartCities"), {
-      type: "doughnut",
-      data: { labels: cityLabels, datasets: [{ data: cityData }]},
-      options: { responsive:true, plugins:{legend:{position:"bottom"}} }
-    });
-    document.getElementById("c2info").textContent = cityLabels.length ? "" : "No data yet";
-
-    // 3) Feedback timeline (by day)
-    const dayCounts = {};
-    for (const r of feedbackRows){
-      const d = r.createdAt?.toDate ? r.createdAt.toDate() : new Date(r.createdAt||Date.now());
-      const key = d.toISOString().slice(0,10);
-      dayCounts[key] = (dayCounts[key]||0)+1;
-    }
-    const days = Object.keys(dayCounts).sort();
-    const vals = days.map(k=>dayCounts[k]);
-    chartTimeline = new Chart(document.getElementById("chartTimeline"), {
-      type: "line",
-      data: { labels: days, datasets: [{ label:"Feedback", data: vals, tension:.3, fill:false }]},
-      options: { responsive:true, plugins:{legend:{display:false}}, scales:{ x:{ ticks:{ maxRotation:0, autoSkip:true }}} }
-    });
-    document.getElementById("c3info").textContent = days.length ? "" : "No data yet";
-  }
-
-  function renderFeedback(){
-    const queryText = (fText.value||"").toLowerCase();
-    const projFilter= (fProject.value||"").toLowerCase();
-    const ipFilter  = (fIP.value||"").toLowerCase();
-
-    const rows = feedbackRows.filter(r=>{
-      const blob = `${r.name||""} ${r.email||""} ${r.message||""}`.toLowerCase();
-      if (queryText && !blob.includes(queryText)) return false;
-      if (projFilter && !(r.project||"").toLowerCase().includes(projFilter)) return false;
-      if (ipFilter && !(r.ip||"").toLowerCase().includes(ipFilter)) return false;
-      return true;
-    });
-
-    tbodyFeedback.innerHTML = "";
-    for (const r of rows){
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${esc(r.project||"")}</td>
-        <td>${esc(r.name||"")}</td>
-        <td>${esc(r.email||"")}</td>
-        <td>${esc(r.message||"")}</td>
-        <td>${esc(r.ip||"")}</td>
-        <td>${esc(r.isp||"")}</td>
-        <td>${esc(r.city||"")}</td>
-        <td class="muted">${esc(lagosTime(r.createdAt))}</td>
-        <td><button class="btn danger" data-id="${r.id}">Delete</button></td>
-      `;
-      tbodyFeedback.appendChild(tr);
-    }
-    kpiFeedback.textContent = feedbackRows.length;
-    [...tbodyFeedback.querySelectorAll("button[data-id]")].forEach(btn=>{
-      btn.onclick = async ()=>{
-        if (!confirm("Delete this feedback?")) return;
-        await deleteDoc(doc(db,"feedback", btn.dataset.id));
-      };
-    });
-  }
-
-  function renderVisitors(){
-    const rows = visitorRows.filter(v=>{
-      const p=(vPage.value||"").toLowerCase();
-      const ip=(vIP.value||"").toLowerCase();
-      const isp=(vISP.value||"").toLowerCase();
-      const c=(vCity.value||"").toLowerCase();
-      if (p && !(v.page||"").toLowerCase().includes(p)) return false;
-      if (ip && !(v.ip||"").toLowerCase().includes(ip)) return false;
-      if (isp && !(v.isp||"").toLowerCase().includes(isp)) return false;
-      if (c && !(v.city||"").toLowerCase().includes(c)) return false;
-      return true;
-    });
-    tbodyVisitors.inne
+  function openReplyModal(preset){
+    replyMeta.textContent = preset ? `Replying to: ${preset.name||"(no name)"} — ${preset.email||"(no email)"} — ${preset.project||"(no project)"}` : "New reply";
+    const adminEmail = adminEmailEl.textContent || ADMIN_ALERT_TO;
+    const mode = replyModeRadios().find(r => r.checked)?.value || "ad
