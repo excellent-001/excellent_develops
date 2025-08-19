@@ -30,7 +30,6 @@
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists()) return alert("Verification not found.");
-
       const data = docSnap.data();
 
       if (Date.now() > data.expiresAt) return alert("Code expired. Please request a new one.");
