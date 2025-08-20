@@ -4,13 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Login - Excellent Developers</title>
-<link rel="stylesheet" href="styles.css">
 <style>
   body {
     margin: 0;
     font-family: Arial, sans-serif;
     display: flex;
     height: 100vh;
+    background: #f4f7fc;
   }
   .container { display: flex; flex:1; }
   .left {
@@ -19,41 +19,51 @@
     align-items: center;
     justify-content: center;
     background: #fff;
+    background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
   }
   .form-box {
     width: 80%;
-    max-width: 350px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    max-width: 360px;
+    padding: 25px;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
     border-radius: 12px;
+    background: #fff;
   }
-  .form-box h2 { margin-bottom: 20px; text-align: center; }
+  .form-box h2 { 
+    margin-bottom: 20px; 
+    text-align: center; 
+    color: #333;
+  }
   .form-box input {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
+    font-size: 14px;
   }
   .form-box button {
     width: 100%;
     padding: 12px;
-    background: #6a11cb;
+    background: linear-gradient(90deg,#6a11cb,#2575fc);
     color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 15px;
+    transition: 0.3s ease;
   }
-  .form-box button:hover { background: #2575fc; }
+  .form-box button:hover { background: linear-gradient(90deg,#2575fc,#6a11cb); }
   .form-links {
-    margin-top: 10px;
+    margin-top: 12px;
     text-align: center;
   }
   .form-links a {
     color: #6a11cb;
     text-decoration: none;
-    margin: 0 5px;
+    margin: 0 6px;
+    font-size: 14px;
   }
   .right {
     width: 60%;
@@ -67,7 +77,13 @@
     padding: 30px;
     position: relative;
   }
-  .right img { width: 80px; margin-bottom: 20px; }
+  .right img { 
+    width: 100px; 
+    margin-bottom: 20px; 
+    border-radius: 12px;
+  }
+  .right h1 { font-size: 28px; margin-bottom: 15px; }
+  .right p { font-size: 16px; max-width: 420px; }
   footer {
     position: fixed;
     bottom: 0;
@@ -90,14 +106,14 @@
   #loadingSpinner {
     display: none;
     text-align: center;
-    margin: 10px 0;
+    margin: 12px 0;
   }
   #loadingSpinner div {
     border: 4px solid #f3f3f3;
     border-top: 4px solid #6a11cb;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     margin: auto;
     animation: spin 1s linear infinite;
   }
@@ -176,12 +192,12 @@
 <!-- Toasts -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Firebase ONLY (step 1) -->
+<!-- Firebase Login Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-// --- Firebase config (unchanged) ---
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
   authDomain: "excellent-d056e.firebaseapp.com",
@@ -195,24 +211,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// --- Admin config (kept) ---
+// Admin email
 const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
-// Toast helper (dismissible)
+// Toast helper
 function showToast(message, type = "success", duration = 4000) {
   const container = document.getElementById("toastContainer");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
-  toast.innerHTML = `<span>${message}</span><button aria-label="Dismiss" title="Dismiss">&times;</button>`;
+  toast.innerHTML = `<span>${message}</span><button>&times;</button>`;
   const closeBtn = toast.querySelector("button");
   closeBtn.addEventListener("click", () => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 300);
   });
   container.appendChild(toast);
-  // animate in
   requestAnimationFrame(() => toast.classList.add("show"));
-  // auto hide
   setTimeout(() => {
     if (toast.parentElement) {
       toast.classList.remove("show");
@@ -230,19 +244,13 @@ form.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  // UI: show spinner + disable button
   spinner.style.display = "block";
   loginBtn.disabled = true;
   loginBtn.textContent = "Logging in...";
 
-  console.log("[Login] Submitting…", { emailMasked: email.replace(/(.{2}).+(@.*)/, "$1***$2") });
-
   try {
-    // 1) Firebase Auth only
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    console.log("[Login] Firebase success:", user.uid);
 
-    // 2) Admin two-way (kept)
     if (email.toLowerCase() === ADMIN_EMAIL) {
       const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
       if (choice) {
@@ -250,23 +258,19 @@ form.addEventListener("submit", async (e) => {
         if (code === "excellentAdmin2025") {
           showToast("Admin login successful ✅", "success");
           setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
-          return; // stop here (no re-enable needed due to redirect)
+          return;
         } else {
           showToast("Invalid admin code. Logging in as user.", "error");
         }
       }
     }
 
-    // 3) Normal redirect
     showToast("Login successful ✅", "success");
     setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
-    return;
 
   } catch (err) {
-    console.error("[Login] Error:", err);
     showToast("Login failed: " + (err?.message || "Unknown error"), "error");
   } finally {
-    // Restore UI if we didn't redirect yet
     spinner.style.display = "none";
     loginBtn.disabled = false;
     loginBtn.textContent = "Login";
