@@ -4,44 +4,120 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Verify Account – Excellent_Develops</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #0b1220, #0f172a);
+    color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    padding: 50px 30px;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.7);
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    animation: fadeSlide 0.8s ease;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card img { width: 100px; margin-bottom: 20px; }
+  .card h1 { margin-bottom: 25px; color: #ff7043; font-size: 1.8em; }
+  .card input {
+    width: 100%; padding: 14px 16px; margin-bottom: 18px;
+    border-radius: 12px; border: none;
+    background: rgba(255,255,255,0.1); color: #e5e7eb;
+    font-size: 1em;
+  }
+  .card input::placeholder { color: #9ca3af; }
+  .card button {
+    width: 100%; padding: 14px; font-size: 1em;
+    border: none; border-radius: 12px;
+    background: #ff7043; color: #fff;
+    cursor: pointer; font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .card button:hover { background: #e65924; transform: translateY(-2px); }
+  .links { margin-top: 18px; font-size: 0.9em; }
+  .links a {
+    color: #9ca3af; text-decoration: none; margin: 0 8px; transition: color 0.3s;
+  }
+  .links a:hover { color: #ff7043; }
+</style>
 </head>
 <body>
-  <h1>Verify Your Account</h1>
-  <form id="verifyForm">
-    <input type="text" id="code" placeholder="Enter 6-digit code" required />
-    <button type="submit">Verify</button>
-  </form>
+  <div class="card">
+    <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent_Develops Logo" />
+    <h1>Verify Account</h1>
+    <p>Enter the 6-digit code sent to your email to complete your registration.</p>
+    <form id="verificationForm">
+      <input type="text" id="codeInput" placeholder="Enter 6-digit code" required />
+      <button type="submit">Verify</button>
+    </form>
+    <div class="links">
+      <a href="index.html">Back to Login</a>
+    </div>
+  </div>
 
-  <script type="module">
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const db = getFirestore();
-    const auth = getAuth();
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+    authDomain: "excellent-d056e.firebaseapp.com",
+    projectId: "excellent-d056e",
+    storageBucket: "excellent-d056e.appspot.com",
+    messagingSenderId: "629984941607",
+    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+    measurementId: "G-G3RCTDSY27"
+  };
 
-    document.getElementById("verifyForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const inputCode = document.getElementById("code").value;
-      const user = auth.currentUser;
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-      if (!user) return alert("No user logged in. Please login again.");
+  document.getElementById("verificationForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const codeEntered = parseInt(document.getElementById("codeInput").value);
+    const uid = prompt("Enter your UID to verify (or store UID in localStorage after signup)"); // optionally store UID after signup
 
-      const docRef = doc(db, "verifications", user.uid);
-      const docSnap = await getDoc(docRef);
+    if (!uid) return alert("UID is required for verification.");
 
-      if (!docSnap.exists()) return alert("Verification not found.");
-      const data = docSnap.data();
+    try {
+      const verDocRef = doc(db, "verifications", uid);
+      const verSnap = await getDoc(verDocRef);
 
-      if (Date.now() > data.expiresAt) return alert("Code expired. Please request a new one.");
+      if (!verSnap.exists()) return alert("Verification record not found.");
 
-      if (parseInt(inputCode) === data.code) {
-        await updateDoc(docRef, { verified: true });
-        alert("Your account is verified! You can now login.");
+      const verData = verSnap.data();
+
+      if (Date.now() > verData.expiresAt) {
+        return alert("❌ Code expired. Please request a new one.");
+      }
+
+      if (verData.code === codeEntered) {
+        await updateDoc(verDocRef, { verified: true });
+        alert("✅ Verification successful! You can now log in.");
         window.location.href = "index.html";
       } else {
-        alert("Incorrect code. Try again.");
+        alert("❌ Incorrect code. Try again.");
       }
-    });
-  </script>
+
+    } catch (error) {
+      alert("Error verifying code: " + error.message);
+    }
+  });
+</script>
 </body>
 </html>
