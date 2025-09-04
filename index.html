@@ -173,7 +173,7 @@
       <div id="loadingSpinner"><div></div></div>
       <div class="form-links">
         <a href="signin.html">Register</a> | 
-        <a href="reset-password.html">Forgot Password?</a>
+        <a href="reset.html">Forgot Password?</a>
       </div>
     </div>
   </div>
@@ -183,7 +183,7 @@
     <span class="close-btn" onclick="window.location.href='index.html'">✖</span>
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
     <h1>Welcome to Excellent Developers</h1>
-    <p>Access your account or, if you’re an admin, you can choose to login as User or Admin.</p>
+    <p>Access your account or, if you’re an admin, enter the secret code to manage the site dashboard.</p>
   </div>
 </div>
 
@@ -247,23 +247,26 @@ form.addEventListener("submit", async (e) => {
 
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    const token = await user.getIdTokenResult();
+
+    // ✅ force refresh claims
+    const token = await user.getIdTokenResult(true);
 
     if (token.claims.admin) {
-      // Give admin choice
-      const choice = confirm("Do you want to login as Admin? (OK = Admin, Cancel = User)");
+      const choice = confirm("Do you want to continue as Admin?\nOK = Admin, Cancel = User");
       if (choice) {
         showToast("Admin login successful ✅", "success");
         setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
+        return;
       } else {
-        showToast("User login successful ✅", "success");
+        showToast("Logged in as user ✅", "success");
         setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
+        return;
       }
-    } else {
-      // Normal user flow
-      showToast("Login successful ✅", "success");
-      setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
     }
+
+    // normal user
+    showToast("Login successful ✅", "success");
+    setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
 
   } catch (err) {
     showToast("Login failed: " + (err?.message || "Unknown error"), "error");
@@ -276,4 +279,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 
 </body>
-          </html>
+  </html>
