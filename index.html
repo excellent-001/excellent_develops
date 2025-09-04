@@ -211,6 +211,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// ADMIN EMAIL
+const ADMIN_EMAIL = "quareebalabi22@gmail.com";
+
 // Toast helper
 function showToast(message, type = "success", duration = 4000) {
   const container = document.getElementById("toastContainer");
@@ -248,23 +251,20 @@ form.addEventListener("submit", async (e) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    // ✅ force refresh claims
-    const token = await user.getIdTokenResult(true);
-
-    if (token.claims.admin) {
-      const choice = confirm("Do you want to continue as Admin?\nOK = Admin, Cancel = User");
+    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
       if (choice) {
-        showToast("Admin login successful ✅", "success");
-        setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
-        return;
-      } else {
-        showToast("Logged in as user ✅", "success");
-        setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
-        return;
+        const code = prompt("Enter Admin Secret Code:");
+        if (code === "excellentAdmin2025") {
+          showToast("Admin login successful ✅", "success");
+          setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
+          return;
+        } else {
+          showToast("Invalid admin code ❌ Logging in as user.", "error");
+        }
       }
     }
 
-    // normal user
     showToast("Login successful ✅", "success");
     setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
 
