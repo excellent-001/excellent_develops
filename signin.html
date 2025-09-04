@@ -15,7 +15,6 @@
     align-items: center;
     height: 100vh;
   }
-
   .card {
     background: rgba(255,255,255,0.05);
     padding: 50px 30px;
@@ -27,82 +26,38 @@
     animation: fadeSlide 0.8s ease;
     transition: transform 0.3s;
   }
-
-  .card:hover {
-    transform: translateY(-5px);
-  }
-
+  .card:hover { transform: translateY(-5px); }
   @keyframes fadeSlide {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
-  .card img {
-    width: 100px;
-    margin-bottom: 20px;
-  }
-
-  .card h1 {
-    margin-bottom: 25px;
-    color: #ff7043;
-    font-size: 1.8em;
-  }
-
+  .card img { width: 100px; margin-bottom: 20px; }
+  .card h1 { margin-bottom: 25px; color: #ff7043; font-size: 1.8em; }
   .card input {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 18px;
-    border-radius: 12px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: #e5e7eb;
-    font-size: 1em;
-    transition: background 0.3s, box-shadow 0.3s;
+    width: 100%; padding: 14px 16px; margin-bottom: 18px;
+    border-radius: 12px; border: none;
+    background: rgba(255,255,255,0.1); color: #e5e7eb;
+    font-size: 1em; transition: background 0.3s, box-shadow 0.3s;
   }
-
-  .card input::placeholder {
-    color: #9ca3af;
-  }
-
+  .card input::placeholder { color: #9ca3af; }
   .card input:focus {
     background: rgba(255,255,255,0.15);
     box-shadow: 0 0 8px rgba(255,255,255,0.3);
     outline: none;
   }
-
   .card button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1em;
-    border: none;
-    border-radius: 12px;
-    background: #ff7043;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
+    width: 100%; padding: 14px; font-size: 1em;
+    border: none; border-radius: 12px;
+    background: #ff7043; color: #fff;
+    cursor: pointer; font-weight: bold;
     transition: background 0.3s, transform 0.2s;
   }
-
-  .card button:hover {
-    background: #e65924;
-    transform: translateY(-2px);
-  }
-
-  .links {
-    margin-top: 18px;
-    font-size: 0.9em;
-  }
-
+  .card button:hover { background: #e65924; transform: translateY(-2px); }
+  .links { margin-top: 18px; font-size: 0.9em; }
   .links a {
-    color: #9ca3af;
-    text-decoration: none;
-    margin: 0 8px;
-    transition: color 0.3s;
+    color: #9ca3af; text-decoration: none; margin: 0 8px; transition: color 0.3s;
   }
-
-  .links a:hover {
-    color: #ff7043;
-  }
+  .links a:hover { color: #ff7043; }
 </style>
 </head>
 <body>
@@ -125,10 +80,11 @@
   <!-- Firebase + EmailJS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
 
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
       authDomain: "excellent-d056e.firebaseapp.com",
@@ -143,9 +99,10 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // EmailJS setup
     emailjs.init("h5LWzY8YUESb4sZbS");
     const EMAIL_SERVICE = "service_r556h12";
-    const EMAIL_TEMPLATE = "template_6xgms6a";
+    const EMAIL_TEMPLATE = "template_t9vrk9q"; // ✅ corrected to your ID
 
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -156,23 +113,37 @@
 
       try {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCred.user.uid;
+        const user = userCred.user;
+        const uid = user.uid;
 
-        await setDoc(doc(db, "users", uid), { fullname, email, phone, createdAt: new Date().toISOString() });
-
-        const code = Math.floor(100000 + Math.random() * 900000);
-        const expiry = Date.now() + 10*60*1000;
-        await setDoc(doc(db, "verifications", uid), { code, expiresAt: expiry, verified: false });
-
-        await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
-          from_email: "quareebalabi22@gmail.com",
-          from_name: "Excellent_Develops",
-          to_email: email,
-          to_name: fullname,
-          message: `Hi ${fullname},\n\nWelcome to Excellent_Develops! 🎉\nYour 6-digit verification code is: ${code}\nIt expires in 10 minutes.\n\nEnjoy!`
+        // Store user in Firestore
+        await setDoc(doc(db, "users", uid), {
+          fullname,
+          email,
+          phone,
+          createdAt: new Date().toISOString()
         });
 
-        alert("Account created! A verification code was sent to your email.");
+        // Generate verification code
+        const code = Math.floor(100000 + Math.random() * 900000);
+        const expiry = Date.now() + 10 * 60 * 1000;
+        await setDoc(doc(db, "verifications", uid), {
+          code,
+          expiresAt: expiry,
+          verified: false
+        });
+
+        // Send Firebase official email verification
+        await sendEmailVerification(user);
+
+        // Send EmailJS custom welcome/verification code
+        await emailjs.send(EMAIL_SERVICE, EMAIL_TEMPLATE, {
+          to_email: email,
+          to_name: fullname,
+          code: code
+        });
+
+        alert("✅ Account created! Please check your email for verification and your 6-digit code.");
         window.location.href = "verification.html";
 
       } catch (error) {
