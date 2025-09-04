@@ -102,7 +102,6 @@
     cursor: pointer;
     color: #fff;
   }
-  /* Spinner */
   #loadingSpinner {
     display: none;
     text-align: center;
@@ -121,13 +120,7 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  /* Toasts */
-  .toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-  }
+  .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
   .toast {
     background: #333;
     color: #fff;
@@ -160,7 +153,6 @@
 <body>
 
 <div class="container">
-  <!-- Left: Login form -->
   <div class="left">
     <div class="form-box">
       <h2>Login</h2>
@@ -169,7 +161,6 @@
         <input type="password" id="password" placeholder="Enter your password" required>
         <button type="submit" id="loginBtn">Login</button>
       </form>
-      <!-- Spinner -->
       <div id="loadingSpinner"><div></div></div>
       <div class="form-links">
         <a href="signin.html">Register</a> | 
@@ -178,7 +169,6 @@
     </div>
   </div>
 
-  <!-- Right: Welcome panel -->
   <div class="right">
     <span class="close-btn" onclick="window.location.href='index.html'">✖</span>
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
@@ -188,16 +178,12 @@
 </div>
 
 <footer>© 2025 Excellent Developers. All Rights Reserved.</footer>
-
-<!-- Toasts -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Firebase Login Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
   authDomain: "excellent-d056e.firebaseapp.com",
@@ -210,19 +196,15 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// Admin email + secret code
 const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 const ADMIN_CODE = "554455";
 
-// Toast helper
 function showToast(message, type = "success", duration = 4000) {
   const container = document.getElementById("toastContainer");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
   toast.innerHTML = `<span>${message}</span><button>&times;</button>`;
-  const closeBtn = toast.querySelector("button");
-  closeBtn.addEventListener("click", () => {
+  toast.querySelector("button").addEventListener("click", () => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 300);
   });
@@ -252,8 +234,14 @@ form.addEventListener("submit", async (e) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-      const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
+    if (!user.emailVerified) {
+      alert("⚠ Please verify your email first. Check your inbox.");
+      await auth.signOut();
+      return;
+    }
+
+    if (email.toLowerCase() === ADMIN_EMAIL) {
+      const choice = confirm("Login as Admin? Click OK for Admin, Cancel for User.");
       if (choice) {
         const code = prompt("Enter Admin Secret Code:");
         if (code === ADMIN_CODE) {
@@ -280,4 +268,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 
 </body>
-  </html>
+</html>
