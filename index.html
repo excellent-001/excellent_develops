@@ -211,8 +211,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ADMIN EMAIL
+// Admin email + secret code
 const ADMIN_EMAIL = "quareebalabi22@gmail.com";
+const ADMIN_CODE = "554455";
 
 // Toast helper
 function showToast(message, type = "success", duration = 4000) {
@@ -255,12 +256,12 @@ form.addEventListener("submit", async (e) => {
       const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
       if (choice) {
         const code = prompt("Enter Admin Secret Code:");
-        if (code === "excellentAdmin2025") {
+        if (code === ADMIN_CODE) {
           showToast("Admin login successful ✅", "success");
           setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
           return;
         } else {
-          showToast("Invalid admin code ❌ Logging in as user.", "error");
+          showToast("Invalid admin code. Logging in as user.", "error");
         }
       }
     }
