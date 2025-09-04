@@ -42,6 +42,24 @@
     border: 1px solid #ccc;
     font-size: 14px;
   }
+  .password-wrapper {
+    position: relative;
+  }
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+  }
+  .error-text {
+    color: #dc3545;
+    font-size: 13px;
+    margin: -5px 0 5px 2px;
+    display: none;
+  }
   .form-box button {
     width: 100%;
     padding: 12px;
@@ -155,6 +173,15 @@
     margin-left: 12px;
     line-height: 1;
   }
+  .remember {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  .remember input {
+    margin-right: 6px;
+  }
 </style>
 </head>
 <body>
@@ -166,7 +193,18 @@
       <h2>Login</h2>
       <form id="loginForm">
         <input type="email" id="email" placeholder="Enter your email" required>
-        <input type="password" id="password" placeholder="Enter your password" required>
+        <div id="emailError" class="error-text">Invalid email format</div>
+
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <span class="toggle-password" id="togglePassword">👁</span>
+        </div>
+        <div id="passwordError" class="error-text">Password must be at least 6 characters</div>
+
+        <div class="remember">
+          <input type="checkbox" id="rememberMe"> Remember Me
+        </div>
+
         <button type="submit" id="loginBtn">Login</button>
       </form>
       <!-- Spinner -->
@@ -183,7 +221,7 @@
     <span class="close-btn" onclick="window.location.href='index.html'">✖</span>
     <img src="https://raw.githubusercontent.com/excellent-001/excellent_develops/refs/heads/main/logo.png" alt="Excellent Developers Logo">
     <h1>Welcome to Excellent Developers</h1>
-    <p>Access your account or, if you’re an admin, enter the secret code to manage the site dashboard.</p>
+    <p>Access your account or, if you’re an admin, your role will be detected automatically.</p>
   </div>
 </div>
 
@@ -195,7 +233,7 @@
 <!-- Firebase Login Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -210,9 +248,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// Admin email
-const ADMIN_EMAIL = "quareebalabi22@gmail.com";
 
 // Toast helper
 function showToast(message, type = "success", duration = 4000) {
@@ -235,14 +270,54 @@ function showToast(message, type = "success", duration = 4000) {
   }, duration);
 }
 
+// Elements
 const form = document.getElementById("loginForm");
 const spinner = document.getElementById("loadingSpinner");
 const loginBtn = document.getElementById("loginBtn");
+const togglePassword = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("password");
+const emailInput = document.getElementById("email");
+const rememberMe = document.getElementById("rememberMe");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
 
+// Toggle password
+togglePassword.addEventListener("click", () => {
+  const type = passwordInput.type === "password" ? "text" : "password";
+  passwordInput.type = type;
+});
+
+// Remember me
+if (localStorage.getItem("rememberedEmail")) {
+  emailInput.value = localStorage.getItem("rememberedEmail");
+  rememberMe.checked = true;
+}
+
+// Validate
+function validateInputs() {
+  let valid = true;
+  if (!emailInput.value.includes("@")) {
+    emailError.style.display = "block";
+    valid = false;
+  } else {
+    emailError.style.display = "none";
+  }
+  if (passwordInput.value.length < 6) {
+    passwordError.style.display = "block";
+    valid = false;
+  } else {
+    passwordError.style.display = "none";
+  }
+  return valid;
+}
+
+// Handle login
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  if (!validateInputs()) return;
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
 
   spinner.style.display = "block";
   loginBtn.disabled = true;
@@ -251,22 +326,26 @@ form.addEventListener("submit", async (e) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    if (email.toLowerCase() === ADMIN_EMAIL) {
-      const choice = confirm("Do you want to login as Admin? Click OK for Admin, Cancel for User.");
-      if (choice) {
-        const code = prompt("Enter Admin Secret Code:");
-        if (code === "excellentAdmin2025") {
-          showToast("Admin login successful ✅", "success");
-          setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
-          return;
-        } else {
-          showToast("Invalid admin code. Logging in as user.", "error");
-        }
-      }
+    // Save remember me
+    if (rememberMe.checked) {
+      localStorage.setItem("rememberedEmail", email);
+    } else {
+      localStorage.removeItem("rememberedEmail");
     }
 
     showToast("Login successful ✅", "success");
-    setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
+
+    // Check admin role via custom claims (set in Firebase backend)
+    onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const token = await currentUser.getIdTokenResult();
+        if (token.claims.admin === true) {
+          setTimeout(() => { window.location.href = "admin-dashboard.html"; }, 1200);
+        } else {
+          setTimeout(() => { window.location.href = "welcome.html"; }, 1200);
+        }
+      }
+    });
 
   } catch (err) {
     showToast("Login failed: " + (err?.message || "Unknown error"), "error");
@@ -279,4 +358,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 
 </body>
-</html>
+                                                   </html>
