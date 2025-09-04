@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reset Password</title>
+  <title>Reset Password - Excellent Developers</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6a0dad, #9b4dca);
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      color: #333;
     }
     .container {
       background: #fff;
-      color: #333;
       padding: 25px;
-      border-radius: 15px;
+      border-radius: 12px;
       width: 320px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
       text-align: center;
     }
-    h2 {
-      margin-bottom: 15px;
-      color: #6a0dad;
-    }
+    h2 { margin-bottom: 15px; color: #6a11cb; }
     input {
       width: 100%;
       padding: 10px;
@@ -37,7 +33,7 @@
       font-size: 14px;
     }
     button {
-      background: #6a0dad;
+      background: linear-gradient(90deg,#6a11cb,#2575fc);
       color: white;
       padding: 10px;
       width: 100%;
@@ -47,7 +43,14 @@
       font-size: 15px;
     }
     button:hover {
-      background: #580a9e;
+      background: linear-gradient(90deg,#2575fc,#6a11cb);
+    }
+    .back-link {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #6a11cb;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -55,42 +58,48 @@
 
 <div class="container">
   <h2>Reset Password</h2>
+  <p>Enter your email to receive a reset link.</p>
   <input type="email" id="email" placeholder="Enter your email" required>
-  <button onclick="resetPassword()">Send Reset Link</button>
+  <button onclick="sendResetLink()">Send Reset Link</button>
+  <a href="login.html" class="back-link">Back to Login</a>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-<script>
-  // Firebase Config
+  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
     authDomain: "excellent-d056e.firebaseapp.com",
     projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.firebasestorage.app",
+    storageBucket: "excellent-d056e.appspot.com",
     messagingSenderId: "629984941607",
     appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
     measurementId: "G-G3RCTDSY27"
   };
-  firebase.initializeApp(firebaseConfig);
 
-  function resetPassword() {
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  async function sendResetLink() {
     const email = document.getElementById("email").value.trim();
     if (!email) {
       alert("Please enter your email.");
       return;
     }
 
-    firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        alert("We’ve sent you a password reset link! Check your inbox.");
-        window.location.href = "login.html"; // Redirect after sending
-      })
-      .catch((error) => {
-        alert("Error: " + error.message);
+    try {
+      await sendPasswordResetEmail(auth, email, {
+        url: window.location.origin + "/login.html" // After reset, redirect to login page
       });
+      alert("Password reset email sent! Please check your inbox.");
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
   }
+
+  window.sendResetLink = sendResetLink;
 </script>
 
 </body>
