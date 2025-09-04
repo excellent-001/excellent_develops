@@ -1,152 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Password Reset - Excellent Developers</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #333;
-    }
-    .container {
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      width: 320px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    h2 { margin-bottom: 15px; color: #6a11cb; }
-    p { font-size: 14px; margin-bottom: 10px; }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-    button {
-      background: linear-gradient(90deg,#6a11cb,#2575fc);
-      color: white;
-      padding: 10px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-    button:hover {
-      background: linear-gradient(90deg,#2575fc,#6a11cb);
-    }
-    .back-link {
-      display: block;
-      margin-top: 12px;
-      font-size: 14px;
-      color: #6a11cb;
-      text-decoration: none;
-    }
-    .hidden { display: none; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reset Password – Excellent Developers</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#6a0dad,#9b4dca);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+  .container {
+    background: #fff;
+    color: #333;
+    padding: 25px;
+    border-radius: 15px;
+    width: 320px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  h2 { margin-bottom: 15px; color:#6a0dad; }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    background: #6a0dad;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  button:hover { background:#580a9e; }
+  .hidden { display:none; }
+</style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Step 1: Ask for email -->
-  <div id="stepEmail">
-    <h2>Reset Password</h2>
-    <p>Enter your email to receive a reset link.</p>
-    <input type="email" id="email" placeholder="Enter your email" required>
-    <button onclick="sendResetLink()">Send Reset Link</button>
-    <a href="login.html" class="back-link">Back to Login</a>
+  <h2>Reset Password</h2>
+
+  <!-- Step 1: Enter Email -->
+  <div id="step1">
+    <input type="email" id="email" placeholder="Enter your email" required />
+    <button onclick="sendResetEmail()">Send Reset Link</button>
   </div>
 
-  <!-- Step 2: Enter new password -->
-  <div id="stepNewPassword" class="hidden">
-    <h2>Enter New Password</h2>
-    <input type="password" id="newPassword" placeholder="New password" required>
-    <button onclick="resetPassword()">Update Password</button>
+  <!-- Step 2: Enter New Password -->
+  <div id="step2" class="hidden">
+    <input type="password" id="newPassword" placeholder="Enter new password" required />
+    <button onclick="updatePassword()">Reset Password</button>
   </div>
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { 
-    getAuth, 
-    sendPasswordResetEmail, 
-    verifyPasswordResetCode, 
-    confirmPasswordReset 
-  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, sendPasswordResetEmail, confirmPasswordReset, applyActionCode, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
-    authDomain: "excellent-d056e.firebaseapp.com",
-    projectId: "excellent-d056e",
-    storageBucket: "excellent-d056e.appspot.com",
-    messagingSenderId: "629984941607",
-    appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
-    measurementId: "G-G3RCTDSY27"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDoTlLIlOyoYiTZLQmzVcDro-cw9TCU9qI",
+  authDomain: "excellent-d056e.firebaseapp.com",
+  projectId: "excellent-d056e",
+  storageBucket: "excellent-d056e.appspot.com",
+  messagingSenderId: "629984941607",
+  appId: "1:629984941607:web:3d7fc2478f555d45a0e002",
+  measurementId: "G-G3RCTDSY27"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  // Check if page opened with oobCode (from Firebase email link)
-  const urlParams = new URLSearchParams(window.location.search);
-  const oobCode = urlParams.get("oobCode");
+let resetCode = null;
 
-  if (oobCode) {
-    // Switch to new password form
-    document.getElementById("stepEmail").classList.add("hidden");
-    document.getElementById("stepNewPassword").classList.remove("hidden");
-  }
+function sendResetEmail() {
+  const email = document.getElementById("email").value.trim();
+  if (!email) { alert("Enter your email"); return; }
 
-  // Step 1: Send reset email
-  async function sendResetLink() {
-    const email = document.getElementById("email").value.trim();
-    if (!email) {
-      alert("Please enter your email.");
-      return;
-    }
+  sendPasswordResetEmail(auth, email, { url: window.location.href })
+    .then(() => {
+      alert("Reset link sent! Check your email.");
+    })
+    .catch(err => { alert("Error: " + err.message); });
+}
 
-    try {
-      await sendPasswordResetEmail(auth, email, {
-        url: window.location.origin + "/reset.html" // same page for confirm step
-      });
-      alert("Password reset email sent! Please check your inbox.");
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  }
+// Check URL for oobCode (Firebase sends this in the reset link)
+const urlParams = new URLSearchParams(window.location.search);
+const oobCode = urlParams.get("oobCode");
+if (oobCode) {
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("step2").classList.remove("hidden");
+  resetCode = oobCode;
+}
 
-  // Step 2: Confirm new password
-  async function resetPassword() {
-    const newPassword = document.getElementById("newPassword").value.trim();
-    if (!newPassword) {
-      alert("Please enter a new password.");
-      return;
-    }
+function updatePassword() {
+  const newPassword = document.getElementById("newPassword").value.trim();
+  if (!newPassword) { alert("Enter a new password"); return; }
 
-    try {
-      await verifyPasswordResetCode(auth, oobCode);
-      await confirmPasswordReset(auth, oobCode, newPassword);
-      alert("Password has been reset successfully! You can now login.");
-      window.location.href = "login.html";
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  }
+  if (!resetCode) { alert("Reset code not found."); return; }
 
-  window.sendResetLink = sendResetLink;
-  window.resetPassword = resetPassword;
+  confirmPasswordReset(auth, resetCode, newPassword)
+    .then(() => {
+      alert("Password reset successful! You can now login.");
+      window.location.href = "index.html";
+    })
+    .catch(err => { alert("Error: " + err.message); });
+}
 </script>
 
 </body>
